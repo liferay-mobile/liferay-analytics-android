@@ -1,0 +1,5 @@
+rootProject.name='com-liferay-analytics-client-android'
+
+include ':sample-app'
+
+include ':library-core'
