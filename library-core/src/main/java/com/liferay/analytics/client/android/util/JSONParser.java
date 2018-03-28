@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import com.liferay.analytics.model.AnalyticsEventsMessage;
+import com.liferay.analytics.model.IdentityContextMessage;
 
 import java.lang.reflect.Type;
 
@@ -46,6 +47,10 @@ public class JSONParser {
 		gsonBuilder.registerTypeAdapter(
 			AnalyticsEventsMessage.class,
 			new AnalyticsEventsMessageSerializer());
+
+		gsonBuilder.registerTypeAdapter(
+			IdentityContextMessage.class,
+			new IdentityContextMessageSerializer());
 
 		return gsonBuilder.create();
 	}
