@@ -16,8 +16,7 @@ package com.liferay.analytics.client.android.api.impl;
 
 import com.liferay.analytics.model.IdentityContextMessage;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
