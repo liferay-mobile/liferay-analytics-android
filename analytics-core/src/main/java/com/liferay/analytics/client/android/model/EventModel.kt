@@ -12,30 +12,29 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.model;
+package com.liferay.analytics.client.android.model
 
-import com.liferay.analytics.model.AnalyticsEventsMessage;
+import com.liferay.analytics.model.AnalyticsEventsMessage
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date
+import java.util.HashMap
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-public class EventModel {
+class EventModel(event: AnalyticsEventsMessage.Event) {
 
-	public EventModel(AnalyticsEventsMessage.Event event) {
-		applicationId = event.getApplicationId();
-		eventDate = event.getEventDate();
-		eventId = event.getEventId();
-		properties = event.getProperties();
-	}
+    var applicationId: String
+    var eventDate = Date()
+    var eventId: String
+    var properties: Map<String, String> = HashMap()
 
-	public String applicationId;
-	public Date eventDate = new Date();
-	public String eventId;
-	public Map<String, String> properties = new HashMap<>();
+    init {
+        applicationId = event.applicationId
+        eventDate = event.eventDate
+        eventId = event.eventId
+        properties = event.properties
+    }
 
 }
