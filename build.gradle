@@ -9,13 +9,9 @@ buildscript {
 		classpath group: "com.android.tools.build", name: "gradle", version: "3.0.1"
 		classpath group: "com.github.dcendents", name: "android-maven-gradle-plugin", version: "2.0"
 		classpath group: "com.jfrog.bintray.gradle", name: "gradle-bintray-plugin", version: "1.8.0"
-		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
 	}
 }
-
-apply plugin: "com.liferay.source.formatter"
 
 allprojects {
 	repositories {
