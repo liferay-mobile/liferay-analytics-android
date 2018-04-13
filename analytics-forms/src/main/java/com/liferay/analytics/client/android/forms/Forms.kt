@@ -67,21 +67,20 @@ object Forms {
     @JvmStatic
     fun trackField(editText: EditText, fieldContext: FieldContext) {
 
-        RxViewUtil.onFocus(
-                editText).subscribe { focusEvent ->
+        RxViewUtil.onFocus(editText).subscribe { focusEvent ->
             val hasFocus = focusEvent.first
 
-            if (hasFocus!!) {
-                _fieldFocused(fieldContext)
+            if (hasFocus) {
+                fieldFocused(fieldContext)
             } else {
                 val focusDuration = focusEvent.second
 
-                _fieldBlurred(focusDuration!!, fieldContext)
+                fieldBlurred(focusDuration, fieldContext)
             }
         }
     }
 
-    private fun _fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
+    private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
         val eventId = "fieldBlurred"
 
         val properties = HashMap<String, String>()
@@ -99,7 +98,7 @@ object Forms {
         analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
-    private fun _fieldFocused(fieldContext: FieldContext) {
+    private fun fieldFocused(fieldContext: FieldContext) {
         val eventId = "fieldFocused"
 
         val properties = HashMap<String, String>()

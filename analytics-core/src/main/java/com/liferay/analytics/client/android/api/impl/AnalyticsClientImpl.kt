@@ -68,7 +68,11 @@ class AnalyticsClientImpl : AnalyticsClient {
 
         val response = _client.newCall(request).execute()
 
-        return response.body()!!.string()
+        response.body()?.let {
+            return it.string()
+        }
+
+        return ""
     }
 
     companion object {
