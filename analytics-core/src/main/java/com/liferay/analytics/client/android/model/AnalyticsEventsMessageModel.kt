@@ -25,13 +25,12 @@ import java.util.HashMap
  * @author Igor Matos
  * @author Allan Melo
  */
-class AnalyticsEventsMessageModel(
-        analyticsEventsMessage: AnalyticsEventsMessage) {
+class AnalyticsEventsMessageModel(analyticsEventsMessage: AnalyticsEventsMessage) {
 
     var analyticsKey: String
     var context: Map<String, String> = HashMap()
     var events: MutableList<EventModel> = ArrayList()
-    var protocolVersion: String
+    var protocolVersion: String?
 
     @SerializedName(alternate = ["userid"], value = "userId")
     var userId: String
