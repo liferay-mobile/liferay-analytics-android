@@ -12,35 +12,9 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.forms;
-
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+package com.liferay.analytics.client.android.forms
 
 /**
  * @author Igor Matos
  */
-public class FormContext {
-
-	public FormContext(@NonNull String formId, @Nullable String formTitle) {
-		_formId = formId;
-		_formTitle = formTitle;
-	}
-
-	@NonNull
-	public String getFormId() {
-		return _formId;
-	}
-
-	@Nullable
-	public String getFormTitle() {
-		return _formTitle;
-	}
-
-	@NonNull
-	private final String _formId;
-
-	@Nullable
-	private final String _formTitle;
-
-}
+data class FormContext(val formId: String, val formTitle: String?)

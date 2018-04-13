@@ -12,23 +12,21 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.forms;
+package com.liferay.analytics.client.android.forms
 
-import android.support.annotation.NonNull;
+import android.util.Pair
 
-import android.util.Pair;
+import android.view.View
 
-import android.view.View;
-
-import io.reactivex.Observable;
+import io.reactivex.Observable
 
 /**
  * @author Igor Matos
  */
-public class RxViewUtil {
+object RxViewUtil {
 
-	public static Observable<Pair<Boolean, Long>> onFocus(@NonNull View view) {
-		return new FocusChangeObservable(view);
-	}
+    fun onFocus(view: View): Observable<Pair<Boolean, Long>> {
+        return FocusChangeObservable(view)
+    }
 
 }
