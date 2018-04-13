@@ -23,24 +23,27 @@ import java.util.*
  */
 object Forms {
 
-    private val _APPLICATION_ID = "forms"
-
-    private val _FIELD_NAME = "fieldName"
-
-    private val _FOCUS_DURATION_KEY = "focusDuration"
-
-    private val _FORM_ID_KEY = "formId"
+    private const val APPLICATION_ID = "forms"
+    private const val FIELD_NAME = "fieldName"
+    private const val FOCUS_DURATION_KEY = "focusDuration"
+    private const val FORM_ID_KEY = "formId"
+    private const val FORM_TITLE_KEY = "formTitle"
+    private const val FIELD_TITLE_KEY = "fieldTitle"
 
     fun formSubmitted(formContext: FormContext) {
         val eventId = "formSubmitted"
 
         val properties = HashMap<String, String>()
 
-        properties[_FORM_ID_KEY] = formContext.formId
+        formContext.formTitle?.let {
+            properties[FORM_TITLE_KEY] = it
+        }
+
+        properties[FORM_ID_KEY] = formContext.formId
 
         val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, _APPLICATION_ID)
+        analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
     fun formViewed(formContext: FormContext) {
@@ -48,16 +51,18 @@ object Forms {
 
         val properties = HashMap<String, String>()
 
-        properties[_FORM_ID_KEY] = formContext.formId
+        formContext.formTitle?.let {
+            properties[FORM_TITLE_KEY] = it
+        }
+
+        properties[FORM_ID_KEY] = formContext.formId
 
         val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, _APPLICATION_ID)
+        analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
-    fun trackField(
-            editText: EditText,
-            fieldContext: FieldContext) {
+    fun trackField(editText: EditText, fieldContext: FieldContext) {
 
         RxViewUtil.onFocus(
                 editText).subscribe { focusEvent ->
@@ -73,20 +78,22 @@ object Forms {
         }
     }
 
-    private fun _fieldBlurred(
-            focusDuration: Long, fieldContext: FieldContext) {
-
+    private fun _fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
         val eventId = "fieldBlurred"
 
         val properties = HashMap<String, String>()
 
-        properties[_FORM_ID_KEY] = fieldContext.formContext.formId
-        properties[_FIELD_NAME] = fieldContext.name
-        properties[_FOCUS_DURATION_KEY] = focusDuration.toString()
+        fieldContext.title?.let {
+            properties[FIELD_TITLE_KEY] = it
+        }
+
+        properties[FORM_ID_KEY] = fieldContext.formContext.formId
+        properties[FIELD_NAME] = fieldContext.name
+        properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
         val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, _APPLICATION_ID)
+        analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
     private fun _fieldFocused(fieldContext: FieldContext) {
@@ -94,12 +101,16 @@ object Forms {
 
         val properties = HashMap<String, String>()
 
-        properties[_FORM_ID_KEY] = fieldContext.formContext.formId
-        properties[_FIELD_NAME] = fieldContext.name
+        fieldContext.title?.let {
+            properties[FIELD_TITLE_KEY] = it
+        }
+
+        properties[FORM_ID_KEY] = fieldContext.formContext.formId
+        properties[FIELD_NAME] = fieldContext.name
 
         val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, _APPLICATION_ID)
+        analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
 }
