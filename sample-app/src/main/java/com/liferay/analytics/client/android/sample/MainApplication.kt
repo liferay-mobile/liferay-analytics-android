@@ -12,22 +12,22 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.sample;
+package com.liferay.analytics.client.android.sample
 
-import android.os.Bundle;
-
-import android.support.v7.app.AppCompatActivity;
+import android.app.Application
+import com.liferay.analytics.client.android.Analytics
 
 /**
  * @author Igor Matos
  */
-public class MainActivity extends AppCompatActivity {
+class MainApplication : Application() {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    override fun onCreate() {
+        super.onCreate()
 
-		setContentView(R.layout.activity_main);
-	}
+        val builder = Analytics.Builder(this, "testecampeao")
+        builder.build()
+
+    }
 
 }
