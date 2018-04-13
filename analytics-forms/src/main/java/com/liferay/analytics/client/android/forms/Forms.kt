@@ -30,6 +30,7 @@ object Forms {
     private const val FORM_TITLE_KEY = "formTitle"
     private const val FIELD_TITLE_KEY = "fieldTitle"
 
+    @JvmStatic
     fun formSubmitted(formContext: FormContext) {
         val eventId = "formSubmitted"
 
@@ -46,6 +47,7 @@ object Forms {
         analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
+    @JvmStatic
     fun formViewed(formContext: FormContext) {
         val eventId = "formViewed"
 
@@ -62,6 +64,7 @@ object Forms {
         analyticsInstance.send(eventId, properties, APPLICATION_ID)
     }
 
+    @JvmStatic
     fun trackField(editText: EditText, fieldContext: FieldContext) {
 
         RxViewUtil.onFocus(
