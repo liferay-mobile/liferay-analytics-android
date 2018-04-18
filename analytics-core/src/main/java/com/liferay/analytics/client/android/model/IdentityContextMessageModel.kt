@@ -15,7 +15,6 @@
 package com.liferay.analytics.client.android.model
 
 import com.liferay.analytics.model.IdentityContextMessage
-import java.util.*
 
 /**
  * @author Igor Matos

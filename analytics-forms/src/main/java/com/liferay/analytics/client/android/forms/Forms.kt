@@ -16,7 +16,6 @@ package com.liferay.analytics.client.android.forms
 
 import android.widget.EditText
 import com.liferay.analytics.client.android.Analytics
-import java.util.*
 
 /**
  * @author Igor Matos

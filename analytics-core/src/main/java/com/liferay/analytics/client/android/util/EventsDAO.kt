@@ -20,14 +20,13 @@ import com.google.gson.reflect.TypeToken
 import com.liferay.analytics.client.android.model.EventModel
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.*
 
 /**
  * @author Igor Matos
  */
 class EventsDAO(context: Context) {
 
-    private val _fileStorage: FileStorage
+    private val _fileStorage: FileStorage = FileStorage(context)
 
     val savedEvents: List<EventModel>?
         get() {
@@ -46,10 +45,6 @@ class EventsDAO(context: Context) {
 
             return null
         }
-
-    init {
-        _fileStorage = FileStorage(context)
-    }
 
     fun addEvents(events: List<EventModel>) {
         val listType = object : TypeToken<ArrayList<EventModel>>() {
