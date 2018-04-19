@@ -23,22 +23,20 @@ import io.reactivex.Flowable
 import io.reactivex.annotations.NonNull
 import io.reactivex.annotations.Nullable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Igor Matos
  */
-class Analytics private constructor(val builder: Builder) {
+class Analytics private constructor(val application: Application, private val analyticsKey: String,
+    private val flushIntervalInMilliseconds: Long) {
 
-    fun send(
-            @NonNull eventId: String, @NonNull properties: Map<String, String>,
-            @NonNull applicationId: String) {
+    fun send(@NonNull eventId: String, @NonNull properties: Map<String, String>, @NonNull applicationId: String) {
 
         if (userId == null) {
             return
         }
 
-        val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(builder.analyticsKey, userId)
+        val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId)
 
         val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
 
@@ -46,53 +44,12 @@ class Analytics private constructor(val builder: Builder) {
 
         analyticsEventsMessageBuilder.event(eventBuilder.build())
 
-        var flowable = Flowable.fromCallable {
+        var flowable = Flowable.fromCallable({
             ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
-        }
+        })
 
         flowable.subscribeOn(Schedulers.newThread())
                 .subscribe()
-    }
-
-    class Builder(@NonNull context: Context?, @NonNull val analyticsKey: String?) {
-        val application: Application
-        private var flushIntervalInMilliseconds: Long = 200000
-
-        init {
-            if (context == null) {
-                throw IllegalArgumentException("Context can't be null.")
-            }
-
-            if (context.applicationContext == null) {
-                throw IllegalArgumentException("AppContext can't be null.")
-            }
-
-            if (analyticsKey.isNullOrEmpty()) {
-                throw IllegalArgumentException(
-                        "Analytics key can't be null or empty.")
-            }
-
-            application = context.applicationContext as Application
-        }
-
-        fun build(): Analytics {
-            return Analytics(this)
-        }
-
-        fun setFlushInterval(
-                @NonNull flushInterval: Long,
-                @NonNull timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Builder {
-
-            if (flushInterval <= 0) {
-                throw IllegalArgumentException(
-                        "flushInterval can't be less than or equals zero")
-            }
-
-            flushIntervalInMilliseconds = timeUnit.toMillis(flushInterval)
-
-            return this
-        }
-
     }
 
     init {
@@ -105,6 +62,34 @@ class Analytics private constructor(val builder: Builder) {
 
     companion object {
 
+	    @JvmStatic
+        fun init(@NonNull context: Context?, analyticsKey: String?, flushIntervalInMilliseconds: Long) {
+
+		    if (context == null) {
+                throw IllegalArgumentException("Context can't be null.")
+            }
+
+            if (context.applicationContext == null) {
+                throw IllegalArgumentException("AppContext can't be null.")
+            }
+
+            if (analyticsKey.isNullOrEmpty()) {
+                throw IllegalArgumentException("Analytics key can't be null or empty.")
+            }
+
+            if (flushIntervalInMilliseconds <= 0) {
+                throw IllegalArgumentException("flushInterval can't be less than or equals zero")
+            }
+
+            val application = context.applicationContext as Application
+            Analytics(application, analyticsKey!!, flushIntervalInMilliseconds)
+        }
+
+	    @JvmStatic
+	    fun init(@NonNull context: Context?, @NonNull analyticsKey: String?) {
+		    init(context, analyticsKey, 2000)  //TODO: extrair o valor default para uma var
+	    }
+
         @JvmStatic
         val instance: Analytics
             @Synchronized get() {
@@ -113,7 +98,6 @@ class Analytics private constructor(val builder: Builder) {
                 }
 
                 throw IllegalStateException("You must initialize your library.")
-
             }
 
         private val ANALYTICS_CLIENT_IMPL = AnalyticsClientImpl()

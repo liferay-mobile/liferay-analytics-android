@@ -25,8 +25,7 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val builder = Analytics.Builder(this, "testecampeao")
-        builder.build()
+        Analytics.init(this, "key")
 
     }
 
