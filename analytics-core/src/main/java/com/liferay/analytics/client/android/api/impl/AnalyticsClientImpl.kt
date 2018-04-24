@@ -15,15 +15,9 @@
 package com.liferay.analytics.client.android.api.impl
 
 import com.liferay.analytics.client.AnalyticsClient
+import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
 import com.liferay.analytics.model.AnalyticsEventsMessage
-
-import java.io.IOException
-
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 
 /**
  * @author Igor Matos
@@ -43,8 +37,6 @@ class AnalyticsClientImpl : AnalyticsClient {
     val analyticsGatewayProtocol: String
         get() = ANALYTICS_GATEWAY_PROTOCOL
 
-    private val _client = OkHttpClient()
-
     @Throws(Exception::class)
     override fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
 
@@ -54,39 +46,14 @@ class AnalyticsClientImpl : AnalyticsClient {
                 "$analyticsGatewayHost:$analyticsGatewayPort" +
                 "$analyticsGatewayPath"
 
-        return post(analyticsPath, json)
-    }
-
-    @Throws(IOException::class)
-    private fun post(url: String, json: String): String {
-        val body = RequestBody.create(MEDIA_TYPE, json)
-
-        val request = Request.Builder()
-                .url(url)
-                .post(body)
-                .build()
-
-        val response = _client.newCall(request).execute()
-
-        response.body()?.let {
-            return it.string()
-        }
-
-        return ""
+        return HTTPClient.post(analyticsPath, json)
     }
 
     companion object {
-
         private const val ANALYTICS_GATEWAY_HOST = "ec-dev.liferay.com"
-
         private const val ANALYTICS_GATEWAY_PATH = "/api/analyticsgateway/send-analytics-events"
-
         private const val ANALYTICS_GATEWAY_PORT = "8095"
-
         private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
-
-        private val MEDIA_TYPE = MediaType.parse(
-                "application/json; charset=utf-8")
     }
 
 }
