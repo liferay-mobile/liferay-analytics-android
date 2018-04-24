@@ -15,15 +15,10 @@
 package com.liferay.analytics.client.android.api.impl
 
 import com.liferay.analytics.client.IdentityClient
+import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
 import com.liferay.analytics.model.IdentityContextMessage
-
 import java.io.IOException
-
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 
 /**
  * @author Igor Matos
@@ -43,8 +38,6 @@ class IdentityClientImpl : IdentityClient {
     private val identityGatewayProtocol: String
         get() = IDENTITY_GATEWAY_PROTOCOL
 
-    private val _client = OkHttpClient()
-
     @Throws(IOException::class)
     override fun getUserId(identityContextMessage: IdentityContextMessage): String {
 
@@ -55,39 +48,14 @@ class IdentityClientImpl : IdentityClient {
                 identityGatewayHost, identityGatewayPort,
                 identityContextMessage.analyticsKey, identityGatewayPath)
 
-        return post(identityPath, json)
-    }
-
-    @Throws(IOException::class)
-    private fun post(url: String, json: String): String {
-        val body = RequestBody.create(MEDIA_TYPE, json)
-
-        val request = Request.Builder()
-                            .url(url)
-                            .post(body)
-                            .build()
-
-        val response = _client.newCall(request).execute()
-
-        response.body()?.let {
-            return it.string()
-        }
-
-        return ""
+        return HTTPClient.post(identityPath, json)
     }
 
     companion object {
-
         private const val IDENTITY_GATEWAY_HOST = "contacts-prod.liferay.com"
-
         private const val IDENTITY_GATEWAY_PATH = "/identity"
-
         private const val IDENTITY_GATEWAY_PORT = "443"
-
         private const val IDENTITY_GATEWAY_PROTOCOL = "https"
-
-        private val MEDIA_TYPE = MediaType.parse(
-                "application/json; charset=utf-8")
     }
 
 }
