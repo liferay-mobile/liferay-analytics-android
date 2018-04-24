@@ -26,38 +26,38 @@ import java.io.IOException
  */
 class EventsDAO(context: Context) {
 
-    private val _fileStorage: FileStorage = FileStorage(context)
+	private val _fileStorage: FileStorage = FileStorage(context)
 
-    val savedEvents: List<EventModel>?
-        get() {
-            try {
-                val eventsJson = _fileStorage.getStringByKey("events")
+	val savedEvents: List<EventModel>?
+		get() {
+			try {
+				val eventsJson = _fileStorage.getStringByKey("events")
 
-                val listType = object : TypeToken<ArrayList<EventModel>>() {
+				val listType = object : TypeToken<ArrayList<EventModel>>() {
 
-                }.type
-                return Gson().fromJson<List<EventModel>>(eventsJson, listType)
-            } catch (e: FileNotFoundException) {
+				}.type
+				return Gson().fromJson<List<EventModel>>(eventsJson, listType)
+			} catch (e: FileNotFoundException) {
 
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+			} catch (e: IOException) {
+				e.printStackTrace()
+			}
 
-            return null
-        }
+			return null
+		}
 
-    fun addEvents(events: List<EventModel>) {
-        val listType = object : TypeToken<ArrayList<EventModel>>() {
+	fun addEvents(events: List<EventModel>) {
+		val listType = object : TypeToken<ArrayList<EventModel>>() {
 
-        }.type
-        val eventsJson = Gson().toJson(events, listType)
+		}.type
+		val eventsJson = Gson().toJson(events, listType)
 
-        try {
-            _fileStorage.saveStringToKey("events", eventsJson)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+		try {
+			_fileStorage.saveStringToKey("events", eventsJson)
+		} catch (e: IOException) {
+			e.printStackTrace()
+		}
 
-    }
+	}
 
 }

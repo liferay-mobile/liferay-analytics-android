@@ -24,31 +24,31 @@ import java.io.InputStreamReader
  */
 class FileStorage(private val _context: Context) {
 
-    @Throws(IOException::class)
-    fun getStringByKey(key: String): String {
-        val inputStream = _context.openFileInput(key)
+	@Throws(IOException::class)
+	fun getStringByKey(key: String): String {
+		val inputStream = _context.openFileInput(key)
 
-        val inputStreamReader = InputStreamReader(
-                inputStream)
+		val inputStreamReader = InputStreamReader(
+			inputStream)
 
-        val bufferedReader = BufferedReader(inputStreamReader)
+		val bufferedReader = BufferedReader(inputStreamReader)
 
-        val stringBuilder = StringBuilder()
+		val stringBuilder = StringBuilder()
 
-        bufferedReader.lineSequence().forEach {
-            stringBuilder.append(it)
-        }
+		bufferedReader.lineSequence().forEach {
+			stringBuilder.append(it)
+		}
 
-        return stringBuilder.toString()
-    }
+		return stringBuilder.toString()
+	}
 
-    @Throws(IOException::class)
-    fun saveStringToKey(key: String, value: String) {
-        val outputStream = _context.openFileOutput(
-                key, Context.MODE_PRIVATE)
+	@Throws(IOException::class)
+	fun saveStringToKey(key: String, value: String) {
+		val outputStream = _context.openFileOutput(
+			key, Context.MODE_PRIVATE)
 
-        outputStream.write(value.toByteArray())
-        outputStream.close()
-    }
+		outputStream.write(value.toByteArray())
+		outputStream.close()
+	}
 
 }

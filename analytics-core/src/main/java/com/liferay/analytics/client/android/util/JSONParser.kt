@@ -29,33 +29,33 @@ import java.lang.reflect.Type
  */
 object JSONParser {
 
-    private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"
+	private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"
 
-    @Throws(JsonSyntaxException::class)
-    fun <T> fromJsonString(json: String, type: Type): T {
+	@Throws(JsonSyntaxException::class)
+	fun <T> fromJsonString(json: String, type: Type): T {
 
-        return gson().fromJson(json, type)
-    }
+		return gson().fromJson(json, type)
+	}
 
-    fun toJSON(element: Any): String {
-        return gson().toJson(element)
-    }
+	fun toJSON(element: Any): String {
+		return gson().toJson(element)
+	}
 
-    @Synchronized
-    internal fun gson(): Gson {
-        val gsonBuilder = GsonBuilder()
+	@Synchronized
+	internal fun gson(): Gson {
+		val gsonBuilder = GsonBuilder()
 
-        gsonBuilder.setDateFormat(DATE_FORMAT)
+		gsonBuilder.setDateFormat(DATE_FORMAT)
 
-        gsonBuilder.registerTypeAdapter(
-                AnalyticsEventsMessage::class.java,
-                AnalyticsEventsMessageSerializer())
+		gsonBuilder.registerTypeAdapter(
+			AnalyticsEventsMessage::class.java,
+			AnalyticsEventsMessageSerializer())
 
-        gsonBuilder.registerTypeAdapter(
-                IdentityContextMessage::class.java,
-                IdentityContextMessageSerializer())
+		gsonBuilder.registerTypeAdapter(
+			IdentityContextMessage::class.java,
+			IdentityContextMessageSerializer())
 
-        return gsonBuilder.create()
-    }
+		return gsonBuilder.create()
+	}
 
 }

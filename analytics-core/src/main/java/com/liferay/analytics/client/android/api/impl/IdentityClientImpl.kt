@@ -26,36 +26,36 @@ import java.io.IOException
  */
 class IdentityClientImpl : IdentityClient {
 
-    private val identityGatewayHost: String
-        get() = IDENTITY_GATEWAY_HOST
+	private val identityGatewayHost: String
+		get() = IDENTITY_GATEWAY_HOST
 
-    private val identityGatewayPath: String
-        get() = IDENTITY_GATEWAY_PATH
+	private val identityGatewayPath: String
+		get() = IDENTITY_GATEWAY_PATH
 
-    private val identityGatewayPort: String
-        get() = IDENTITY_GATEWAY_PORT
+	private val identityGatewayPort: String
+		get() = IDENTITY_GATEWAY_PORT
 
-    private val identityGatewayProtocol: String
-        get() = IDENTITY_GATEWAY_PROTOCOL
+	private val identityGatewayProtocol: String
+		get() = IDENTITY_GATEWAY_PROTOCOL
 
-    @Throws(IOException::class)
-    override fun getUserId(identityContextMessage: IdentityContextMessage): String {
+	@Throws(IOException::class)
+	override fun getUserId(identityContextMessage: IdentityContextMessage): String {
 
-        val json = JSONParser.toJSON(identityContextMessage)
+		val json = JSONParser.toJSON(identityContextMessage)
 
-        val identityPath = String.format(
-                "%s://%s:%s/%s%s", identityGatewayProtocol,
-                identityGatewayHost, identityGatewayPort,
-                identityContextMessage.analyticsKey, identityGatewayPath)
+		val identityPath = String.format(
+			"%s://%s:%s/%s%s", identityGatewayProtocol,
+			identityGatewayHost, identityGatewayPort,
+			identityContextMessage.analyticsKey, identityGatewayPath)
 
-        return HTTPClient.post(identityPath, json)
-    }
+		return HTTPClient.post(identityPath, json)
+	}
 
-    companion object {
-        private const val IDENTITY_GATEWAY_HOST = "contacts-prod.liferay.com"
-        private const val IDENTITY_GATEWAY_PATH = "/identity"
-        private const val IDENTITY_GATEWAY_PORT = "443"
-        private const val IDENTITY_GATEWAY_PROTOCOL = "https"
-    }
+	companion object {
+		private const val IDENTITY_GATEWAY_HOST = "contacts-prod.liferay.com"
+		private const val IDENTITY_GATEWAY_PATH = "/identity"
+		private const val IDENTITY_GATEWAY_PORT = "443"
+		private const val IDENTITY_GATEWAY_PROTOCOL = "https"
+	}
 
 }

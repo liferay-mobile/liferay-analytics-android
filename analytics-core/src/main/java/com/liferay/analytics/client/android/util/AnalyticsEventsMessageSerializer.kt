@@ -27,16 +27,16 @@ import java.lang.reflect.Type
  */
 class AnalyticsEventsMessageSerializer : JsonSerializer<AnalyticsEventsMessage> {
 
-    override fun serialize(
-            analyticsEventsMessage: AnalyticsEventsMessage, typeOfSrc: Type,
-            context: JsonSerializationContext): JsonElement {
+	override fun serialize(
+		analyticsEventsMessage: AnalyticsEventsMessage, typeOfSrc: Type,
+		context: JsonSerializationContext): JsonElement {
 
-        val model = AnalyticsEventsMessageModel(
-                analyticsEventsMessage)
+		val model = AnalyticsEventsMessageModel(
+			analyticsEventsMessage)
 
-        val gson = JSONParser.gson()
+		val gson = JSONParser.gson()
 
-        return gson.toJsonTree(model)
-    }
+		return gson.toJsonTree(model)
+	}
 
 }

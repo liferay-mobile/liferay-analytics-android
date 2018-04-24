@@ -25,35 +25,35 @@ import com.liferay.analytics.model.AnalyticsEventsMessage
  */
 class AnalyticsClientImpl : AnalyticsClient {
 
-    val analyticsGatewayHost: String
-        get() = ANALYTICS_GATEWAY_HOST
+	val analyticsGatewayHost: String
+		get() = ANALYTICS_GATEWAY_HOST
 
-    val analyticsGatewayPath: String
-        get() = ANALYTICS_GATEWAY_PATH
+	val analyticsGatewayPath: String
+		get() = ANALYTICS_GATEWAY_PATH
 
-    val analyticsGatewayPort: String
-        get() = ANALYTICS_GATEWAY_PORT
+	val analyticsGatewayPort: String
+		get() = ANALYTICS_GATEWAY_PORT
 
-    val analyticsGatewayProtocol: String
-        get() = ANALYTICS_GATEWAY_PROTOCOL
+	val analyticsGatewayProtocol: String
+		get() = ANALYTICS_GATEWAY_PROTOCOL
 
-    @Throws(Exception::class)
-    override fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
+	@Throws(Exception::class)
+	override fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
 
-        val json = JSONParser.toJSON(analyticsEventsMessage)
+		val json = JSONParser.toJSON(analyticsEventsMessage)
 
-        val analyticsPath = "$analyticsGatewayProtocol://" +
-                "$analyticsGatewayHost:$analyticsGatewayPort" +
-                "$analyticsGatewayPath"
+		val analyticsPath = "$analyticsGatewayProtocol://" +
+			"$analyticsGatewayHost:$analyticsGatewayPort" +
+			"$analyticsGatewayPath"
 
-        return HTTPClient.post(analyticsPath, json)
-    }
+		return HTTPClient.post(analyticsPath, json)
+	}
 
-    companion object {
-        private const val ANALYTICS_GATEWAY_HOST = "ec-dev.liferay.com"
-        private const val ANALYTICS_GATEWAY_PATH = "/api/analyticsgateway/send-analytics-events"
-        private const val ANALYTICS_GATEWAY_PORT = "8095"
-        private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
-    }
+	companion object {
+		private const val ANALYTICS_GATEWAY_HOST = "ec-dev.liferay.com"
+		private const val ANALYTICS_GATEWAY_PATH = "/api/analyticsgateway/send-analytics-events"
+		private const val ANALYTICS_GATEWAY_PORT = "8095"
+		private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
+	}
 
 }

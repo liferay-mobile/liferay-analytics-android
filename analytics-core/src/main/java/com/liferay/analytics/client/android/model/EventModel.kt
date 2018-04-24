@@ -25,16 +25,16 @@ import java.util.HashMap
  */
 class EventModel(event: AnalyticsEventsMessage.Event) {
 
-    var applicationId: String
-    var eventDate = Date()
-    var eventId: String
-    var properties: Map<String, String> = HashMap()
+	var applicationId: String
+	var eventDate = Date()
+	var eventId: String
+	var properties: Map<String, String> = HashMap()
 
-    init {
-        applicationId = event.applicationId
-        eventDate = event.eventDate
-        eventId = event.eventId
-        properties = event.properties
-    }
+	init {
+		applicationId = event.applicationId
+		eventDate = event.eventDate
+		eventId = event.eventId
+		properties = event.properties
+	}
 
 }
