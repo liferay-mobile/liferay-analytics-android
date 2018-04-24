@@ -25,8 +25,8 @@ import io.reactivex.Observable
  */
 object RxViewUtil {
 
-    fun onFocus(view: View): Observable<Pair<Boolean, Long>> {
-        return FocusChangeObservable(view)
-    }
+	fun onFocus(view: View): Observable<Pair<Boolean, Long>> {
+		return FocusChangeObservable(view)
+	}
 
 }

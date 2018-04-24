@@ -28,85 +28,85 @@ import io.reactivex.schedulers.Schedulers
  * @author Igor Matos
  */
 class Analytics private constructor(val application: Application, private val analyticsKey: String,
-    private val flushIntervalInMilliseconds: Long) {
+	private val flushIntervalInMilliseconds: Long) {
 
-    fun send(@NonNull eventId: String, @NonNull properties: Map<String, String>, @NonNull applicationId: String) {
+	fun send(@NonNull eventId: String, @NonNull properties: Map<String, String>, @NonNull applicationId: String) {
 
-        if (userId == null) {
-            return
-        }
+		if (userId == null) {
+			return
+		}
 
-        val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId)
+		val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId)
 
-        val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
+		val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
 
-        eventBuilder.properties(properties)
+		eventBuilder.properties(properties)
 
-        analyticsEventsMessageBuilder.event(eventBuilder.build())
+		analyticsEventsMessageBuilder.event(eventBuilder.build())
 
-        var flowable = Flowable.fromCallable({
-            ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
-        })
+		var flowable = Flowable.fromCallable({
+			ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
+		})
 
-        flowable.subscribeOn(Schedulers.newThread())
-                .subscribe()
-    }
+		flowable.subscribeOn(Schedulers.newThread())
+			.subscribe()
+	}
 
-    init {
-        analyticsInstance?.let {
-            throw IllegalStateException("Your library was already initialized.")
-        }
+	init {
+		analyticsInstance?.let {
+			throw IllegalStateException("Your library was already initialized.")
+		}
 
-        analyticsInstance = this
-    }
+		analyticsInstance = this
+	}
 
-    companion object {
+	companion object {
 
-	    @JvmStatic
-        fun init(@NonNull context: Context?, analyticsKey: String?, flushIntervalInMilliseconds: Long) {
+		@JvmStatic
+		fun init(@NonNull context: Context?, analyticsKey: String?, flushIntervalInMilliseconds: Long) {
 
-		    if (context == null) {
-                throw IllegalArgumentException("Context can't be null.")
-            }
+			if (context == null) {
+				throw IllegalArgumentException("Context can't be null.")
+			}
 
-            if (context.applicationContext == null) {
-                throw IllegalArgumentException("AppContext can't be null.")
-            }
+			if (context.applicationContext == null) {
+				throw IllegalArgumentException("AppContext can't be null.")
+			}
 
-            if (analyticsKey.isNullOrEmpty()) {
-                throw IllegalArgumentException("Analytics key can't be null or empty.")
-            }
+			if (analyticsKey.isNullOrEmpty()) {
+				throw IllegalArgumentException("Analytics key can't be null or empty.")
+			}
 
-            if (flushIntervalInMilliseconds <= 0) {
-                throw IllegalArgumentException("flushInterval can't be less than or equals zero")
-            }
+			if (flushIntervalInMilliseconds <= 0) {
+				throw IllegalArgumentException("flushInterval can't be less than or equals zero")
+			}
 
-            val application = context.applicationContext as Application
-            Analytics(application, analyticsKey!!, flushIntervalInMilliseconds)
-        }
+			val application = context.applicationContext as Application
+			Analytics(application, analyticsKey!!, flushIntervalInMilliseconds)
+		}
 
-	    @JvmStatic
-	    fun init(@NonNull context: Context?, @NonNull analyticsKey: String?) {
-		    init(context, analyticsKey, 2000)  //TODO: extrair o valor default para uma var
-	    }
+		@JvmStatic
+		fun init(@NonNull context: Context?, @NonNull analyticsKey: String?) {
+			init(context, analyticsKey, 2000)
+		}
 
-        @JvmStatic
-        val instance: Analytics
-            @Synchronized get() {
-                analyticsInstance?.takeUnless {
-                    return it
-                }
+		@JvmStatic
+		val instance: Analytics
+			@Synchronized get() {
+				analyticsInstance?.takeUnless {
+					return it
+				}
 
-                throw IllegalStateException("You must initialize your library.")
-            }
+				throw IllegalStateException("You must initialize your library.")
+			}
 
-        private val ANALYTICS_CLIENT_IMPL = AnalyticsClientImpl()
+		private val ANALYTICS_CLIENT_IMPL = AnalyticsClientImpl()
 
-        @SuppressLint("StaticFieldLeak")
-        private var analyticsInstance: Analytics? = null
+		@SuppressLint("StaticFieldLeak")
+		private var analyticsInstance: Analytics? = null
 
-        @Nullable
-        private val userId: String? = "kAnalyticsDroid"
-    }
+		@Nullable
+		private val userId: String? = "kAnalyticsDroid"
+	}
 
 }

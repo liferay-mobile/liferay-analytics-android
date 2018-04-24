@@ -29,39 +29,39 @@ import java.sql.Timestamp
  */
 class FocusChangeObservable(private val _view: View) : Observable<Pair<Boolean, Long>>() {
 
-    override fun subscribeActual(observer: Observer<in Pair<Boolean, Long>>) {
+	override fun subscribeActual(observer: Observer<in Pair<Boolean, Long>>) {
 
-        val listener = FocusChangeObservable.Listener(_view, observer)
+		val listener = FocusChangeObservable.Listener(_view, observer)
 
-        observer.onSubscribe(listener)
-        _view.onFocusChangeListener = listener
-    }
+		observer.onSubscribe(listener)
+		_view.onFocusChangeListener = listener
+	}
 
-    protected class Listener(
-            private val _view: View, private val _observer: Observer<in Pair<Boolean, Long>>)
-                : MainThreadDisposable(), View.OnFocusChangeListener {
+	protected class Listener(
+		private val _view: View, private val _observer: Observer<in Pair<Boolean, Long>>)
+		: MainThreadDisposable(), View.OnFocusChangeListener {
 
-        private var _lastTimestamp = java.lang.Long.MIN_VALUE
+		private var _lastTimestamp = java.lang.Long.MIN_VALUE
 
-        override fun onFocusChange(v: View, hasFocus: Boolean) {
-            val systemTimestamp = Timestamp(
-                    System.currentTimeMillis())
+		override fun onFocusChange(v: View, hasFocus: Boolean) {
+			val systemTimestamp = Timestamp(
+				System.currentTimeMillis())
 
-            val currentTimestamp = systemTimestamp.time
+			val currentTimestamp = systemTimestamp.time
 
-            val focusedDuration = if (hasFocus) 0 else currentTimestamp - _lastTimestamp
+			val focusedDuration = if (hasFocus) 0 else currentTimestamp - _lastTimestamp
 
-            if (!isDisposed) {
-                _observer.onNext(Pair(hasFocus, focusedDuration))
-            }
+			if (!isDisposed) {
+				_observer.onNext(Pair(hasFocus, focusedDuration))
+			}
 
-            _lastTimestamp = currentTimestamp
-        }
+			_lastTimestamp = currentTimestamp
+		}
 
-        override fun onDispose() {
-            _view.onFocusChangeListener = null
-        }
+		override fun onDispose() {
+			_view.onFocusChangeListener = null
+		}
 
-    }
+	}
 
 }

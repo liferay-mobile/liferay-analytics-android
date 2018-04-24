@@ -27,27 +27,27 @@ import java.util.HashMap
  */
 class AnalyticsEventsMessageModel(analyticsEventsMessage: AnalyticsEventsMessage) {
 
-    var analyticsKey: String
-    var context: Map<String, String> = HashMap()
-    var events: MutableList<EventModel> = ArrayList()
-    var protocolVersion: String?
+	var analyticsKey: String
+	var context: Map<String, String> = HashMap()
+	var events: MutableList<EventModel> = ArrayList()
+	var protocolVersion: String?
 
-    @SerializedName(alternate = ["userid"], value = "userId")
-    var userId: String
+	@SerializedName(alternate = ["userid"], value = "userId")
+	var userId: String
 
-    init {
+	init {
 
-        analyticsKey = analyticsEventsMessage.analyticsKey
-        context = analyticsEventsMessage.context
-        events = ArrayList()
+		analyticsKey = analyticsEventsMessage.analyticsKey
+		context = analyticsEventsMessage.context
+		events = ArrayList()
 
-        for (event in analyticsEventsMessage.events) {
+		for (event in analyticsEventsMessage.events) {
 
-            events.add(EventModel(event))
-        }
+			events.add(EventModel(event))
+		}
 
-        protocolVersion = analyticsEventsMessage.protocolVersion
-        userId = analyticsEventsMessage.userId
-    }
+		protocolVersion = analyticsEventsMessage.protocolVersion
+		userId = analyticsEventsMessage.userId
+	}
 
 }

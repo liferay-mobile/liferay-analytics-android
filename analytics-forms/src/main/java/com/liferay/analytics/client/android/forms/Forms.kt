@@ -22,96 +22,96 @@ import com.liferay.analytics.client.android.Analytics
  */
 object Forms {
 
-    private const val APPLICATION_ID = "forms"
-    private const val FIELD_NAME = "fieldName"
-    private const val FOCUS_DURATION_KEY = "focusDuration"
-    private const val FORM_ID_KEY = "formId"
-    private const val FORM_TITLE_KEY = "formTitle"
-    private const val FIELD_TITLE_KEY = "fieldTitle"
+	private const val APPLICATION_ID = "forms"
+	private const val FIELD_NAME = "fieldName"
+	private const val FOCUS_DURATION_KEY = "focusDuration"
+	private const val FORM_ID_KEY = "formId"
+	private const val FORM_TITLE_KEY = "formTitle"
+	private const val FIELD_TITLE_KEY = "fieldTitle"
 
-    @JvmStatic
-    fun formSubmitted(formContext: FormContext) {
-        val eventId = "formSubmitted"
+	@JvmStatic
+	fun formSubmitted(formContext: FormContext) {
+		val eventId = "formSubmitted"
 
-        val properties = HashMap<String, String>()
+		val properties = HashMap<String, String>()
 
-        formContext.formTitle?.let {
-            properties[FORM_TITLE_KEY] = it
-        }
+		formContext.formTitle?.let {
+			properties[FORM_TITLE_KEY] = it
+		}
 
-        properties[FORM_ID_KEY] = formContext.formId
+		properties[FORM_ID_KEY] = formContext.formId
 
-        val analyticsInstance = Analytics.instance
+		val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, APPLICATION_ID)
-    }
+		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+	}
 
-    @JvmStatic
-    fun formViewed(formContext: FormContext) {
-        val eventId = "formViewed"
+	@JvmStatic
+	fun formViewed(formContext: FormContext) {
+		val eventId = "formViewed"
 
-        val properties = HashMap<String, String>()
+		val properties = HashMap<String, String>()
 
-        formContext.formTitle?.let {
-            properties[FORM_TITLE_KEY] = it
-        }
+		formContext.formTitle?.let {
+			properties[FORM_TITLE_KEY] = it
+		}
 
-        properties[FORM_ID_KEY] = formContext.formId
+		properties[FORM_ID_KEY] = formContext.formId
 
-        val analyticsInstance = Analytics.instance
+		val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, APPLICATION_ID)
-    }
+		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+	}
 
-    @JvmStatic
-    fun trackField(editText: EditText, fieldContext: FieldContext) {
+	@JvmStatic
+	fun trackField(editText: EditText, fieldContext: FieldContext) {
 
-        RxViewUtil.onFocus(editText).subscribe { focusEvent ->
-            val hasFocus = focusEvent.first
+		RxViewUtil.onFocus(editText).subscribe { focusEvent ->
+			val hasFocus = focusEvent.first
 
-            if (hasFocus) {
-                fieldFocused(fieldContext)
-            } else {
-                val focusDuration = focusEvent.second
+			if (hasFocus) {
+				fieldFocused(fieldContext)
+			} else {
+				val focusDuration = focusEvent.second
 
-                fieldBlurred(focusDuration, fieldContext)
-            }
-        }
-    }
+				fieldBlurred(focusDuration, fieldContext)
+			}
+		}
+	}
 
-    private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
-        val eventId = "fieldBlurred"
+	private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
+		val eventId = "fieldBlurred"
 
-        val properties = HashMap<String, String>()
+		val properties = HashMap<String, String>()
 
-        fieldContext.title?.let {
-            properties[FIELD_TITLE_KEY] = it
-        }
+		fieldContext.title?.let {
+			properties[FIELD_TITLE_KEY] = it
+		}
 
-        properties[FORM_ID_KEY] = fieldContext.formContext.formId
-        properties[FIELD_NAME] = fieldContext.name
-        properties[FOCUS_DURATION_KEY] = focusDuration.toString()
+		properties[FORM_ID_KEY] = fieldContext.formContext.formId
+		properties[FIELD_NAME] = fieldContext.name
+		properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
-        val analyticsInstance = Analytics.instance
+		val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, APPLICATION_ID)
-    }
+		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+	}
 
-    private fun fieldFocused(fieldContext: FieldContext) {
-        val eventId = "fieldFocused"
+	private fun fieldFocused(fieldContext: FieldContext) {
+		val eventId = "fieldFocused"
 
-        val properties = HashMap<String, String>()
+		val properties = HashMap<String, String>()
 
-        fieldContext.title?.let {
-            properties[FIELD_TITLE_KEY] = it
-        }
+		fieldContext.title?.let {
+			properties[FIELD_TITLE_KEY] = it
+		}
 
-        properties[FORM_ID_KEY] = fieldContext.formContext.formId
-        properties[FIELD_NAME] = fieldContext.name
+		properties[FORM_ID_KEY] = fieldContext.formContext.formId
+		properties[FIELD_NAME] = fieldContext.name
 
-        val analyticsInstance = Analytics.instance
+		val analyticsInstance = Analytics.instance
 
-        analyticsInstance.send(eventId, properties, APPLICATION_ID)
-    }
+		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+	}
 
 }

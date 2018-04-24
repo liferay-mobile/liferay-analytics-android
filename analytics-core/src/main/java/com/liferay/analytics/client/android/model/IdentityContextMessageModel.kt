@@ -21,49 +21,49 @@ import com.liferay.analytics.model.IdentityContextMessage
  * @author Allan Melo
  */
 class IdentityContextMessageModel(
-        identityContextMessage: IdentityContextMessage) {
+	identityContextMessage: IdentityContextMessage) {
 
-    var analyticsKey: String
-    var cookiesEnabled: Boolean = false
-    var browserPluginDetails: String?
-    var canvasFingerPrint: String?
-    var dataSourceIdentifier: String
-    var dataSourceIndividualIdentifier: String
-    var domain: String
-    var httpAcceptHeaders: String?
-    var identityFields: Map<String, String> = HashMap()
-    var language: String
-    var platform: String?
-    var protocolVersion: String
-    var screenSizeAndColorDepth: String?
-    var systemFonts: String?
-    var timezone: String?
-    var touchSupport: Boolean = false
-    var userAgent: String?
-    var userId: String?
-    var webGLFingerPrint: String?
+	var analyticsKey: String
+	var cookiesEnabled: Boolean = false
+	var browserPluginDetails: String?
+	var canvasFingerPrint: String?
+	var dataSourceIdentifier: String
+	var dataSourceIndividualIdentifier: String
+	var domain: String
+	var httpAcceptHeaders: String?
+	var identityFields: Map<String, String> = HashMap()
+	var language: String
+	var platform: String?
+	var protocolVersion: String
+	var screenSizeAndColorDepth: String?
+	var systemFonts: String?
+	var timezone: String?
+	var touchSupport: Boolean = false
+	var userAgent: String?
+	var userId: String?
+	var webGLFingerPrint: String?
 
-    init {
+	init {
 
-        analyticsKey = identityContextMessage.analyticsKey
-        browserPluginDetails = identityContextMessage.browserPluginDetails
-        canvasFingerPrint = identityContextMessage.canvasFingerPrint
-        cookiesEnabled = identityContextMessage.isCookiesEnabled
-        dataSourceIdentifier = identityContextMessage.dataSourceIdentifier
-        dataSourceIndividualIdentifier = identityContextMessage.dataSourceIndividualIdentifier
-        domain = identityContextMessage.domain
-        httpAcceptHeaders = identityContextMessage.httpAcceptHeaders
-        identityFields = identityContextMessage.identityFields
-        language = identityContextMessage.language
-        platform = identityContextMessage.platform
-        protocolVersion = identityContextMessage.protocolVersion
-        screenSizeAndColorDepth = identityContextMessage.screenSizeAndColorDepth
-        systemFonts = identityContextMessage.systemFonts
-        timezone = identityContextMessage.timezone
-        touchSupport = identityContextMessage.isTouchSupport
-        userAgent = identityContextMessage.userAgent
-        userId = identityContextMessage.userId
-        webGLFingerPrint = identityContextMessage.webGLFingerPrint
-    }
+		analyticsKey = identityContextMessage.analyticsKey
+		browserPluginDetails = identityContextMessage.browserPluginDetails
+		canvasFingerPrint = identityContextMessage.canvasFingerPrint
+		cookiesEnabled = identityContextMessage.isCookiesEnabled
+		dataSourceIdentifier = identityContextMessage.dataSourceIdentifier
+		dataSourceIndividualIdentifier = identityContextMessage.dataSourceIndividualIdentifier
+		domain = identityContextMessage.domain
+		httpAcceptHeaders = identityContextMessage.httpAcceptHeaders
+		identityFields = identityContextMessage.identityFields
+		language = identityContextMessage.language
+		platform = identityContextMessage.platform
+		protocolVersion = identityContextMessage.protocolVersion
+		screenSizeAndColorDepth = identityContextMessage.screenSizeAndColorDepth
+		systemFonts = identityContextMessage.systemFonts
+		timezone = identityContextMessage.timezone
+		touchSupport = identityContextMessage.isTouchSupport
+		userAgent = identityContextMessage.userAgent
+		userId = identityContextMessage.userId
+		webGLFingerPrint = identityContextMessage.webGLFingerPrint
+	}
 
 }
