@@ -36,91 +36,91 @@ import java.util.concurrent.TimeUnit
  */
 class AnalyticsClientImplTest {
 
-    private val _analyticsClientImpl = Mockito.spy(AnalyticsClientImpl::class.java)
+	private val _analyticsClientImpl = Mockito.spy(AnalyticsClientImpl::class.java)
 
-    private lateinit var _userId: String
+	private lateinit var _userId: String
 
-    @Before
-    fun setUp() {
-        Mockito.`when`(_analyticsClientImpl.analyticsGatewayHost)
-                .thenReturn("192.168.108.90")
+	@Before
+	fun setUp() {
+		Mockito.`when`(_analyticsClientImpl.analyticsGatewayHost)
+			.thenReturn("192.168.108.90")
 
-        Mockito.`when`(_analyticsClientImpl.analyticsGatewayProtocol)
-                .thenReturn("http")
+		Mockito.`when`(_analyticsClientImpl.analyticsGatewayProtocol)
+			.thenReturn("http")
 
-        Mockito.`when`(_analyticsClientImpl.analyticsGatewayPort)
-                .thenReturn("8081")
+		Mockito.`when`(_analyticsClientImpl.analyticsGatewayPort)
+			.thenReturn("8081")
 
-        Mockito.`when`(_analyticsClientImpl.analyticsGatewayPath)
-                .thenReturn("/")
+		Mockito.`when`(_analyticsClientImpl.analyticsGatewayPath)
+			.thenReturn("/")
 
-        _userId = _getUserId()
-    }
+		_userId = _getUserId()
+	}
 
-    @Test
-    @Throws(Exception::class)
-    fun testSendAnalytics() {
-        val analyticsEventsMessageBuilder =
-            AnalyticsEventsMessage.builder("liferay.com", _userId)
-                                    .contextProperty("languageId", "pt_PT")
-                                    .contextProperty("url", "http://192.168.108.90:8081/")
+	@Test
+	@Throws(Exception::class)
+	fun testSendAnalytics() {
+		val analyticsEventsMessageBuilder =
+			AnalyticsEventsMessage.builder("liferay.com", _userId)
+				.contextProperty("languageId", "pt_PT")
+				.contextProperty("url", "http://192.168.108.90:8081/")
 
-        val event = AnalyticsEventsMessage.Event.builder("ApplicationId", "View")
-                                                .property("elementId", "banner1")
-                                                .build()
+		val event = AnalyticsEventsMessage.Event.builder("ApplicationId", "View")
+			.property("elementId", "banner1")
+			.build()
 
-        analyticsEventsMessageBuilder.event(event)
-        analyticsEventsMessageBuilder.protocolVersion("1.0")
+		analyticsEventsMessageBuilder.event(event)
+		analyticsEventsMessageBuilder.protocolVersion("1.0")
 
-        _analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build())
+		_analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build())
 
-        val body = RequestBody.create(_MEDIA_TYPE, _getQuery(_userId))
+		val body = RequestBody.create(_MEDIA_TYPE, _getQuery(_userId))
 
-        val client = OkHttpClient().newBuilder()
-                                    .readTimeout(300, TimeUnit.SECONDS)
-                                    .writeTimeout(300, TimeUnit.SECONDS)
-                                    .connectTimeout(300, TimeUnit.SECONDS)
-                                    .build()
+		val client = OkHttpClient().newBuilder()
+			.readTimeout(300, TimeUnit.SECONDS)
+			.writeTimeout(300, TimeUnit.SECONDS)
+			.connectTimeout(300, TimeUnit.SECONDS)
+			.build()
 
-        val request = Request.Builder()
-                                .url(_CASSANDRA_URL)
-                                .post(body)
-                                .build()
+		val request = Request.Builder()
+			.url(_CASSANDRA_URL)
+			.post(body)
+			.build()
 
-        val response = client.newCall(request).execute() as okhttp3.Response
+		val response = client.newCall(request).execute() as okhttp3.Response
 
-        val responseBody = response.body()!!.string()
+		val responseBody = response.body()!!.string()
 
-        val listType = object : TypeToken<ArrayList<AnalyticsEventsMessageModel>>() {}.type
+		val listType = object : TypeToken<ArrayList<AnalyticsEventsMessageModel>>() {}.type
 
-        val list = JSONParser.fromJsonString<ArrayList<AnalyticsEventsMessageModel>>(
-                responseBody, listType)
+		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEventsMessageModel>>(
+			responseBody, listType)
 
-        Assert.assertTrue(!list.isEmpty())
+		Assert.assertTrue(!list.isEmpty())
 
-        val model = list[0]
+		val model = list[0]
 
-        Assert.assertEquals(_userId, model.userId)
-    }
+		Assert.assertEquals(_userId, model.userId)
+	}
 
-    private fun _getQuery(userId: String?): String {
-        return """{ "keyspace": "analytics", "table": "analyticsevent",
+	private fun _getQuery(userId: String?): String {
+		return """{ "keyspace": "analytics", "table": "analyticsevent",
                 "conditions" : [{"name":"userId","operator":"eq",
                 "value": "$userId"}]}"""
-    }
+	}
 
-    private fun _getUserId(): String {
-        val currentDate = SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(Date())
+	private fun _getUserId(): String {
+		val currentDate = SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(Date())
 
-        return "ANDROID$currentDate"
-    }
+		return "ANDROID$currentDate"
+	}
 
-    companion object {
+	companion object {
 
-        private const val _CASSANDRA_URL = "http://192.168.108.90:9095/api/query/execute"
+		private const val _CASSANDRA_URL = "http://192.168.108.90:9095/api/query/execute"
 
-        private val _MEDIA_TYPE = MediaType.parse(
-                "application/json; charset=utf-8")
-    }
+		private val _MEDIA_TYPE = MediaType.parse(
+			"application/json; charset=utf-8")
+	}
 
 }
