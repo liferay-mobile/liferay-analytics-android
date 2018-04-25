@@ -63,7 +63,9 @@ class Analytics private constructor(val application: Application, private val an
 	companion object {
 
 		@JvmStatic
-		fun init(@NonNull context: Context?, analyticsKey: String?, flushIntervalInMilliseconds: Long) {
+		@JvmOverloads
+		fun init(@NonNull context: Context?, analyticsKey: String?,
+			flushIntervalInMilliseconds: Long = FLUSH_INTERVAL_DEFAULT) {
 
 			if (context == null) {
 				throw IllegalArgumentException("Context can't be null.")
@@ -86,11 +88,6 @@ class Analytics private constructor(val application: Application, private val an
 		}
 
 		@JvmStatic
-		fun init(@NonNull context: Context?, @NonNull analyticsKey: String?) {
-			init(context, analyticsKey, 2000)
-		}
-
-		@JvmStatic
 		val instance: Analytics
 			@Synchronized get() {
 				analyticsInstance?.takeUnless {
@@ -107,6 +104,8 @@ class Analytics private constructor(val application: Application, private val an
 
 		@Nullable
 		private val userId: String? = "kAnalyticsDroid"
+
+		private const val FLUSH_INTERVAL_DEFAULT: Long = 2000
 	}
 
 }
