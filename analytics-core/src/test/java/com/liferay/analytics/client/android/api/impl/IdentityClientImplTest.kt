@@ -25,26 +25,26 @@ import org.junit.Test
  */
 class IdentityClientImplTest {
 
-    @Test
-    @Throws(Exception::class)
-    fun testGetUserId() {
-        val identityContextMessageBuilder =
-                IdentityContextMessage.builder("liferay.com")
+	@Test
+	@Throws(Exception::class)
+	fun testGetUserId() {
+		val identityContextMessageBuilder =
+			IdentityContextMessage.builder("liferay.com")
 
-        identityContextMessageBuilder.dataSourceIdentifier("Liferay")
-        identityContextMessageBuilder.dataSourceIndividualIdentifier("12345")
-        identityContextMessageBuilder.domain("liferay.com")
-        identityContextMessageBuilder.language("en-US")
-        identityContextMessageBuilder.protocolVersion("1.0")
+		identityContextMessageBuilder.dataSourceIdentifier("Liferay")
+		identityContextMessageBuilder.dataSourceIndividualIdentifier("12345")
+		identityContextMessageBuilder.domain("liferay.com")
+		identityContextMessageBuilder.language("en-US")
+		identityContextMessageBuilder.protocolVersion("1.0")
 
-        identityContextMessageBuilder.identityFieldsProperty("email", "joe.blogs@liferay.com")
-        identityContextMessageBuilder.identityFieldsProperty("name", "Joe Bloggs")
+		identityContextMessageBuilder.identityFieldsProperty("email", "joe.blogs@liferay.com")
+		identityContextMessageBuilder.identityFieldsProperty("name", "Joe Bloggs")
 
-        val identityClientImpl = IdentityClientImpl()
+		val identityClientImpl = IdentityClientImpl()
 
-        val userId = identityClientImpl.getUserId(identityContextMessageBuilder.build())
+		val userId = identityClientImpl.getUserId(identityContextMessageBuilder.build())
 
-        Assert.assertTrue(userId.isNotEmpty())
-    }
+		Assert.assertTrue(userId.isNotEmpty())
+	}
 
 }
