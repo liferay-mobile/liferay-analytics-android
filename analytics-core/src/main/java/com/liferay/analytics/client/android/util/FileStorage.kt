@@ -16,36 +16,39 @@ package com.liferay.analytics.client.android.util
 
 import android.content.Context
 import java.io.BufferedReader
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 
 /**
  * @author Igor Matos
  */
-class FileStorage(private val _context: Context) {
+internal class FileStorage(private val context: Context) {
 
 	@Throws(IOException::class)
-	fun getStringByKey(key: String): String {
-		val inputStream = _context.openFileInput(key)
+	fun getStringByKey(key: String): String? {
+		try {
+			val inputStream = context.openFileInput(key)
 
-		val inputStreamReader = InputStreamReader(
-			inputStream)
+			val inputStreamReader = InputStreamReader(inputStream)
 
-		val bufferedReader = BufferedReader(inputStreamReader)
+			val bufferedReader = BufferedReader(inputStreamReader)
 
-		val stringBuilder = StringBuilder()
+			val stringBuilder = StringBuilder()
 
-		bufferedReader.lineSequence().forEach {
-			stringBuilder.append(it)
+			bufferedReader.lineSequence().forEach {
+				stringBuilder.append(it)
+			}
+
+			return stringBuilder.toString()
+		} catch (e: FileNotFoundException) {
+			return null
 		}
-
-		return stringBuilder.toString()
 	}
 
 	@Throws(IOException::class)
 	fun saveStringToKey(key: String, value: String) {
-		val outputStream = _context.openFileOutput(
-			key, Context.MODE_PRIVATE)
+		val outputStream = context.openFileOutput(key, Context.MODE_PRIVATE)
 
 		outputStream.write(value.toByteArray())
 		outputStream.close()
