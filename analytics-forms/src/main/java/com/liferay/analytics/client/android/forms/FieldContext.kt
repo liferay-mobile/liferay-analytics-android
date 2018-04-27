@@ -17,4 +17,4 @@ package com.liferay.analytics.client.android.forms
 /**
  * @author Igor Matos
  */
-data class FieldContext(val name: String, val title: String?, val formContext: FormContext)
+data class FieldContext(val name: String, val title: String?, val formAttributes: FormAttributes)

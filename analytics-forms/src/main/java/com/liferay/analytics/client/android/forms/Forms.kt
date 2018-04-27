@@ -30,31 +30,31 @@ object Forms {
 	private const val FIELD_TITLE_KEY = "fieldTitle"
 
 	@JvmStatic
-	fun formSubmitted(formContext: FormContext) {
+	fun formSubmitted(formAttributes: FormAttributes) {
 		val eventId = "formSubmitted"
 
 		val properties = HashMap<String, String>()
 
-		formContext.formTitle?.let {
+		formAttributes.formTitle?.let {
 			properties[FORM_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = formContext.formId
+		properties[FORM_ID_KEY] = formAttributes.formId
 
 		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
 
 	@JvmStatic
-	fun formViewed(formContext: FormContext) {
+	fun formViewed(formAttributes: FormAttributes) {
 		val eventId = "formViewed"
 
 		val properties = HashMap<String, String>()
 
-		formContext.formTitle?.let {
+		formAttributes.formTitle?.let {
 			properties[FORM_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = formContext.formId
+		properties[FORM_ID_KEY] = formAttributes.formId
 
 		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
@@ -84,7 +84,7 @@ object Forms {
 			properties[FIELD_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = fieldContext.formContext.formId
+		properties[FORM_ID_KEY] = fieldContext.formAttributes.formId
 		properties[FIELD_NAME] = fieldContext.name
 		properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
@@ -100,7 +100,7 @@ object Forms {
 			properties[FIELD_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = fieldContext.formContext.formId
+		properties[FORM_ID_KEY] = fieldContext.formAttributes.formId
 		properties[FIELD_NAME] = fieldContext.name
 
 		Analytics.send(eventId, properties, APPLICATION_ID)

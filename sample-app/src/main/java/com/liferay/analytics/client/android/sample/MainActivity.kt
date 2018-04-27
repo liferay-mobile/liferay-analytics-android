@@ -18,8 +18,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
-import com.liferay.analytics.client.android.api.impl.IdentityClientImpl
-import com.liferay.analytics.client.android.forms.FormContext
+import com.liferay.analytics.client.android.forms.FormAttributes
 import com.liferay.analytics.client.android.forms.Forms
 
 /**
@@ -31,9 +30,9 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		val formContext = FormContext("FormID", "Form Title")
+		val formAttributes = FormAttributes("FormID", "Form Title")
 
-		Forms.formViewed(formContext)
+		Forms.formViewed(formAttributes)
 
 		val button = findViewById<Button>(R.id.button)
 
