@@ -41,9 +41,7 @@ object Forms {
 
 		properties[FORM_ID_KEY] = formContext.formId
 
-		val analyticsInstance = Analytics.instance
-
-		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
 
 	@JvmStatic
@@ -58,9 +56,7 @@ object Forms {
 
 		properties[FORM_ID_KEY] = formContext.formId
 
-		val analyticsInstance = Analytics.instance
-
-		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
 
 	@JvmStatic
@@ -92,9 +88,7 @@ object Forms {
 		properties[FIELD_NAME] = fieldContext.name
 		properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
-		val analyticsInstance = Analytics.instance
-
-		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
 
 	private fun fieldFocused(fieldContext: FieldContext) {
@@ -109,9 +103,7 @@ object Forms {
 		properties[FORM_ID_KEY] = fieldContext.formContext.formId
 		properties[FIELD_NAME] = fieldContext.name
 
-		val analyticsInstance = Analytics.instance
-
-		analyticsInstance.send(eventId, properties, APPLICATION_ID)
+		Analytics.send(eventId, properties, APPLICATION_ID)
 	}
 
 }
