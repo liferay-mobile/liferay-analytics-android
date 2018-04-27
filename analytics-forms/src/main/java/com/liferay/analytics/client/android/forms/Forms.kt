@@ -16,6 +16,7 @@ package com.liferay.analytics.client.android.forms
 
 import android.widget.EditText
 import com.liferay.analytics.client.android.Analytics
+import com.liferay.analytics.client.android.forms.FormEvent.*
 
 /**
  * @author Igor Matos
@@ -31,8 +32,6 @@ object Forms {
 
 	@JvmStatic
 	fun formSubmitted(formAttributes: FormAttributes) {
-		val eventId = "formSubmitted"
-
 		val properties = HashMap<String, String>()
 
 		formAttributes.formTitle?.let {
@@ -41,13 +40,11 @@ object Forms {
 
 		properties[FORM_ID_KEY] = formAttributes.formId
 
-		Analytics.send(eventId, properties, APPLICATION_ID)
+		send(FORM_SUBMITTED, properties)
 	}
 
 	@JvmStatic
 	fun formViewed(formAttributes: FormAttributes) {
-		val eventId = "formViewed"
-
 		val properties = HashMap<String, String>()
 
 		formAttributes.formTitle?.let {
@@ -56,7 +53,7 @@ object Forms {
 
 		properties[FORM_ID_KEY] = formAttributes.formId
 
-		Analytics.send(eventId, properties, APPLICATION_ID)
+		send(FORM_VIEWED, properties)
 	}
 
 	@JvmStatic
@@ -76,8 +73,6 @@ object Forms {
 	}
 
 	private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
-		val eventId = "fieldBlurred"
-
 		val properties = HashMap<String, String>()
 
 		fieldContext.title?.let {
@@ -88,12 +83,10 @@ object Forms {
 		properties[FIELD_NAME] = fieldContext.name
 		properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
-		Analytics.send(eventId, properties, APPLICATION_ID)
+		send(FIELD_BLURRED, properties)
 	}
 
 	private fun fieldFocused(fieldContext: FieldContext) {
-		val eventId = "fieldFocused"
-
 		val properties = HashMap<String, String>()
 
 		fieldContext.title?.let {
@@ -103,7 +96,11 @@ object Forms {
 		properties[FORM_ID_KEY] = fieldContext.formAttributes.formId
 		properties[FIELD_NAME] = fieldContext.name
 
-		Analytics.send(eventId, properties, APPLICATION_ID)
+		send(FIELD_FOCUSED, properties)
+	}
+
+	private fun send(formEvent: FormEvent, properties: HashMap<String, String>) {
+		Analytics.send(formEvent.eventId, properties, APPLICATION_ID)
 	}
 
 }
