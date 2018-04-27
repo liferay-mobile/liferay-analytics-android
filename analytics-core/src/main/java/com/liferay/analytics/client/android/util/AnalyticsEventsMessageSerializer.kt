@@ -31,8 +31,7 @@ class AnalyticsEventsMessageSerializer : JsonSerializer<AnalyticsEventsMessage> 
 		analyticsEventsMessage: AnalyticsEventsMessage, typeOfSrc: Type,
 		context: JsonSerializationContext): JsonElement {
 
-		val model = AnalyticsEventsMessageModel(
-			analyticsEventsMessage)
+		val model = AnalyticsEventsMessageModel(analyticsEventsMessage)
 
 		val gson = JSONParser.gson()
 

@@ -43,8 +43,7 @@ class AnalyticsClientImpl : AnalyticsClient {
 		val json = JSONParser.toJSON(analyticsEventsMessage)
 
 		val analyticsPath = "$analyticsGatewayProtocol://" +
-			"$analyticsGatewayHost:$analyticsGatewayPort" +
-			"$analyticsGatewayPath"
+			"$analyticsGatewayHost:$analyticsGatewayPort$analyticsGatewayPath"
 
 		return HTTPClient.post(analyticsPath, json)
 	}

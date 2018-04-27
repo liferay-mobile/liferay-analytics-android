@@ -20,8 +20,7 @@ import com.liferay.analytics.model.IdentityContextMessage
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityContextMessageModel(
-	identityContextMessage: IdentityContextMessage) {
+class IdentityContextMessageModel(identityContextMessage: IdentityContextMessage) {
 
 	var analyticsKey: String
 	var cookiesEnabled: Boolean = false

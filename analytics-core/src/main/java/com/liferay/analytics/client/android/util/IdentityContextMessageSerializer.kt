@@ -27,16 +27,15 @@ import java.lang.reflect.Type
  */
 class IdentityContextMessageSerializer : JsonSerializer<IdentityContextMessage> {
 
-	override fun serialize(
-		identityContextMessage: IdentityContextMessage, typeOfSrc: Type,
-		context: JsonSerializationContext): JsonElement {
+    override fun serialize(
+        identityContextMessage: IdentityContextMessage, typeOfSrc: Type,
+        context: JsonSerializationContext): JsonElement {
 
-		val model = IdentityContextMessageModel(
-			identityContextMessage)
+        val model = IdentityContextMessageModel(identityContextMessage)
 
-		val gson = JSONParser.gson()
+        val gson = JSONParser.gson()
 
-		return gson.toJsonTree(model)
-	}
+        return gson.toJsonTree(model)
+    }
 
 }

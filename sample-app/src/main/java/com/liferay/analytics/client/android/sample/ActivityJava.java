@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import com.liferay.analytics.client.android.forms.FormAttributes;
 import com.liferay.analytics.client.android.forms.Forms;
+import com.liferay.analytics.client.android.util.JSONParser;
 
 public class ActivityJava extends AppCompatActivity {
 

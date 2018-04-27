@@ -36,8 +36,7 @@ internal class EventsDAO(context: Context) {
 
 			eventsJsonString?.let {
 				try {
-					var eventsList = Gson().fromJson<List<AnalyticsEventsMessage>>(it, listType())
-					return eventsList
+					return Gson().fromJson<List<AnalyticsEventsMessage>>(it, listType())
 				} catch (e: JsonSyntaxException) {
 					clear()
 				}
