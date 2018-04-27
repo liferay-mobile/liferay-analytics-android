@@ -20,7 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import com.liferay.analytics.client.android.forms.FormContext;
+import com.liferay.analytics.client.android.forms.FormAttributes;
 import com.liferay.analytics.client.android.forms.Forms;
 
 public class ActivityJava extends AppCompatActivity {
@@ -32,14 +32,14 @@ public class ActivityJava extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FormContext formContext = new FormContext("FormID", "Form Title 2");
+        final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title 2");
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Forms.formSubmitted(formContext);
+                Forms.formSubmitted(formAttributes);
 
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
