@@ -30,28 +30,6 @@ import io.reactivex.schedulers.Schedulers
 class Analytics private constructor(val application: Application, private val analyticsKey: String,
 	private val flushIntervalInMilliseconds: Long) {
 
-	fun send(@NonNull eventId: String, @NonNull properties: Map<String, String>, @NonNull applicationId: String) {
-
-		if (userId == null) {
-			return
-		}
-
-		val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId)
-
-		val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
-
-		eventBuilder.properties(properties)
-
-		analyticsEventsMessageBuilder.event(eventBuilder.build())
-
-		var flowable = Flowable.fromCallable({
-			ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
-		})
-
-		flowable.subscribeOn(Schedulers.newThread())
-			.subscribe()
-	}
-
 	init {
 		analyticsInstance?.let {
 			throw IllegalStateException("Your library was already initialized.")
@@ -88,13 +66,36 @@ class Analytics private constructor(val application: Application, private val an
 		}
 
 		@JvmStatic
-		val instance: Analytics
+		fun send(@NonNull eventId: String, @NonNull properties: Map<String, String>, @NonNull applicationId: String) {
+
+			if (userId == null) {
+				return
+			}
+
+			val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(instance.analyticsKey, userId)
+
+			val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
+
+			eventBuilder.properties(properties)
+
+			analyticsEventsMessageBuilder.event(eventBuilder.build())
+
+			var flowable = Flowable.fromCallable({
+				ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
+			})
+
+			flowable.subscribeOn(Schedulers.newThread())
+				.subscribe()
+		}
+
+		@JvmStatic
+		internal val instance: Analytics
 			@Synchronized get() {
-				analyticsInstance?.takeUnless {
+				analyticsInstance?.let {
 					return it
 				}
 
-				throw IllegalStateException("You must initialize your library.")
+				throw IllegalStateException("You must initialize your library")
 			}
 
 		private val ANALYTICS_CLIENT_IMPL = AnalyticsClientImpl()
