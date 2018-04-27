@@ -36,23 +36,23 @@ public class FileStorageTest {
 
     @Before
     public void setUp() throws IOException {
-        _fileStorage = new FileStorage(RuntimeEnvironment.application);
+        fileStorage = new FileStorage(RuntimeEnvironment.application);
 
-        _fileStorage.saveStringToKey(_savedKey, _savedValue);
+        fileStorage.saveStringToKey(savedKey, savedValue);
     }
 
     @Test
     public void testRetrieveSavedValue() throws IOException {
-        String result = _fileStorage.getStringByKey(_savedKey);
+        String result = fileStorage.getStringByKey(savedKey);
 
         Assert.assertNotNull(result);
-        Assert.assertEquals(_savedValue, result);
+        Assert.assertEquals(savedValue, result);
     }
 
     @Test
     public void testRetrieveUnsavedValue() {
         try {
-            String result = _fileStorage.getStringByKey(_notSavedKey);
+            String result = fileStorage.getStringByKey(notSavedKey);
             Assert.fail();
         } catch (IOException ioe) {
             return;
@@ -61,11 +61,11 @@ public class FileStorageTest {
 
     @Test
     public void testSaveStringToKey() throws IOException {
-        _fileStorage.saveStringToKey("key", "value");
+        fileStorage.saveStringToKey("key", "value");
     }
 
-    private FileStorage _fileStorage;
-    private String _notSavedKey = "notSavedValue";
-    private String _savedKey = "savedKey";
-    private String _savedValue = "savedValue";
+    private FileStorage fileStorage;
+    private String notSavedKey = "notSavedValue";
+    private String savedKey = "savedKey";
+    private String savedValue = "savedValue";
 }

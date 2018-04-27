@@ -20,33 +20,31 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
-import com.liferay.analytics.client.android.Analytics;
 import com.liferay.analytics.client.android.forms.FormContext;
 import com.liferay.analytics.client.android.forms.Forms;
 
 public class ActivityJava extends AppCompatActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_java);
-		Toolbar toolbar = findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_java);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-		final FormContext formContext = new FormContext("formform", "Form Title agora vai");
+        final FormContext formContext = new FormContext("FormID", "Form Title 2");
 
-		FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
-		fab.setOnClickListener( new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Forms.formSubmitted(formContext);
-	
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-					.setAction("Action", null).show();
-			}
-		});
-	}
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Forms.formSubmitted(formContext);
 
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null)
+                    .show();
+            }
+        });
+    }
 }

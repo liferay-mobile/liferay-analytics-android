@@ -27,21 +27,20 @@ import com.liferay.analytics.client.android.forms.Forms
  */
 class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_main)
 
-        val formContext = FormContext(
-                "formIDID", "titulo campeão")
+		val formContext = FormContext("FormID", "Form Title")
 
-        Forms.formViewed(formContext)
+		Forms.formViewed(formContext)
 
-        val button = findViewById<Button>(R.id.button)
+		val button = findViewById<Button>(R.id.button)
 
-        button.setOnClickListener {
-            var intent = Intent(it.context, ActivityJava::class.java)
-            startActivity(intent)
-        }
-    }
+		button.setOnClickListener {
+			var intent = Intent(it.context, ActivityJava::class.java)
+			startActivity(intent)
+		}
+	}
 
 }
