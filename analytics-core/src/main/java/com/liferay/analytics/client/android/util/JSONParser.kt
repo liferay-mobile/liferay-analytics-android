@@ -41,7 +41,6 @@ object JSONParser {
 		return gson().toJson(element)
 	}
 
-	@Synchronized
 	internal fun gson(): Gson {
 		val gsonBuilder = GsonBuilder()
 
