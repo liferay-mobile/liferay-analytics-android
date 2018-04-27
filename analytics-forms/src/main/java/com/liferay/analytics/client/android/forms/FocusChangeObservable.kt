@@ -37,7 +37,7 @@ class FocusChangeObservable(private val view: View) : Observable<Pair<Boolean, L
 		view.onFocusChangeListener = listener
 	}
 
-	protected class Listener(
+	private class Listener(
 		private val view: View, private val observer: Observer<in Pair<Boolean, Long>>)
 		: MainThreadDisposable(), View.OnFocusChangeListener {
 

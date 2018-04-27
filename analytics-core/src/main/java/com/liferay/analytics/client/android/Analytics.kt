@@ -40,8 +40,8 @@ class Analytics private constructor(val application: Application, private val an
 
 	companion object {
 
-		@JvmStatic
 		@JvmOverloads
+		@JvmStatic
 		fun init(@NonNull context: Context?, analyticsKey: String?,
 			flushIntervalInMilliseconds: Long = FLUSH_INTERVAL_DEFAULT) {
 
@@ -94,7 +94,7 @@ class Analytics private constructor(val application: Application, private val an
 
 			analyticsEventsMessageBuilder.event(eventBuilder.build())
 
-			var flowable = Flowable.fromCallable({
+			val flowable = Flowable.fromCallable({
 				ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
 			})
 

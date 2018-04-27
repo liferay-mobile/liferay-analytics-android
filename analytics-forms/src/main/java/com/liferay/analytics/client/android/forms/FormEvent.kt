@@ -17,7 +17,7 @@ package com.liferay.analytics.client.android.forms
 /**
  * @author Igor Matos
  */
-internal enum class FormEvent(val eventId: String) {
+internal enum class FormEvent(val value: String) {
 	FORM_SUBMITTED("formSubmitted"),
 	FORM_VIEWED("formViewed"),
 	FIELD_BLURRED("fieldBlurred"),

@@ -42,7 +42,6 @@ class AnalyticsEventsMessageModel(analyticsEventsMessage: AnalyticsEventsMessage
 		events = ArrayList()
 
 		for (event in analyticsEventsMessage.events) {
-
 			events.add(EventModel(event))
 		}
 
