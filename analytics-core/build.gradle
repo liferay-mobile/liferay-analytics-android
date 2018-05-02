@@ -13,8 +13,8 @@ ext {
 	versionCode = 100
 	versionName = '1.0.0'
 
-	siteUrl = 'https://github.com/liferay-mobile/com-liferay-analytics-client-android'
-	gitUrl = 'https://github.com/liferay-mobile/com-liferay-analytics-client-android.git'
+	siteUrl = 'https://github.com/liferay-mobile/liferay-analytics-android'
+	gitUrl = 'https://github.com/liferay-mobile/liferay-analytics-android.git'
 
 	licenseName = 'GNU Lesser General Public License, version 2.1'
 	licenseUrl = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
