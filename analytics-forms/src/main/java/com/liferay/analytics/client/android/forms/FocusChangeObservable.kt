@@ -30,7 +30,6 @@ import java.sql.Timestamp
 class FocusChangeObservable(private val view: View) : Observable<Pair<Boolean, Long>>() {
 
 	override fun subscribeActual(observer: Observer<in Pair<Boolean, Long>>) {
-
 		val listener = FocusChangeObservable.Listener(view, observer)
 
 		observer.onSubscribe(listener)

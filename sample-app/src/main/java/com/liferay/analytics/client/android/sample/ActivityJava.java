@@ -22,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import com.liferay.analytics.client.android.forms.FormAttributes;
 import com.liferay.analytics.client.android.forms.Forms;
-import com.liferay.analytics.client.android.util.JSONParser;
 
 public class ActivityJava extends AppCompatActivity {
 
@@ -34,7 +33,6 @@ public class ActivityJava extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title 2");
-
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
