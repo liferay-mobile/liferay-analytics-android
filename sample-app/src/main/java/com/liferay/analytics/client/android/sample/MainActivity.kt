@@ -18,6 +18,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.forms.FormAttributes
 import com.liferay.analytics.client.android.forms.Forms
 

@@ -38,7 +38,6 @@ public class ActivityJava extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title");
-        FloatingActionButton fab = findViewById(R.id.fab);
 
         FieldAttributes nameFieldAttributes = new FieldAttributes("Name", "nameTitle", formAttributes);
         EditText nameField = findViewById(R.id.nameField);
@@ -50,6 +49,7 @@ public class ActivityJava extends AppCompatActivity {
         EditText emailField = findViewById(R.id.emailField);
         Forms.trackField(emailField, emailFieldAttributes);
 
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
