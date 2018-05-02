@@ -15,7 +15,7 @@
 package com.liferay.analytics.client.android.dao
 
 import com.liferay.analytics.client.android.BuildConfig
-import com.liferay.analytics.model.AnalyticsEventsMessage
+import com.liferay.analytics.client.android.model.EventModel
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config
  * @author Igor Matos
  */
 
-@Config(constants = BuildConfig::class, sdk = intArrayOf(26))
+@Config(constants = BuildConfig::class, sdk = [26])
 @RunWith(RobolectricTestRunner::class)
 class EventsDAOTest {
 
@@ -38,52 +38,58 @@ class EventsDAOTest {
 	fun setUp() {
 		eventsDAO = EventsDAO(RuntimeEnvironment.application)
 
-		val analyticsEventsMessage = createAnalyticsEventsMessage(FIRST_ELEMENT_ID, FIRST_EVENT_ID)
+		val eventModel = EventModel(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
 
-		eventsDAO.addEvents(listOf(analyticsEventsMessage))
+		eventsDAO.addEvents(listOf(eventModel))
 	}
 
 	@Test
-	fun addAnalyticsEventsMessageTest() {
-		val firstEventFromFirstAnalyticsMessage = eventsDAO.savedEvents.first().events.first()
+	fun addEventTest() {
+		val firstEventModel = eventsDAO.events.first()
 
-		Assert.assertEquals(firstEventFromFirstAnalyticsMessage.eventId, FIRST_EVENT_ID)
-		Assert.assertEquals(firstEventFromFirstAnalyticsMessage.properties["elementId"], FIRST_ELEMENT_ID)
+		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
 	}
 
 	@Test
-	fun addMoreOneAnalyticsEventsMessageTest() {
-		val elementId = "lastElementId"
-		val eventId = "lastEventId"
+	fun addAnotherEventTest() {
+		val lastApplicationId = "lastApplicationId"
+		val lastEventId = "lastEventId"
 
-		val analyticsEventsMessage = createAnalyticsEventsMessage(elementId, eventId)
-		eventsDAO.addEvents(listOf(analyticsEventsMessage))
+		val eventModel = EventModel(lastApplicationId, lastEventId)
+		eventsDAO.addEvents(listOf(eventModel))
 
-		val lastEventFromFirstAnalyticsMessage = eventsDAO.savedEvents.last().events.first()
+		val events = eventsDAO.events
 
-		Assert.assertEquals(lastEventFromFirstAnalyticsMessage.eventId, eventId)
-		Assert.assertEquals(lastEventFromFirstAnalyticsMessage.properties["elementId"], elementId)
+		val lastEventModel = events.last()
+		Assert.assertEquals(lastEventId, lastEventModel.eventId)
+		Assert.assertEquals(lastApplicationId, lastEventModel.applicationId)
 
-		val firstEventFromFirstAnalyticsMessage = eventsDAO.savedEvents.first().events.first()
-
-		Assert.assertEquals(firstEventFromFirstAnalyticsMessage.eventId, FIRST_EVENT_ID)
-		Assert.assertEquals(firstEventFromFirstAnalyticsMessage.properties["elementId"], FIRST_ELEMENT_ID)
+		val firstEventModel = events.first()
+		Assert.assertEquals(FIRST_EVENT_ID, firstEventModel.eventId)
+		Assert.assertEquals(FIRST_APPLICATION_ID, firstEventModel.applicationId)
 	}
 
-	fun createAnalyticsEventsMessage(elementId: String, eventId: String): AnalyticsEventsMessage {
-		val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder("analyticsKey", "userId")
-		val eventBuilder = AnalyticsEventsMessage.Event.builder("ApplicationId", eventId)
+	@Test
+	fun clearEventsTest() {
+		eventsDAO.clear()
 
-		eventBuilder.property("elementId", elementId)
+		Assert.assertEquals(0, eventsDAO.events.size)
+	}
 
-		analyticsEventsMessageBuilder.event(eventBuilder.build())
+	@Test
+	fun replaceEventsTest() {
+		val eventToReplace = EventModel("applicationId", "eventId")
+		eventsDAO.replace(listOf(eventToReplace))
 
-		return analyticsEventsMessageBuilder.build()
+		val events = eventsDAO.events
+		Assert.assertEquals(1, events.size)
+		Assert.assertEquals("applicationId", events.first().applicationId)
+		Assert.assertEquals("eventId", events.first().eventId)
 	}
 
 	companion object {
 		private const val FIRST_EVENT_ID = "firstEventId"
-		private const val FIRST_ELEMENT_ID = "firstElementId"
+		private const val FIRST_APPLICATION_ID = "firstApplicationId"
 	}
 
 }
