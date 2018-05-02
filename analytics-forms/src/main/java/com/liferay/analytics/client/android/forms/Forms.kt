@@ -100,7 +100,7 @@ object Forms {
 	}
 
 	private fun send(formEvent: FormEvent, properties: HashMap<String, String>) {
-		Analytics.send(formEvent.value, properties, APPLICATION_ID)
+		Analytics.send(formEvent.value, APPLICATION_ID, properties)
 	}
 
 }
