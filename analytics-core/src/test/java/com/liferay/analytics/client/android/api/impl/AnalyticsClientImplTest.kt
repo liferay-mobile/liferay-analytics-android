@@ -16,18 +16,18 @@ package com.liferay.analytics.client.android.api.impl
 
 import com.google.gson.reflect.TypeToken
 import com.liferay.analytics.client.android.model.AnalyticsEventsMessageModel
+import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
 import com.liferay.analytics.model.AnalyticsEventsMessage
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 /**
@@ -74,22 +74,13 @@ class AnalyticsClientImplTest {
 
 		analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build())
 
-		val body = RequestBody.create(MEDIA_TYPE, getQuery(userId))
-
 		val client = OkHttpClient().newBuilder()
 			.readTimeout(300, TimeUnit.SECONDS)
 			.writeTimeout(300, TimeUnit.SECONDS)
 			.connectTimeout(300, TimeUnit.SECONDS)
 			.build()
 
-		val request = Request.Builder()
-			.url(CASSANDRA_URL)
-			.post(body)
-			.build()
-
-		val response = client.newCall(request).execute() as okhttp3.Response
-
-		val responseBody = response.body()!!.string()
+		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), client)
 
 		val listType = object : TypeToken<ArrayList<AnalyticsEventsMessageModel>>() {}.type
 

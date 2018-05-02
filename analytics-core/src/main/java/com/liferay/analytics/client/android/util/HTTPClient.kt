@@ -23,15 +23,12 @@ import java.io.IOException
 /**
  * @author Igor Matos
  */
-class HTTPClient {
+internal class HTTPClient {
 
 	companion object {
 
 		@Throws(IOException::class)
-		fun post(url: String, json: String): String {
-
-			val client = OkHttpClient()
-
+		fun post(url: String, json: String, client: OkHttpClient = OkHttpClient()): String {
 			val body = RequestBody.create(MEDIA_TYPE, json)
 
 			val request = Request.Builder()
