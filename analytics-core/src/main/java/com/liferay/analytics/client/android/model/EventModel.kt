@@ -37,4 +37,7 @@ class EventModel(event: AnalyticsEventsMessage.Event) {
 		properties = event.properties
 	}
 
+	constructor(applicationId: String, eventId: String) :
+		this(AnalyticsEventsMessage.Event.builder(applicationId, eventId).build())
+
 }
