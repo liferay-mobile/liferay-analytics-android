@@ -108,7 +108,6 @@ class AnalyticsClientImplTest {
 
 	companion object {
 		private const val CASSANDRA_URL = "http://192.168.108.90:9095/api/query/execute"
-		private val MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
 	}
 
 }
