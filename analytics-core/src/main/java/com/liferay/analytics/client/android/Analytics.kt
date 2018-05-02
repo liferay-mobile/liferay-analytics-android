@@ -42,7 +42,7 @@ class Analytics private constructor(val application: Application, private val an
 
 		@JvmOverloads
 		@JvmStatic
-		fun init(@NonNull context: Context?, analyticsKey: String?,
+		fun init(@NonNull context: Context, @NonNull analyticsKey: String,
 			flushIntervalInMilliseconds: Long = FLUSH_INTERVAL_DEFAULT) {
 
 			if (context == null) {
@@ -53,7 +53,7 @@ class Analytics private constructor(val application: Application, private val an
 				throw IllegalArgumentException("AppContext can't be null.")
 			}
 
-			if (analyticsKey.isNullOrEmpty() || analyticsKey!!.isBlank()) {
+			if (analyticsKey.isNullOrEmpty() || analyticsKey.isBlank()) {
 				throw IllegalArgumentException("Analytics key can't be null or empty.")
 			}
 
@@ -67,18 +67,18 @@ class Analytics private constructor(val application: Application, private val an
 
 		@JvmOverloads
 		@JvmStatic
-		fun send(@NonNull eventId: String?, @NonNull properties: Map<String, String>? = hashMapOf(),
-			@NonNull applicationId: String?) {
+		fun send(@NonNull eventId: String, @NonNull applicationId: String,
+			@NonNull properties: Map<String, String> = hashMapOf()) {
 
 			if (userId == null) {
 				return
 			}
 
-			if (eventId.isNullOrEmpty() || eventId!!.isBlank()) {
+			if (eventId.isNullOrEmpty() || eventId.isBlank()) {
 				throw IllegalArgumentException("EventId can't be null or empty.")
 			}
 
-			if (applicationId.isNullOrEmpty() || applicationId!!.isBlank()) {
+			if (applicationId.isNullOrEmpty() || applicationId.isBlank()) {
 				throw IllegalArgumentException("ApplicationId can't be null or empty.")
 			}
 
@@ -86,7 +86,8 @@ class Analytics private constructor(val application: Application, private val an
 				throw IllegalArgumentException("Properties can't be null.")
 			}
 
-			val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(instance.analyticsKey, userId)
+			val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(
+				instance.analyticsKey, userId)
 
 			val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
 
@@ -103,7 +104,7 @@ class Analytics private constructor(val application: Application, private val an
 		}
 
 		@JvmStatic
-		internal val instance: Analytics
+		private val instance: Analytics
 			@Synchronized get() {
 				analyticsInstance?.let {
 					return it
