@@ -15,7 +15,7 @@
 package com.liferay.analytics.client.android.dao
 
 import com.liferay.analytics.client.android.BuildConfig
-import com.liferay.analytics.client.android.model.EventModel
+import com.liferay.analytics.client.android.model.Event
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +38,7 @@ class EventsDAOTest {
 	fun setUp() {
 		eventsDAO = EventsDAO(RuntimeEnvironment.application)
 
-		val eventModel = EventModel(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
+		val eventModel = Event(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
 
 		eventsDAO.addEvents(listOf(eventModel))
 	}
@@ -55,7 +55,7 @@ class EventsDAOTest {
 		val lastApplicationId = "lastApplicationId"
 		val lastEventId = "lastEventId"
 
-		val eventModel = EventModel(lastApplicationId, lastEventId)
+		val eventModel = Event(lastApplicationId, lastEventId)
 		eventsDAO.addEvents(listOf(eventModel))
 
 		val events = eventsDAO.events
@@ -78,7 +78,7 @@ class EventsDAOTest {
 
 	@Test
 	fun replaceEventsTest() {
-		val eventToReplace = EventModel("applicationId", "eventId")
+		val eventToReplace = Event("applicationId", "eventId")
 		eventsDAO.replace(listOf(eventToReplace))
 
 		val events = eventsDAO.events

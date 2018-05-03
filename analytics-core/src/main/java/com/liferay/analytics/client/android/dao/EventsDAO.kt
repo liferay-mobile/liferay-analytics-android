@@ -18,7 +18,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import com.liferay.analytics.client.android.model.EventModel
+import com.liferay.analytics.client.android.model.Event
 import com.liferay.analytics.client.android.util.FileStorage
 import java.io.IOException
 import java.lang.reflect.Type
@@ -30,13 +30,13 @@ internal class EventsDAO(context: Context) {
 
 	private val fileStorage: FileStorage = FileStorage(context)
 
-	val events: List<EventModel>
+	val events: List<Event>
 		get() {
 			val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
 
 			eventsJsonString?.let {
 				try {
-					return Gson().fromJson<List<EventModel>>(it, listType())
+					return Gson().fromJson<List<Event>>(it, listType())
 				} catch (e: JsonSyntaxException) {
 					clear()
 				}
@@ -45,7 +45,7 @@ internal class EventsDAO(context: Context) {
 			return listOf()
 		}
 
-	fun addEvents(events: List<EventModel>) {
+	fun addEvents(events: List<Event>) {
 		val eventsToSave = this.events.plus(events)
 
 		replace(eventsToSave)
@@ -55,7 +55,7 @@ internal class EventsDAO(context: Context) {
 		replace(listOf())
 	}
 
-	fun replace(events: List<EventModel>) {
+	fun replace(events: List<Event>) {
 		val eventsJson = Gson().toJson(events)
 
 		try {
@@ -66,7 +66,7 @@ internal class EventsDAO(context: Context) {
 	}
 
 	private fun listType(): Type? {
-		return object : TypeToken<ArrayList<EventModel>>() {}.type
+		return object : TypeToken<ArrayList<Event>>() {}.type
 	}
 
 	companion object {

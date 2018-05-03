@@ -15,16 +15,16 @@
 package com.liferay.analytics.client.android.api.impl
 
 import com.google.gson.reflect.TypeToken
-import com.liferay.analytics.client.android.model.AnalyticsEventsMessageModel
+import com.liferay.analytics.client.android.model.AnalyticsEventsMessage
+import com.liferay.analytics.client.android.model.Event
 import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
-import com.liferay.analytics.model.AnalyticsEventsMessage
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
@@ -42,17 +42,10 @@ class AnalyticsClientImplTest {
 
 	@Before
 	fun setUp() {
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayHost)
-			.thenReturn("192.168.108.90")
-
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayProtocol)
-			.thenReturn("http")
-
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayPort)
-			.thenReturn("8081")
-
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayPath)
-			.thenReturn("/")
+		Mockito.`when`(analyticsClientImpl.analyticsGatewayHost).thenReturn("192.168.108.90")
+		Mockito.`when`(analyticsClientImpl.analyticsGatewayProtocol).thenReturn("http")
+		Mockito.`when`(analyticsClientImpl.analyticsGatewayPort).thenReturn("8081")
+		Mockito.`when`(analyticsClientImpl.analyticsGatewayPath).thenReturn("/")
 
 		userId = getUserId()
 	}
@@ -60,19 +53,17 @@ class AnalyticsClientImplTest {
 	@Test
 	@Throws(Exception::class)
 	fun testSendAnalytics() {
-		val analyticsEventsMessageBuilder =
-			AnalyticsEventsMessage.builder("liferay.com", userId)
-				.contextProperty("languageId", "pt_PT")
-				.contextProperty("url", "http://192.168.108.90:8081/")
+		var analyticsEventsMessage = AnalyticsEventsMessage("liferay.com", userId).apply {
+			context = mapOf("languageId" to "pt_PT",
+				"url" to "http://192.168.108.90:8081/")
 
-		val event = AnalyticsEventsMessage.Event.builder("ApplicationId", "View")
-			.property("elementId", "banner1")
-			.build()
+			protocolVersion = "1.0"
 
-		analyticsEventsMessageBuilder.event(event)
-		analyticsEventsMessageBuilder.protocolVersion("1.0")
+			val event = Event("ApplicationId", "EventId")
+			events = mutableListOf(event)
+		}
 
-		analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build())
+		analyticsClientImpl.sendAnalytics(analyticsEventsMessage)
 
 		val client = OkHttpClient().newBuilder()
 			.readTimeout(300, TimeUnit.SECONDS)
@@ -82,14 +73,12 @@ class AnalyticsClientImplTest {
 
 		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), client)
 
-		val listType = object : TypeToken<ArrayList<AnalyticsEventsMessageModel>>() {}.type
+		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEventsMessage>>(
+			responseBody, listType())
 
-		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEventsMessageModel>>(
-			responseBody, listType)
+		Assert.assertTrue(list.isNotEmpty())
 
-		Assert.assertTrue(!list.isEmpty())
-
-		val model = list[0]
+		val model = list.first()
 
 		Assert.assertEquals(userId, model.userId)
 	}
@@ -104,6 +93,10 @@ class AnalyticsClientImplTest {
 		val currentDate = SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(Date())
 
 		return "ANDROID$currentDate"
+	}
+
+	private fun listType(): Type {
+		return object : TypeToken<ArrayList<AnalyticsEventsMessage>>() {}.type
 	}
 
 	companion object {

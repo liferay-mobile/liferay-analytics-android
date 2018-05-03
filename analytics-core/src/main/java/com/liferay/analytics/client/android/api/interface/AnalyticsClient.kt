@@ -12,33 +12,17 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.api.impl
+package com.liferay.analytics.client.android.api.`interface`
 
-import com.liferay.analytics.client.android.model.IdentityContextMessage
-import org.junit.Assert
-import org.junit.Test
+import com.liferay.analytics.client.android.model.AnalyticsEventsMessage
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityClientImplTest {
+interface AnalyticsClient {
 
-	@Test
 	@Throws(Exception::class)
-	fun testGetUserId() {
-		val identityContextMessage = IdentityContextMessage("liferay.com").apply {
-			language = "en-US"
-			protocolVersion = "1.0"
-
-			identityFields = mutableMapOf("email" to "joe.blogs@liferay.com",
-				"name" to "Joe Bloggs")
-		}
-
-		val identityClientImpl = IdentityClientImpl()
-		val userId = identityClientImpl.getUserId(identityContextMessage)
-
-		Assert.assertTrue(userId.isNotEmpty())
-	}
+	fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String
 
 }
