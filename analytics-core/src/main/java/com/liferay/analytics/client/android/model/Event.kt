@@ -12,37 +12,18 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.util
+package com.liferay.analytics.client.android.model
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSyntaxException
-import java.lang.reflect.Type
+import java.util.Date
+import java.util.HashMap
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-internal object JSONParser {
+class Event(var applicationId: String, var eventId: String) {
 
-	private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"
-
-	@Throws(JsonSyntaxException::class)
-	fun <T> fromJsonString(json: String, type: Type): T {
-
-		return gson().fromJson(json, type)
-	}
-
-	fun toJSON(element: Any): String {
-		return gson().toJson(element)
-	}
-
-	internal fun gson(): Gson {
-		val gsonBuilder = GsonBuilder()
-
-		gsonBuilder.setDateFormat(DATE_FORMAT)
-
-		return gsonBuilder.create()
-	}
+	var eventDate = Date()
+	var properties: Map<String, String> = HashMap()
 
 }

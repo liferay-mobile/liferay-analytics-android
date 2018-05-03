@@ -14,10 +14,10 @@
 
 package com.liferay.analytics.client.android.api.impl
 
-import com.liferay.analytics.client.AnalyticsClient
+import com.liferay.analytics.client.android.api.`interface`.AnalyticsClient
+import com.liferay.analytics.client.android.model.AnalyticsEventsMessage
 import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
-import com.liferay.analytics.model.AnalyticsEventsMessage
 
 /**
  * @author Igor Matos

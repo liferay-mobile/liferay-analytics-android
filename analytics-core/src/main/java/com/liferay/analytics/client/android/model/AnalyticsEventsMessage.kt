@@ -14,30 +14,18 @@
 
 package com.liferay.analytics.client.android.model
 
-import com.liferay.analytics.model.AnalyticsEventsMessage
-
-import java.util.Date
+import com.google.gson.annotations.SerializedName
 import java.util.HashMap
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-class EventModel(event: AnalyticsEventsMessage.Event) {
+data class AnalyticsEventsMessage(var analyticsKey: String,
+	@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
 
-	var applicationId: String
-	var eventDate = Date()
-	var eventId: String
-	var properties: Map<String, String> = HashMap()
-
-	init {
-		applicationId = event.applicationId
-		eventDate = event.eventDate
-		eventId = event.eventId
-		properties = event.properties
-	}
-
-	constructor(applicationId: String, eventId: String) :
-		this(AnalyticsEventsMessage.Event.builder(applicationId, eventId).build())
+	var context: Map<String, String> = HashMap()
+	var events: MutableList<Event> = mutableListOf()
+	var protocolVersion: String? = null
 
 }

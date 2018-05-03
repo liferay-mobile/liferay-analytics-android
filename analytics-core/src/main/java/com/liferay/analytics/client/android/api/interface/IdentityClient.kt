@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -12,33 +12,18 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.api.impl
+package com.liferay.analytics.client.android.api.`interface`
 
 import com.liferay.analytics.client.android.model.IdentityContextMessage
-import org.junit.Assert
-import org.junit.Test
+import java.io.IOException
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityClientImplTest {
+interface IdentityClient {
 
-	@Test
-	@Throws(Exception::class)
-	fun testGetUserId() {
-		val identityContextMessage = IdentityContextMessage("liferay.com").apply {
-			language = "en-US"
-			protocolVersion = "1.0"
-
-			identityFields = mutableMapOf("email" to "joe.blogs@liferay.com",
-				"name" to "Joe Bloggs")
-		}
-
-		val identityClientImpl = IdentityClientImpl()
-		val userId = identityClientImpl.getUserId(identityContextMessage)
-
-		Assert.assertTrue(userId.isNotEmpty())
-	}
+	@Throws(IOException::class)
+	fun getUserId(identityContextMessage: IdentityContextMessage): String
 
 }
