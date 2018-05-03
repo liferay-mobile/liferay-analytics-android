@@ -14,10 +14,10 @@
 
 package com.liferay.analytics.client.android.api.impl
 
-import com.liferay.analytics.client.IdentityClient
+import com.liferay.analytics.client.android.api.`interface`.IdentityClient
+import com.liferay.analytics.client.android.model.IdentityContextMessage
 import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
-import com.liferay.analytics.model.IdentityContextMessage
 import java.io.IOException
 
 /**

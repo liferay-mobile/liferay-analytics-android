@@ -12,37 +12,22 @@
  * details.
  */
 
-package com.liferay.analytics.client.android.util
-
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSyntaxException
-import java.lang.reflect.Type
+package com.liferay.analytics.client.android.model
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-internal object JSONParser {
+data class IdentityContextMessage(var analyticsKey: String) {
 
-	private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"
-
-	@Throws(JsonSyntaxException::class)
-	fun <T> fromJsonString(json: String, type: Type): T {
-
-		return gson().fromJson(json, type)
-	}
-
-	fun toJSON(element: Any): String {
-		return gson().toJson(element)
-	}
-
-	internal fun gson(): Gson {
-		val gsonBuilder = GsonBuilder()
-
-		gsonBuilder.setDateFormat(DATE_FORMAT)
-
-		return gsonBuilder.create()
-	}
+	var identityFields: MutableMap<String, String> = mutableMapOf()
+	var language: String? = null
+	var platform: String? = null
+	var protocolVersion: String? = null
+	var screenSizeAndColorDepth: String? = null
+	var systemFonts: String? = null
+	var timezone: String? = null
+	var touchSupport = false
+	var userId: String? = null
 
 }
