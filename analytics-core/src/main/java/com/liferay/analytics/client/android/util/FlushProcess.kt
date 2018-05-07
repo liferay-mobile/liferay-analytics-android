@@ -37,6 +37,29 @@ internal class FlushProcess(context: Context, var interval: Long) {
 		flush()
 	}
 
+	fun getEventsToSend(): List<Event> {
+		return eventsDAO.events.take(FLUSH_SIZE)
+	}
+
+	fun getRemainingEvents(): List<Event> {
+		return eventsDAO.events.drop(FLUSH_SIZE)
+	}
+
+	fun saveEventsQueue() {
+		eventsDAO.addEvents(eventsQueue)
+		eventsQueue.clear()
+	}
+
+	fun addEvent(event: Event) {
+		if (isInProgress) {
+			eventsQueue.add(event)
+
+			return
+		}
+
+		eventsDAO.addEvents(listOf(event))
+	}
+
 	private fun sendEvents() {
 		if (isInProgress) {
 			return
@@ -67,29 +90,6 @@ internal class FlushProcess(context: Context, var interval: Long) {
 			isInProgress = false
 			saveEventsQueue()
 		}
-	}
-
-	fun getEventsToSend(): List<Event> {
-		return eventsDAO.events.take(FLUSH_SIZE)
-	}
-
-	fun getRemainingEvents(): List<Event> {
-		return eventsDAO.events.drop(FLUSH_SIZE)
-	}
-
-	fun saveEventsQueue() {
-		eventsDAO.addEvents(eventsQueue)
-		eventsQueue.clear()
-	}
-
-	fun addEvent(event: Event) {
-		if (isInProgress) {
-			eventsQueue.add(event)
-
-			return
-		}
-
-		eventsDAO.addEvents(listOf(event))
 	}
 
 	private fun flush() {
