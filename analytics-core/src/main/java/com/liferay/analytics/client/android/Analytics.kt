@@ -17,18 +17,15 @@ package com.liferay.analytics.client.android
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import com.liferay.analytics.client.android.api.impl.AnalyticsClientImpl
-import com.liferay.analytics.model.AnalyticsEventsMessage
-import io.reactivex.Flowable
+import com.liferay.analytics.client.android.model.Event
+import com.liferay.analytics.client.android.util.FlushProcess
 import io.reactivex.annotations.NonNull
-import io.reactivex.annotations.Nullable
-import io.reactivex.schedulers.Schedulers
 
 /**
  * @author Igor Matos
  */
-class Analytics private constructor(val application: Application, private val analyticsKey: String,
-	private val flushIntervalInMilliseconds: Long) {
+class Analytics private constructor(val application: Application, internal val analyticsKey: String,
+	flushIntervalInMilliseconds: Long) {
 
 	init {
 		analyticsInstance?.let {
@@ -36,6 +33,8 @@ class Analytics private constructor(val application: Application, private val an
 		}
 
 		analyticsInstance = this
+
+		flushProcess = FlushProcess(application, flushIntervalInMilliseconds)
 	}
 
 	companion object {
@@ -70,10 +69,6 @@ class Analytics private constructor(val application: Application, private val an
 		fun send(@NonNull eventId: String, @NonNull applicationId: String,
 			@NonNull properties: Map<String, String> = hashMapOf()) {
 
-			if (userId == null) {
-				return
-			}
-
 			if (eventId.isNullOrEmpty() || eventId.isBlank()) {
 				throw IllegalArgumentException("EventId can't be null or empty.")
 			}
@@ -86,25 +81,14 @@ class Analytics private constructor(val application: Application, private val an
 				throw IllegalArgumentException("Properties can't be null.")
 			}
 
-			val analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(
-				instance.analyticsKey, userId)
+			val event = Event(applicationId, eventId)
+			event.properties = properties
 
-			val eventBuilder = AnalyticsEventsMessage.Event.builder(applicationId, eventId)
-
-			eventBuilder.properties(properties)
-
-			analyticsEventsMessageBuilder.event(eventBuilder.build())
-
-			val flowable = Flowable.fromCallable({
-				ANALYTICS_CLIENT_IMPL.sendAnalytics(analyticsEventsMessageBuilder.build())
-			})
-
-			flowable.subscribeOn(Schedulers.newThread())
-				.subscribe()
+			flushProcess.addEvent(event)
 		}
 
 		@JvmStatic
-		private val instance: Analytics
+		var instance: Analytics?
 			@Synchronized get() {
 				analyticsInstance?.let {
 					return it
@@ -112,16 +96,15 @@ class Analytics private constructor(val application: Application, private val an
 
 				throw IllegalStateException("You must initialize your library")
 			}
-
-		private val ANALYTICS_CLIENT_IMPL = AnalyticsClientImpl()
+			set(value) {
+				analyticsInstance = value
+			}
 
 		@SuppressLint("StaticFieldLeak")
 		private var analyticsInstance: Analytics? = null
 
-		@Nullable
-		private val userId: String? = "kAnalyticsDroid"
-
-		private const val FLUSH_INTERVAL_DEFAULT: Long = 2000
+		internal lateinit var flushProcess: FlushProcess
+		private const val FLUSH_INTERVAL_DEFAULT: Long = 60000
 	}
 
 }
