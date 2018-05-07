@@ -16,7 +16,10 @@ package com.liferay.analytics.client.android.forms
 
 import android.widget.EditText
 import com.liferay.analytics.client.android.Analytics
-import com.liferay.analytics.client.android.forms.FormEvent.*
+import com.liferay.analytics.client.android.forms.FormEvent.FIELD_BLURRED
+import com.liferay.analytics.client.android.forms.FormEvent.FIELD_FOCUSED
+import com.liferay.analytics.client.android.forms.FormEvent.FORM_SUBMITTED
+import com.liferay.analytics.client.android.forms.FormEvent.FORM_VIEWED
 
 /**
  * @author Igor Matos
