@@ -14,7 +14,9 @@
 
 package com.liferay.analytics.client.android.forms
 
+import android.arch.lifecycle.LifecycleOwner
 import android.widget.EditText
+import com.kizitonwose.android.disposebag.disposedWith
 import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.forms.FormEvent.*
 
@@ -58,18 +60,20 @@ object Forms {
 
 	@JvmStatic
 	fun trackField(editText: EditText, fieldContext: FieldContext) {
+		val lifecycleOwner = editText.context as? LifecycleOwner ?: return
 
-		RxViewUtil.onFocus(editText).subscribe { focusEvent ->
-			val hasFocus = focusEvent.first
+		RxViewUtil.onFocus(editText)
+			.subscribe { focusEvent ->
+				val hasFocus = focusEvent.first
 
-			if (hasFocus) {
-				fieldFocused(fieldContext)
-			} else {
-				val focusDuration = focusEvent.second
+				if (hasFocus) {
+					fieldFocused(fieldContext)
+				} else {
+					val focusDuration = focusEvent.second
 
-				fieldBlurred(focusDuration, fieldContext)
-			}
-		}
+					fieldBlurred(focusDuration, fieldContext)
+				}
+			}.disposedWith(lifecycleOwner)
 	}
 
 	private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
