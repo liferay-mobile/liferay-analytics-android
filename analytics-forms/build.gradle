@@ -3,36 +3,37 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+	compileSdkVersion 26
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 26
+		versionCode 1
+		versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+	}
 
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
 }
 
 dependencies {
-    androidTestImplementation group: "com.android.support.test", name: "runner", version: "1.0.1"
-    androidTestImplementation group: "com.android.support.test.espresso", name: "espresso-core", version: "3.0.1"
+	androidTestImplementation group: "com.android.support.test", name: "runner", version: "1.0.1"
+	androidTestImplementation group: "com.android.support.test.espresso", name: "espresso-core", version: "3.0.1"
+	testImplementation group: "junit", name: "junit", version: "4.12"
 
-    implementation group: "com.jakewharton.rxbinding2", name: "rxbinding", version: "2.1.1"
+	implementation group: "com.jakewharton.rxbinding2", name: "rxbinding", version: "2.1.1"
+	implementation group: "com.android.support", name: "appcompat-v7", version: "26.1.0"
+	implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jre7", version: "$kotlin_version"
 
-    implementation group: "com.android.support", name: "appcompat-v7", version: "26.1.0"
-    implementation project(":analytics-core")
+	implementation ('com.github.kizitonwose:android-disposebag:0.1.0') {
+		exclude group: 'android.arch.lifecycle', module: 'runtime'
+	}
 
-    testImplementation group: "junit", name: "junit", version: "4.12"
-    implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jre7", version: "$kotlin_version"
+	implementation project(":analytics-core")
 }
