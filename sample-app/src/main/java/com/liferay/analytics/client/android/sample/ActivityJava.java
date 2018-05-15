@@ -20,9 +20,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
+import com.liferay.analytics.client.android.forms.FieldAttributes;
 import com.liferay.analytics.client.android.forms.FormAttributes;
 import com.liferay.analytics.client.android.forms.Forms;
-import com.liferay.analytics.client.android.util.JSONParser;
 
 public class ActivityJava extends AppCompatActivity {
 
@@ -33,16 +34,23 @@ public class ActivityJava extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title 2");
-
+        final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title");
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        FieldAttributes nameFieldAttributes = new FieldAttributes("Name", "nameTitle", formAttributes);
+        EditText nameField = findViewById(R.id.nameField);
+        Forms.trackField(nameField, nameFieldAttributes);
+
+        FieldAttributes emailFieldAttributes = new FieldAttributes("Email", "emailTitle", formAttributes);
+        EditText emailField = findViewById(R.id.emailField);
+        Forms.trackField(emailField, emailFieldAttributes);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Forms.formSubmitted(formAttributes);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Email sent!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show();
             }

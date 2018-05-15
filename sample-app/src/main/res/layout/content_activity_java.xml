@@ -23,4 +23,28 @@
 	tools:context="com.liferay.analytics.client.android.sample.ActivityJava"
 	tools:showIn="@layout/activity_java">
 
+	<EditText
+		android:id="@+id/nameField"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:ems="10"
+		android:hint="Name"
+		android:inputType="textPersonName"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		/>
+	<EditText
+		android:id="@+id/emailField"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		android:ems="10"
+		android:hint="Email"
+		android:inputType="textPersonName"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/nameField"
+		/>
 </android.support.constraint.ConstraintLayout>
