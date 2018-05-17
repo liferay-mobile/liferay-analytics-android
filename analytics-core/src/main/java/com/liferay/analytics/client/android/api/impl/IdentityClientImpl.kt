@@ -23,7 +23,7 @@ import java.io.IOException
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityClientImpl {
+internal class IdentityClientImpl {
 
 	private val identityGatewayHost: String
 		get() = IDENTITY_GATEWAY_HOST

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -16,18 +16,5 @@ package com.liferay.analytics.client.android.model
 
 /**
  * @author Igor Matos
- * @author Allan Melo
  */
-data class IdentityContextMessage(var analyticsKey: String) {
-
-	var identityFields: MutableMap<String, String> = mutableMapOf()
-	var language: String? = null
-	var platform: String? = null
-	var protocolVersion: String? = null
-	var screenSizeAndColorDepth: String? = null
-	var systemFonts: String? = null
-	var timezone: String? = null
-	var touchSupport = false
-	var userId: String? = null
-
-}
+data class Identity(val name: String, val email: String)
