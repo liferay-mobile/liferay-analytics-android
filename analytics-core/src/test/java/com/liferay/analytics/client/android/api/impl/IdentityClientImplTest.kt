@@ -14,9 +14,11 @@
 
 package com.liferay.analytics.client.android.api.impl
 
-import com.liferay.analytics.client.android.model.IdentityContextMessage
+import com.liferay.analytics.client.android.model.Identity
+import com.liferay.analytics.client.android.model.IdentityContext
 import org.junit.Assert
 import org.junit.Test
+import java.io.IOException
 
 /**
  * @author Igor Matos
@@ -25,20 +27,27 @@ import org.junit.Test
 class IdentityClientImplTest {
 
 	@Test
-	@Throws(Exception::class)
-	fun testGetUserId() {
-		val identityContextMessage = IdentityContextMessage("liferay.com").apply {
-			language = "en-US"
-			protocolVersion = "1.0"
-
-			identityFields = mutableMapOf("email" to "joe.blogs@liferay.com",
-				"name" to "Joe Bloggs")
+	fun sendUserId() {
+		val identityContext = IdentityContext("liferay.com").apply {
+			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
 
 		val identityClientImpl = IdentityClientImpl()
-		val userId = identityClientImpl.getUserId(identityContextMessage)
 
-		Assert.assertTrue(userId.isNotEmpty())
+		try {
+			identityClientImpl.send(identityContext)
+		} catch (e: IOException) {
+			Assert.fail()
+		}
+
+	}
+
+	@Test
+	fun createUserId() {
+		val identityContext = IdentityContext("liferay.com")
+		val userId = identityContext.userId
+
+		Assert.assertEquals(userId.length, 20)
 	}
 
 }
