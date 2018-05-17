@@ -14,8 +14,7 @@
 
 package com.liferay.analytics.client.android.api.impl
 
-import com.liferay.analytics.client.android.api.`interface`.IdentityClient
-import com.liferay.analytics.client.android.model.IdentityContextMessage
+import com.liferay.analytics.client.android.model.IdentityContext
 import com.liferay.analytics.client.android.util.HTTPClient
 import com.liferay.analytics.client.android.util.JSONParser
 import java.io.IOException
@@ -24,7 +23,7 @@ import java.io.IOException
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityClientImpl : IdentityClient {
+class IdentityClientImpl {
 
 	private val identityGatewayHost: String
 		get() = IDENTITY_GATEWAY_HOST
@@ -39,22 +38,20 @@ class IdentityClientImpl : IdentityClient {
 		get() = IDENTITY_GATEWAY_PROTOCOL
 
 	@Throws(IOException::class)
-	override fun getUserId(identityContextMessage: IdentityContextMessage): String {
+	fun send(identityContext: IdentityContext): String {
 
-		val json = JSONParser.toJSON(identityContextMessage)
+		val json = JSONParser.toJSON(identityContext)
 
-		val identityPath = String.format(
-			"%s://%s:%s/%s%s", identityGatewayProtocol,
-			identityGatewayHost, identityGatewayPort,
-			identityContextMessage.analyticsKey, identityGatewayPath)
+		val identityPath = "$identityGatewayProtocol://$identityGatewayHost:" +
+			"$identityGatewayPort/$identityGatewayPath"
 
 		return HTTPClient.post(identityPath, json)
 	}
 
 	companion object {
-		private const val IDENTITY_GATEWAY_HOST = "contacts-prod.liferay.com"
-		private const val IDENTITY_GATEWAY_PATH = "/identity"
-		private const val IDENTITY_GATEWAY_PORT = "443"
+		private const val IDENTITY_GATEWAY_HOST = "ec-dev.liferay.com"
+		private const val IDENTITY_GATEWAY_PATH = "api/identitycontextgateway/send-identity-context"
+		private const val IDENTITY_GATEWAY_PORT = "8095"
 		private const val IDENTITY_GATEWAY_PROTOCOL = "https"
 	}
 
