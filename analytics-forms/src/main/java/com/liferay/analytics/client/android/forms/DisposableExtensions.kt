@@ -40,7 +40,7 @@ fun Disposable.disposedWith(owner: LifecycleOwner) {
 	owner.lifecycle.addObserver(object : LifecycleObserver {
 
 		@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-		fun onDestroy(owner: LifecycleOwner) {
+		fun onDestroy() {
 			owner.lifecycle.removeObserver(this)
 			dispose()
 		}

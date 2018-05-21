@@ -27,7 +27,7 @@ dependencies {
 	androidTestImplementation group: "com.android.support.test.espresso", name: "espresso-core", version: "3.0.1"
 	testImplementation group: "junit", name: "junit", version: "4.12"
 
-	implementation group: "com.jakewharton.rxbinding2", name: "rxbinding", version: "2.1.1"
+	implementation group: "com.jakewharton.rxbinding2", name: "rxbinding-kotlin", version: "2.1.1"
 	implementation group: "com.android.support", name: "appcompat-v7", version: "26.1.0"
 	implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jre7", version: "$kotlin_version"
 	implementation group: "android.arch.lifecycle", name: "compiler", version: "1.1.1"

@@ -16,11 +16,13 @@ package com.liferay.analytics.client.android.forms
 
 import android.arch.lifecycle.LifecycleOwner
 import android.widget.EditText
+import com.jakewharton.rxbinding2.view.focusChanges
 import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.forms.FormEvent.FIELD_BLURRED
 import com.liferay.analytics.client.android.forms.FormEvent.FIELD_FOCUSED
 import com.liferay.analytics.client.android.forms.FormEvent.FORM_SUBMITTED
 import com.liferay.analytics.client.android.forms.FormEvent.FORM_VIEWED
+import java.sql.Timestamp
 
 /**
  * @author Igor Matos
@@ -64,18 +66,25 @@ object Forms {
 	fun trackField(editText: EditText, fieldAttributes: FieldAttributes) {
 		val lifecycleOwner = editText.context as? LifecycleOwner ?: return
 
-		RxViewUtil.onFocus(editText)
-			.subscribe { focusEvent ->
-				val hasFocus = focusEvent.first
-
-				if (hasFocus) {
+		editText.focusChanges()
+			.skipInitialValue()
+			.doOnNext { focus ->
+				if (focus) {
 					fieldFocused(fieldAttributes)
-				} else {
-					val focusDuration = focusEvent.second
-
-					fieldBlurred(focusDuration, fieldAttributes)
 				}
-			}.disposedWith(lifecycleOwner)
+			}
+			.map { (Timestamp(System.currentTimeMillis()).time) }
+			.buffer(2)
+			.map { pair ->
+				val focusTimestamp = pair.first()
+				val blurredTimestamp = pair.last()
+				blurredTimestamp - focusTimestamp
+			}
+			.subscribe { duration ->
+				fieldBlurred(duration, fieldAttributes)
+			}
+			.disposedWith(lifecycleOwner)
+
 	}
 
 	private fun fieldBlurred(focusDuration: Long, fieldAttributes: FieldAttributes) {
