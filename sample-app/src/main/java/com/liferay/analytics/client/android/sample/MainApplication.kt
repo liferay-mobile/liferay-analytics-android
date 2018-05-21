@@ -15,18 +15,40 @@
 package com.liferay.analytics.client.android.sample
 
 import android.app.Application
+import android.content.Context
 import com.liferay.analytics.client.android.Analytics
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
+import com.squareup.leakcanary.LeakCanary.refWatcher
+
 
 /**
  * @author Igor Matos
  */
 class MainApplication : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
+	companion object {
+		fun getRefWatcher(context: Context): RefWatcher {
+			val application = context.applicationContext as MainApplication
+			return application.refWatcher
+		}
+	}
 
-        Analytics.init(this, "key")
+	private lateinit var refWatcher: RefWatcher
 
-    }
+	override fun onCreate() {
+		super.onCreate()
+
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			return
+		}
+
+		if (BuildConfig.DEBUG) {
+			refWatcher = LeakCanary.install(this)
+		}
+
+		Analytics.init(this, "key")
+
+	}
 
 }

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import com.liferay.analytics.client.android.forms.FieldAttributes;
 import com.liferay.analytics.client.android.forms.FormAttributes;
 import com.liferay.analytics.client.android.forms.Forms;
+import com.squareup.leakcanary.RefWatcher;
 
 public class ActivityJava extends AppCompatActivity {
 
@@ -31,14 +32,18 @@ public class ActivityJava extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_java);
+
+        RefWatcher refWatcher = MainApplication.Companion.getRefWatcher(this);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title");
         FloatingActionButton fab = findViewById(R.id.fab);
 
         FieldAttributes nameFieldAttributes = new FieldAttributes("Name", "nameTitle", formAttributes);
         EditText nameField = findViewById(R.id.nameField);
+        refWatcher.watch(nameField);
+
         Forms.trackField(nameField, nameFieldAttributes);
 
         FieldAttributes emailFieldAttributes = new FieldAttributes("Email", "emailTitle", formAttributes);
