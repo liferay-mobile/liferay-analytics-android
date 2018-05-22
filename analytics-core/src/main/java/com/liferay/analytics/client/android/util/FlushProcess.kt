@@ -16,7 +16,7 @@ package com.liferay.analytics.client.android.util
 
 import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.api.impl.AnalyticsClientImpl
-import com.liferay.analytics.client.android.api.impl.IdentityClientImpl
+import com.liferay.analytics.client.android.api.impl.IdentityClient
 import com.liferay.analytics.client.android.dao.EventsDAO
 import com.liferay.analytics.client.android.dao.UserDAO
 import com.liferay.analytics.client.android.model.AnalyticsEventsMessage
@@ -122,7 +122,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 	}
 
 	fun sendIdentities() {
-		val identityClient = IdentityClientImpl()
+		val identityClient = IdentityClient()
 
 		var userContexts = userDAO.userContexts.toMutableList()
 
