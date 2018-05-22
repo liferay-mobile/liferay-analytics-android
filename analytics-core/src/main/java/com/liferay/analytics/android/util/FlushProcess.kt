@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Igor Matos
  */
-internal class FlushProcess(fileStorage: FileStorage, private var interval: Long) {
+internal class FlushProcess(fileStorage: FileStorage, private var flushInterval: Int) {
 
 	var eventsQueue: MutableList<Event> = mutableListOf()
 	var isInProgress = false
@@ -98,7 +98,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 	}
 
 	private fun flush() {
-		Observable.interval(interval, interval, TimeUnit.MILLISECONDS)
+		Observable.interval(flushInterval.toLong(), TimeUnit.SECONDS)
 			.subscribeOn(Schedulers.io())
 			.subscribe {
 				sendEvents()

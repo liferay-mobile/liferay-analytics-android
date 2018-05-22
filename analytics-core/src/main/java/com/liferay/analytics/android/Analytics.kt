@@ -28,7 +28,7 @@ import io.reactivex.annotations.NonNull
  * @author Igor Matos
  */
 class Analytics private constructor(fileStorage: FileStorage, internal val analyticsKey: String,
-	flushIntervalInMilliseconds: Long) {
+	flushInterval: Int) {
 
 	private val userDAO: UserDAO
 
@@ -40,7 +40,7 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 		analyticsInstance = this
 
 		userDAO = UserDAO(fileStorage)
-		flushProcess = FlushProcess(fileStorage, flushIntervalInMilliseconds)
+		flushProcess = FlushProcess(fileStorage, flushInterval)
 	}
 
 	companion object {
@@ -48,7 +48,7 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 		@JvmOverloads
 		@JvmStatic
 		fun configure(@NonNull context: Context, @NonNull analyticsKey: String,
-			flushIntervalInMilliseconds: Long = FLUSH_INTERVAL_DEFAULT) {
+			flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
 
 			if (context == null) {
 				throw IllegalArgumentException("Context can't be null.")
@@ -62,14 +62,14 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 				throw IllegalArgumentException("Analytics key can't be null or empty.")
 			}
 
-			if (flushIntervalInMilliseconds <= 0) {
+			if (flushInterval <= 0) {
 				throw IllegalArgumentException("flushInterval can't be less than or equals zero.")
 			}
 
 			val application = context.applicationContext as Application
 			val fileStorage = FileStorage(application)
 
-			Analytics(fileStorage, analyticsKey, flushIntervalInMilliseconds)
+			Analytics(fileStorage, analyticsKey, flushInterval)
 		}
 
 		@JvmOverloads
@@ -119,10 +119,15 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 			instance!!.userDAO.setUserId(identityContext.userId)
 		}
 
+		@JvmStatic
+		fun clearSession() {
+			instance!!.userDAO.clearUserId()
+		}
+
 		private var analyticsInstance: Analytics? = null
 
 		internal lateinit var flushProcess: FlushProcess
-		private const val FLUSH_INTERVAL_DEFAULT: Long = 60000
+		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
 	}
 
 	fun getDefaultIdentityContext(): IdentityContext {
