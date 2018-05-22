@@ -14,18 +14,23 @@
 
 package com.liferay.analytics.client.android
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import com.liferay.analytics.client.android.dao.UserDAO
 import com.liferay.analytics.client.android.model.Event
+import com.liferay.analytics.client.android.model.Identity
+import com.liferay.analytics.client.android.model.IdentityContext
+import com.liferay.analytics.client.android.util.FileStorage
 import com.liferay.analytics.client.android.util.FlushProcess
 import io.reactivex.annotations.NonNull
 
 /**
  * @author Igor Matos
  */
-class Analytics private constructor(val application: Application, internal val analyticsKey: String,
+class Analytics private constructor(fileStorage: FileStorage, internal val analyticsKey: String,
 	flushIntervalInMilliseconds: Long) {
+
+	private val userDAO: UserDAO
 
 	init {
 		analyticsInstance?.let {
@@ -34,7 +39,8 @@ class Analytics private constructor(val application: Application, internal val a
 
 		analyticsInstance = this
 
-		flushProcess = FlushProcess(application, flushIntervalInMilliseconds)
+		userDAO = UserDAO(fileStorage)
+		flushProcess = FlushProcess(fileStorage, flushIntervalInMilliseconds)
 	}
 
 	companion object {
@@ -61,7 +67,9 @@ class Analytics private constructor(val application: Application, internal val a
 			}
 
 			val application = context.applicationContext as Application
-			Analytics(application, analyticsKey, flushIntervalInMilliseconds)
+			val fileStorage = FileStorage(application)
+
+			Analytics(fileStorage, analyticsKey, flushIntervalInMilliseconds)
 		}
 
 		@JvmOverloads
@@ -100,11 +108,25 @@ class Analytics private constructor(val application: Application, internal val a
 				analyticsInstance = value
 			}
 
-		@SuppressLint("StaticFieldLeak")
+		@JvmStatic
+		fun setIdentity(email: String, name: String = "") {
+			val identityContext = instance!!.getDefaultIdentityContext()
+
+			val identity = Identity(name, email)
+			identityContext.identity = identity
+
+			instance!!.userDAO.addIdentityContext(identityContext)
+			instance!!.userDAO.setUserId(identityContext.userId)
+		}
+
 		private var analyticsInstance: Analytics? = null
 
 		internal lateinit var flushProcess: FlushProcess
 		private const val FLUSH_INTERVAL_DEFAULT: Long = 60000
+	}
+
+	fun getDefaultIdentityContext(): IdentityContext {
+		return IdentityContext(analyticsKey)
 	}
 
 }

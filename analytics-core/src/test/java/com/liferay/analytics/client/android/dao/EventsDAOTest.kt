@@ -16,6 +16,7 @@ package com.liferay.analytics.client.android.dao
 
 import com.liferay.analytics.client.android.BuildConfig
 import com.liferay.analytics.client.android.model.Event
+import com.liferay.analytics.client.android.util.FileStorage
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -36,7 +37,8 @@ class EventsDAOTest {
 
 	@Before
 	fun setUp() {
-		eventsDAO = EventsDAO(RuntimeEnvironment.application)
+		val filestorage = FileStorage(RuntimeEnvironment.application)
+		eventsDAO = EventsDAO(filestorage)
 
 		val eventModel = Event(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
 
@@ -44,14 +46,14 @@ class EventsDAOTest {
 	}
 
 	@Test
-	fun addEventTest() {
+	fun addEvent() {
 		val firstEventModel = eventsDAO.events.first()
 
 		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
 	}
 
 	@Test
-	fun addAnotherEventTest() {
+	fun addAnotherEvent() {
 		val lastApplicationId = "lastApplicationId"
 		val lastEventId = "lastEventId"
 
@@ -70,14 +72,14 @@ class EventsDAOTest {
 	}
 
 	@Test
-	fun clearEventsTest() {
+	fun clearEvents() {
 		eventsDAO.clear()
 
 		Assert.assertEquals(0, eventsDAO.events.size)
 	}
 
 	@Test
-	fun replaceEventsTest() {
+	fun replaceEvents() {
 		val eventToReplace = Event("applicationId", "eventId")
 		eventsDAO.replace(listOf(eventToReplace))
 

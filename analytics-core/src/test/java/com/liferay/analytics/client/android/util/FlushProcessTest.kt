@@ -17,6 +17,7 @@ package com.liferay.analytics.client.android.util
 import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.BuildConfig
 import com.liferay.analytics.client.android.dao.EventsDAO
+import com.liferay.analytics.client.android.dao.UserDAO
 import com.liferay.analytics.client.android.model.Event
 import junit.framework.Assert
 import org.junit.After
@@ -35,18 +36,24 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class FlushProcessTest {
 
-	private lateinit var flushProcess: FlushProcess
+	private lateinit var analytics: Analytics
 	private lateinit var eventsDAO: EventsDAO
+	private lateinit var flushProcess: FlushProcess
+	private lateinit var userDAO: UserDAO
 
 
 	@Before
 	fun setup() {
 		Analytics.init(RuntimeEnvironment.application, "analyticsKey")
 
+		analytics = Analytics.instance!!
 		flushProcess = Analytics.flushProcess
 		eventsDAO = flushProcess.eventsDAO
+		userDAO = flushProcess.userDAO
 
 		eventsDAO.clear()
+		userDAO.clearIdentities()
+		userDAO.clearUserId()
 	}
 
 	@After
@@ -55,7 +62,7 @@ class FlushProcessTest {
 	}
 
 	@Test
-	fun inProgressTest() {
+	fun inProgress() {
 		val event1 = Event("applicationId1", "eventId1")
 		val event2 = Event("applicationId2", "eventId2")
 
@@ -116,7 +123,24 @@ class FlushProcessTest {
 		Assert.assertEquals("event100", events.last().eventId)
 	}
 
-	fun createEvents(size: Int) {
+	@Test
+	fun sendIdentities() {
+		val defaultUserContext = analytics.getDefaultIdentityContext()
+
+		userDAO.addIdentityContext(defaultUserContext)
+		Assert.assertEquals(1, userDAO.userContexts.size)
+		flushProcess.sendIdentities()
+		Assert.assertEquals(0, userDAO.userContexts.size)
+	}
+
+	@Test
+	fun getUserId() {
+		val userId = "123456789"
+		userDAO.setUserId(userId)
+		Assert.assertEquals(userId, flushProcess.getUserId())
+	}
+
+	private fun createEvents(size: Int) {
 		var events: MutableList<Event> = mutableListOf()
 
 		for (i in 1..size) {
@@ -125,6 +149,5 @@ class FlushProcessTest {
 
 		eventsDAO.replace(events)
 	}
-
 
 }
