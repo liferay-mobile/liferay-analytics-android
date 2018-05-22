@@ -24,7 +24,7 @@ import java.io.IOException
  * @author Igor Matos
  * @author Allan Melo
  */
-class IdentityClientImplTest {
+class IdentityClientTest {
 
 	@Test
 	fun sendUserId() {
@@ -32,7 +32,7 @@ class IdentityClientImplTest {
 			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
 
-		val identityClientImpl = IdentityClientImpl()
+		val identityClientImpl = IdentityClient()
 
 		try {
 			identityClientImpl.send(identityContext)
