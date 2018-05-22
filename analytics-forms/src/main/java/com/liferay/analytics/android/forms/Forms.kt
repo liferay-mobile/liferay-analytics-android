@@ -17,12 +17,12 @@ package com.liferay.analytics.android.forms
 import android.arch.lifecycle.LifecycleOwner
 import android.widget.EditText
 import com.jakewharton.rxbinding2.view.focusChanges
-import java.sql.Timestamp
 import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.forms.FormEvent.FIELD_BLURRED
 import com.liferay.analytics.android.forms.FormEvent.FIELD_FOCUSED
 import com.liferay.analytics.android.forms.FormEvent.FORM_SUBMITTED
 import com.liferay.analytics.android.forms.FormEvent.FORM_VIEWED
+import java.sql.Timestamp
 
 /**
  * @author Igor Matos
@@ -73,7 +73,7 @@ object Forms {
 					fieldFocused(fieldAttributes)
 				}
 			}
-			.map { (Timestamp(System.currentTimeMillis()).time) }
+			.map { Timestamp(System.currentTimeMillis()).time }
 			.buffer(2)
 			.map { pair ->
 				val focusTimestamp = pair.first()
