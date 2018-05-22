@@ -31,7 +31,7 @@ import kotlin.concurrent.schedule
  */
 internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
-	var eventsQueue: MutableList<Event> = mutableListOf()
+	var eventsQueue: HashMap<String, List<Event>> = hashMapOf()
 	var isInProgress = false
 	var eventsDAO: EventsDAO = EventsDAO(fileStorage)
 	var userDAO: UserDAO = UserDAO(fileStorage)
@@ -41,24 +41,6 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		flush()
 	}
 
-	fun addEvent(event: Event) {
-		if (isInProgress) {
-			eventsQueue.add(event)
-
-			return
-		}
-
-		eventsDAO.addEvents(listOf(event))
-	}
-
-	fun getEventsToSend(): List<Event> {
-		return eventsDAO.getEvents().take(FLUSH_SIZE)
-	}
-
-	fun getRemainingEvents(): List<Event> {
-		return eventsDAO.getEvents().drop(FLUSH_SIZE)
-	}
-
 	fun getUserId(): String {
 		val userId = userDAO.getUserId() ?: initUserId()
 
@@ -66,28 +48,34 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 	}
 
 	private fun saveEventsQueue() {
-		eventsDAO.addEvents(eventsQueue)
+		eventsQueue.forEach { (userId, events) ->
+			eventsDAO.addEvents(userId, events)
+		}
+
 		eventsQueue.clear()
+	}
+
+	fun addEvent(event: Event) {
+		val userId = getUserId()
+
+		if (isInProgress) {
+			eventsQueue[userId] = (eventsQueue[userId] ?: listOf()).plus(event)
+
+			return
+		}
+
+		eventsDAO.addEvents(userId, listOf(event))
 	}
 
 	private fun sendEvents() {
 		try {
 			isInProgress = true
 
-			val instance = Analytics.instance!!
-			val userId = getUserId()
+			val userIdsAndEvents = eventsDAO.getEvents()
 
-			var events = getEventsToSend()
-
-			while (events.isNotEmpty()) {
-				val analyticsEventsMessage = AnalyticsEvents(instance.analyticsKey, userId)
-
-				analyticsEventsMessage.events = getEventsToSend()
-
-				analyticsClient.sendAnalytics(analyticsEventsMessage)
-
-				events = getRemainingEvents()
-				eventsDAO.replace(events)
+			userIdsAndEvents.forEach { (userId, events) ->
+				sendEventsForUserId(userId, events)
+				userIdsAndEvents.remove(userId)
 			}
 
 			sendIdentities()
@@ -100,6 +88,24 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 			isInProgress = false
 			saveEventsQueue()
 		}
+	}
+
+	private fun sendEventsForUserId(userId: String, events: List<Event>) {
+		val instance = Analytics.instance!!
+
+		var events = events.take(FLUSH_SIZE)
+
+		while (events.isNotEmpty()) {
+			val analyticsEvents = AnalyticsEvents(instance.analyticsKey, userId)
+
+			analyticsEvents.events = events.take(FLUSH_SIZE)
+
+			analyticsClient.sendAnalytics(analyticsEvents)
+
+			events = events.drop(FLUSH_SIZE)
+			eventsDAO.replace(userId, events)
+		}
+
 	}
 
 	fun sendIdentities() {

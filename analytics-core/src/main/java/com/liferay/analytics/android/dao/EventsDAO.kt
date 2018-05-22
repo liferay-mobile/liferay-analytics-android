@@ -28,32 +28,32 @@ import java.lang.reflect.Type
  */
 internal class EventsDAO(private var fileStorage: FileStorage) {
 
-	fun addEvents(events: List<Event>) {
-		val eventsToSave = this.getEvents().plus(events)
+	fun addEvents(userId: String, events: List<Event>) {
+		val currentEvents = this.getEvents()
+		currentEvents[userId] = (currentEvents[userId] ?: listOf()) + events
 
-		replace(eventsToSave)
+		replace(currentEvents)
 	}
 
 	fun clear() {
-		replace(listOf())
+		replace(hashMapOf())
 	}
 
-	fun getEvents(): List<Event> {
+	fun getEvents(): MutableMap<String, List<Event>> {
 		val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
 
 		eventsJsonString?.let {
 			try {
-				return Gson().fromJson<List<Event>>(it, listType())
-			}
-			catch (e: JsonSyntaxException) {
+				return Gson().fromJson<HashMap<String, List<Event>>>(it, listType())
+			} catch (e: JsonSyntaxException) {
 				clear()
 			}
 		}
 
-		return listOf()
+		return mutableMapOf()
 	}
 
-	fun replace(events: List<Event>) {
+	fun replace(events: MutableMap<String, List<Event>>) {
 		val eventsJson = Gson().toJson(events)
 
 		try {
@@ -64,8 +64,15 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 		}
 	}
 
+	fun replace(userId: String, events: List<Event>) {
+		var currentEvents = this.getEvents()
+		currentEvents[userId] = events
+
+		replace(currentEvents)
+	}
+
 	private fun listType(): Type? {
-		return object : TypeToken<ArrayList<Event>>() {}.type
+		return object : TypeToken<HashMap<String, List<Event>>>() {}.type
 	}
 
 	companion object {

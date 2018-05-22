@@ -42,7 +42,14 @@ class EventsDAOTest {
 
 		val eventModel = Event(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
 
-		eventsDAO.addEvents(listOf(eventModel))
+		eventsDAO.addEvents("userId", listOf(eventModel))
+	}
+
+	@Test
+	fun addEvent() {
+		val firstEventModel = eventsDAO.getEvents()["userId"]?.first()
+
+		Assert.assertEquals(firstEventModel!!.eventId, FIRST_EVENT_ID)
 	}
 
 	@Test
@@ -51,24 +58,17 @@ class EventsDAOTest {
 		val lastEventId = "lastEventId"
 
 		val eventModel = Event(lastApplicationId, lastEventId)
-		eventsDAO.addEvents(listOf(eventModel))
+		eventsDAO.addEvents("userId", listOf(eventModel))
 
 		val events = eventsDAO.getEvents()
 
-		val lastEventModel = events.last()
-		Assert.assertEquals(lastEventId, lastEventModel.eventId)
-		Assert.assertEquals(lastApplicationId, lastEventModel.applicationId)
+		val lastEventModel = events["userId"]?.last()
+		Assert.assertEquals(lastEventId, lastEventModel!!.eventId)
+		Assert.assertEquals(lastApplicationId, lastEventModel!!.applicationId)
 
-		val firstEventModel = events.first()
-		Assert.assertEquals(FIRST_EVENT_ID, firstEventModel.eventId)
-		Assert.assertEquals(FIRST_APPLICATION_ID, firstEventModel.applicationId)
-	}
-
-	@Test
-	fun addEvent() {
-		val firstEventModel = eventsDAO.getEvents().first()
-
-		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
+		val firstEventModel = events["userId"]?.first()
+		Assert.assertEquals(FIRST_EVENT_ID, firstEventModel!!.eventId)
+		Assert.assertEquals(FIRST_APPLICATION_ID, firstEventModel!!.applicationId)
 	}
 
 	@Test
@@ -81,9 +81,10 @@ class EventsDAOTest {
 	@Test
 	fun replaceEvents() {
 		val eventToReplace = Event("applicationId", "eventId")
-		eventsDAO.replace(listOf(eventToReplace))
+		eventsDAO.replace(hashMapOf("userId" to listOf(eventToReplace)))
 
-		val events = eventsDAO.getEvents()
+		val events = eventsDAO.getEvents()["userId"]!!
+
 		Assert.assertEquals(1, events.size)
 		Assert.assertEquals("applicationId", events.first().applicationId)
 		Assert.assertEquals("eventId", events.first().eventId)

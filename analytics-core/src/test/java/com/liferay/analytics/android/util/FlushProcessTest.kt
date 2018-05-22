@@ -61,47 +61,10 @@ class FlushProcessTest {
 	}
 
 	@Test
-	fun getEventsToSave() {
-		var events = flushProcess.getRemainingEvents()
-		Assert.assertEquals(0, events.count())
-
-		createEvents(size = 1)
-		events = flushProcess.getRemainingEvents()
-		Assert.assertEquals(0, events.count())
-
-		createEvents(size = 101)
-		events = flushProcess.getRemainingEvents()
-		Assert.assertEquals(1, events.count())
-		Assert.assertEquals("event101", events.first().eventId)
-
-		createEvents(size = 250)
-		events = flushProcess.getRemainingEvents()
-		Assert.assertEquals(150, events.count())
-		Assert.assertEquals("event101", events.first().eventId)
-		Assert.assertEquals("event250", events.last().eventId)
-	}
-
-
-	@Test
-	fun getEventsToSend() {
-		var events = flushProcess.getEventsToSend()
-		Assert.assertEquals(0, events.count())
-
-		createEvents(size = 1)
-		events = flushProcess.getEventsToSend()
-		Assert.assertEquals(1, events.count())
-
-		createEvents(size = 101)
-		events = flushProcess.getEventsToSend()
-		Assert.assertEquals(100, events.count())
-		Assert.assertEquals("event1", events.first().eventId)
-		Assert.assertEquals("event100", events.last().eventId)
-
-		createEvents(size = 250)
-		events = flushProcess.getEventsToSend()
-		Assert.assertEquals(100, events.count())
-		Assert.assertEquals("event1", events.first().eventId)
-		Assert.assertEquals("event100", events.last().eventId)
+	fun getUserId() {
+		val userId = "123456789"
+		userDAO.setUserId(userId)
+		Assert.assertEquals(userId, flushProcess.getUserId())
 	}
 
 	@Test
@@ -112,13 +75,6 @@ class FlushProcessTest {
 		Assert.assertEquals(1, userDAO.getUserContexts().size)
 		flushProcess.sendIdentities()
 		Assert.assertEquals(0, userDAO.getUserContexts().size)
-	}
-
-	@Test
-	fun getUserId() {
-		val userId = "123456789"
-		userDAO.setUserId(userId)
-		Assert.assertEquals(userId, flushProcess.getUserId())
 	}
 
 	@Test
@@ -139,13 +95,4 @@ class FlushProcessTest {
 		Assert.assertEquals(1, flushProcess.eventsQueue.size)
 	}
 
-	private fun createEvents(size: Int) {
-		var events: MutableList<Event> = mutableListOf()
-
-		for (i in 1..size) {
-			events.add(Event("appId$i", "event$i"))
-		}
-
-		eventsDAO.replace(events)
-	}
 }
