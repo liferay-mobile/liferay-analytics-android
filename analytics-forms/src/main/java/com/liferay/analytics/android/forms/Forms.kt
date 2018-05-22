@@ -60,44 +60,44 @@ object Forms {
 	}
 
 	@JvmStatic
-	fun trackField(editText: EditText, fieldContext: FieldContext) {
+	fun trackField(editText: EditText, fieldAttributes: FieldAttributes) {
 
 		RxViewUtil.onFocus(editText).subscribe { focusEvent ->
 			val hasFocus = focusEvent.first
 
 			if (hasFocus) {
-				fieldFocused(fieldContext)
+				fieldFocused(fieldAttributes)
 			} else {
 				val focusDuration = focusEvent.second
 
-				fieldBlurred(focusDuration, fieldContext)
+				fieldBlurred(focusDuration, fieldAttributes)
 			}
 		}
 	}
 
-	private fun fieldBlurred(focusDuration: Long, fieldContext: FieldContext) {
+	private fun fieldBlurred(focusDuration: Long, fieldAttributes: FieldAttributes) {
 		val properties = HashMap<String, String>()
 
-		fieldContext.title?.let {
+		fieldAttributes.title?.let {
 			properties[FIELD_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = fieldContext.formAttributes.formId
-		properties[FIELD_NAME] = fieldContext.name
+		properties[FORM_ID_KEY] = fieldAttributes.formAttributes.formId
+		properties[FIELD_NAME] = fieldAttributes.name
 		properties[FOCUS_DURATION_KEY] = focusDuration.toString()
 
 		send(FIELD_BLURRED, properties)
 	}
 
-	private fun fieldFocused(fieldContext: FieldContext) {
+	private fun fieldFocused(fieldAttributes: FieldAttributes) {
 		val properties = HashMap<String, String>()
 
-		fieldContext.title?.let {
+		fieldAttributes.title?.let {
 			properties[FIELD_TITLE_KEY] = it
 		}
 
-		properties[FORM_ID_KEY] = fieldContext.formAttributes.formId
-		properties[FIELD_NAME] = fieldContext.name
+		properties[FORM_ID_KEY] = fieldAttributes.formAttributes.formId
+		properties[FIELD_NAME] = fieldAttributes.name
 
 		send(FIELD_FOCUSED, properties)
 	}
