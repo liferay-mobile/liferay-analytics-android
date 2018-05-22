@@ -12,4 +12,4 @@
 ~ details.
 -->
 
-<manifest package="com.liferay.analytics.client.android.forms" />
+<manifest package="com.liferay.analytics.android.forms" />
