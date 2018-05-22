@@ -4,8 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 
 ext {
 	publishedGroupId = 'com.liferay'
-	libraryName = 'com.liferay.analytics.client.android'
-	libraryDescription = 'Liferay Analytics client for Android'
+	libraryName = 'liferay-analytics-android'
+	libraryDescription = 'Liferay Analytics for Android'
 
 	bintrayRepo = 'liferay-mobile'
 	bintrayOrg = 'liferay'

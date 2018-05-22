@@ -2,6 +2,25 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+ext {
+	publishedGroupId = 'com.liferay'
+	libraryName = 'liferay-analytics-forms-android'
+	libraryDescription = 'Liferay Analytics Forms plugin for Android'
+
+	bintrayRepo = 'liferay-mobile'
+	bintrayOrg = 'liferay'
+
+	versionCode = 100
+	versionName = '1.0.0'
+
+	siteUrl = 'https://github.com/liferay-mobile/liferay-analytics-android'
+	gitUrl = 'https://github.com/liferay-mobile/liferay-analytics-android.git'
+
+	licenseName = 'GNU Lesser General Public License, version 2.1'
+	licenseUrl = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+	allLicenses = ['LGPL-2.1']
+}
+
 android {
 	compileSdkVersion 26
 
@@ -35,3 +54,6 @@ dependencies {
 
 	implementation project(":analytics-core")
 }
+
+apply from: '../bintray.gradle'
+apply from: '../install.gradle'
