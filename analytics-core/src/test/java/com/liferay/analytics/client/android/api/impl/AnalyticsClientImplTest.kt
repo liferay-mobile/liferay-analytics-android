@@ -52,7 +52,7 @@ class AnalyticsClientImplTest {
 
 	@Test
 	@Throws(Exception::class)
-	fun testSendAnalytics() {
+	fun sendAnalytics() {
 		var analyticsEventsMessage = AnalyticsEventsMessage("liferay.com", userId).apply {
 			context = mapOf("languageId" to "pt_PT",
 				"url" to "http://192.168.108.90:8081/")
