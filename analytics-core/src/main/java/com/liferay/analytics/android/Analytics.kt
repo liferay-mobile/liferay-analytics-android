@@ -47,7 +47,7 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 
 		@JvmOverloads
 		@JvmStatic
-		fun init(@NonNull context: Context, @NonNull analyticsKey: String,
+		fun configure(@NonNull context: Context, @NonNull analyticsKey: String,
 			flushIntervalInMilliseconds: Long = FLUSH_INTERVAL_DEFAULT) {
 
 			if (context == null) {

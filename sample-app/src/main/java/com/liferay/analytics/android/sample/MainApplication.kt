@@ -25,7 +25,7 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Analytics.init(this, "key")
+        Analytics.configure(this, "key")
 
     }
 
