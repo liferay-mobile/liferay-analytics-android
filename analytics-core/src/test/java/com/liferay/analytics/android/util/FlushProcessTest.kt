@@ -44,7 +44,7 @@ class FlushProcessTest {
 
 	@Before
 	fun setup() {
-		Analytics.init(RuntimeEnvironment.application, "analyticsKey")
+		Analytics.configure(RuntimeEnvironment.application, "analyticsKey")
 
 		analytics = Analytics.instance!!
 		flushProcess = Analytics.flushProcess

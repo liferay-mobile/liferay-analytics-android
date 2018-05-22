@@ -45,7 +45,7 @@ class MainApplication : Application() {
 			refWatcher = LeakCanary.install(this)
 		}
 
-		Analytics.init(this, "key")
+		Analytics.configure(this, "key")
 
 	}
 
