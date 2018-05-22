@@ -47,7 +47,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 		return eventsDAO.events.drop(FLUSH_SIZE)
 	}
 
-	fun saveEventsQueue() {
+	private fun saveEventsQueue() {
 		eventsDAO.addEvents(eventsQueue)
 		eventsQueue.clear()
 	}
@@ -71,7 +71,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 			isInProgress = true
 
 			val instance = Analytics.instance!!
-			val userId = "userIdAndroid"
+			val userId = getUserId()
 
 			var events = getEventsToSend()
 
@@ -84,7 +84,10 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 
 				events = getRemainingEvents()
 				eventsDAO.replace(events)
+
 			}
+
+			sendIdentities()
 
 		} catch (e: Exception) {
 			e.printStackTrace()
@@ -100,6 +103,36 @@ internal class FlushProcess(fileStorage: FileStorage, private var interval: Long
 			.subscribe {
 				sendEvents()
 			}
+	}
+
+	private fun initUserId(): String {
+		val instance = Analytics.instance!!
+		val identityContext = instance.getDefaultIdentityContext()
+
+		userDAO.addIdentityContext(identityContext)
+		userDAO.setUserId(identityContext.userId)
+
+		return identityContext.userId
+	}
+
+	fun getUserId(): String {
+		val userId = userDAO.userId ?: initUserId()
+
+		return userId
+	}
+
+	fun sendIdentities() {
+		val identityClient = IdentityClientImpl()
+
+		var userContexts = userDAO.userContexts.toMutableList()
+
+		while (userContexts.isNotEmpty()) {
+			val userContext = userContexts.removeAt(0)
+
+			identityClient.send(userContext)
+			userDAO.replace(userContexts)
+		}
+
 	}
 
 	private val analyticsClientImpl = AnalyticsClientImpl()
