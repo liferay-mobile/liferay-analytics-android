@@ -14,10 +14,11 @@
 
 package com.liferay.analytics.client.android.util
 
-import android.content.Context
 import com.liferay.analytics.client.android.Analytics
 import com.liferay.analytics.client.android.api.impl.AnalyticsClientImpl
+import com.liferay.analytics.client.android.api.impl.IdentityClientImpl
 import com.liferay.analytics.client.android.dao.EventsDAO
+import com.liferay.analytics.client.android.dao.UserDAO
 import com.liferay.analytics.client.android.model.AnalyticsEventsMessage
 import com.liferay.analytics.client.android.model.Event
 import io.reactivex.Observable
@@ -27,11 +28,12 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Igor Matos
  */
-internal class FlushProcess(context: Context, var interval: Long) {
+internal class FlushProcess(fileStorage: FileStorage, private var interval: Long) {
 
 	var eventsQueue: MutableList<Event> = mutableListOf()
 	var isInProgress = false
-	var eventsDAO: EventsDAO = EventsDAO(context)
+	var eventsDAO: EventsDAO = EventsDAO(fileStorage)
+	var userDAO: UserDAO = UserDAO(fileStorage)
 
 	init {
 		flush()

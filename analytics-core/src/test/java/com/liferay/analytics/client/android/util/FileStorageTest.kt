@@ -49,7 +49,7 @@ class FileStorageTest {
 
 	@Test
 	@Throws(IOException::class)
-	fun testRetrieveSavedValue() {
+	fun retrieveSavedValue() {
 		val result = fileStorage.getStringByKey(savedKey)
 
 		Assert.assertNotNull(result)
@@ -57,7 +57,7 @@ class FileStorageTest {
 	}
 
 	@Test
-	fun testRetrieveUnsavedValue() {
+	fun retrieveUnsavedValue() {
 		val result = fileStorage.getStringByKey(notSavedKey)
 
 		result?.let {
@@ -67,7 +67,7 @@ class FileStorageTest {
 
 	@Test
 	@Throws(IOException::class)
-	fun testSaveStringToKey() {
+	fun saveStringToKey() {
 		fileStorage.saveStringToKey("key", "value")
 	}
 }

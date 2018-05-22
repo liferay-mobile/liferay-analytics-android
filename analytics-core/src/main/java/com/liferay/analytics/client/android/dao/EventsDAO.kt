@@ -14,7 +14,6 @@
 
 package com.liferay.analytics.client.android.dao
 
-import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -26,9 +25,7 @@ import java.lang.reflect.Type
 /**
  * @author Igor Matos
  */
-internal class EventsDAO(context: Context) {
-
-	private val fileStorage: FileStorage = FileStorage(context)
+internal class EventsDAO(private var fileStorage: FileStorage) {
 
 	val events: List<Event>
 		get() {
