@@ -1,4 +1,4 @@
-rootProject.name='com-liferay-analytics-client-android'
+rootProject.name='liferay-analytics-android'
 
 include ':sample-app'
 
