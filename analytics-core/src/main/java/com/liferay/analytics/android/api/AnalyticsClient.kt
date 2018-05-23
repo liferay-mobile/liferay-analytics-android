@@ -17,6 +17,7 @@ package com.liferay.analytics.android.api
 import com.liferay.analytics.android.model.AnalyticsEventsMessage
 import com.liferay.analytics.android.util.HTTPClient
 import com.liferay.analytics.android.util.JSONParser
+import java.io.IOException
 
 /**
  * @author Igor Matos
@@ -36,7 +37,7 @@ class AnalyticsClient  {
 	val analyticsGatewayProtocol: String
 		get() = ANALYTICS_GATEWAY_PROTOCOL
 
-	@Throws(Exception::class)
+	@Throws(IOException::class)
 	fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
 
 		val json = JSONParser.toJSON(analyticsEventsMessage)
