@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.analytics.android.api.impl
+package com.liferay.analytics.android.api
 
 import com.google.gson.reflect.TypeToken
 import com.liferay.analytics.android.model.AnalyticsEventsMessage
@@ -34,18 +34,18 @@ import java.util.concurrent.TimeUnit
  * @author Igor Matos
  * @author Allan Melo
  */
-class AnalyticsClientImplTest {
+class AnalyticsClientTest {
 
-	private val analyticsClientImpl = Mockito.spy(AnalyticsClientImpl::class.java)
+	private val analyticsCLient = Mockito.spy(AnalyticsClient::class.java)
 
 	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayHost).thenReturn("192.168.108.90")
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayProtocol).thenReturn("http")
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayPort).thenReturn("8081")
-		Mockito.`when`(analyticsClientImpl.analyticsGatewayPath).thenReturn("/")
+		Mockito.`when`(analyticsCLient.analyticsGatewayHost).thenReturn("192.168.108.90")
+		Mockito.`when`(analyticsCLient.analyticsGatewayProtocol).thenReturn("http")
+		Mockito.`when`(analyticsCLient.analyticsGatewayPort).thenReturn("8081")
+		Mockito.`when`(analyticsCLient.analyticsGatewayPath).thenReturn("/")
 
 		userId = getUserId()
 	}
@@ -63,7 +63,7 @@ class AnalyticsClientImplTest {
 			events = mutableListOf(event)
 		}
 
-		analyticsClientImpl.sendAnalytics(analyticsEventsMessage)
+		analyticsCLient.sendAnalytics(analyticsEventsMessage)
 
 		val client = OkHttpClient().newBuilder()
 			.readTimeout(300, TimeUnit.SECONDS)

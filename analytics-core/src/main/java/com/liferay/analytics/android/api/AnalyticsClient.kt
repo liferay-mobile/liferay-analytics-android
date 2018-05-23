@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -12,9 +12,8 @@
  * details.
  */
 
-package com.liferay.analytics.android.api.impl
+package com.liferay.analytics.android.api
 
-import com.liferay.analytics.android.api.`interface`.AnalyticsClient
 import com.liferay.analytics.android.model.AnalyticsEventsMessage
 import com.liferay.analytics.android.util.HTTPClient
 import com.liferay.analytics.android.util.JSONParser
@@ -23,7 +22,7 @@ import com.liferay.analytics.android.util.JSONParser
  * @author Igor Matos
  * @author Allan Melo
  */
-class AnalyticsClientImpl : AnalyticsClient {
+class AnalyticsClient  {
 
 	val analyticsGatewayHost: String
 		get() = ANALYTICS_GATEWAY_HOST
@@ -38,7 +37,7 @@ class AnalyticsClientImpl : AnalyticsClient {
 		get() = ANALYTICS_GATEWAY_PROTOCOL
 
 	@Throws(Exception::class)
-	override fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
+	fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
 
 		val json = JSONParser.toJSON(analyticsEventsMessage)
 

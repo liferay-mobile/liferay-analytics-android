@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.analytics.android.api.impl
+package com.liferay.analytics.android.api
 
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext

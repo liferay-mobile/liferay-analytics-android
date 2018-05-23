@@ -16,14 +16,15 @@ package com.liferay.analytics.android.util
 
 import android.util.Log
 import com.liferay.analytics.android.Analytics
-import com.liferay.analytics.android.api.impl.AnalyticsClientImpl
-import com.liferay.analytics.android.api.impl.IdentityClient
+import com.liferay.analytics.android.api.AnalyticsClient
+import com.liferay.analytics.android.api.IdentityClient
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.AnalyticsEventsMessage
 import com.liferay.analytics.android.model.Event
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -81,7 +82,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 
 				analyticsEventsMessage.events = events.take(100).toMutableList()
 
-				analyticsClientImpl.sendAnalytics(analyticsEventsMessage)
+				analyticsClient.sendAnalytics(analyticsEventsMessage)
 
 				events = getRemainingEvents()
 				eventsDAO.replace(events)
@@ -90,8 +91,9 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 
 			sendIdentities()
 
-		} catch (e: Exception) {
-			e.printStackTrace()
+		} catch (e: IOException) {
+			Log.d("LIFERAY-ANALYTICS",
+				"Could not send analytics events ${e.printStackTrace()}")
 		} finally {
 			isInProgress = false
 			saveEventsQueue()
@@ -136,7 +138,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 
 	}
 
-	private val analyticsClientImpl = AnalyticsClientImpl()
+	private val analyticsClient = AnalyticsClient()
 
 	companion object {
 		private const val FLUSH_SIZE = 100
