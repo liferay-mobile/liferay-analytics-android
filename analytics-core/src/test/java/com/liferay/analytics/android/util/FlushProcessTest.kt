@@ -47,7 +47,7 @@ class FlushProcessTest {
 		Analytics.configure(RuntimeEnvironment.application, "analyticsKey")
 
 		analytics = Analytics.instance!!
-		flushProcess = Analytics.flushProcess
+		flushProcess = analytics.flushProcess
 		eventsDAO = flushProcess.eventsDAO
 		userDAO = flushProcess.userDAO
 

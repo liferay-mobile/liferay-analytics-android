@@ -30,18 +30,8 @@ import io.reactivex.annotations.NonNull
 class Analytics private constructor(fileStorage: FileStorage, internal val analyticsKey: String,
 	flushInterval: Int) {
 
-	private val userDAO: UserDAO
-
-	init {
-		analyticsInstance?.let {
-			throw IllegalStateException("Your library was already initialized.")
-		}
-
-		analyticsInstance = this
-
-		userDAO = UserDAO(fileStorage)
-		flushProcess = FlushProcess(fileStorage, flushInterval)
-	}
+	private val userDAO = UserDAO(fileStorage)
+	internal var flushProcess = FlushProcess(fileStorage, flushInterval)
 
 	companion object {
 
@@ -49,6 +39,10 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 		@JvmStatic
 		fun configure(@NonNull context: Context, @NonNull analyticsKey: String,
 			flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
+
+			analyticsInstance?.let {
+				throw IllegalStateException("Your library was already initialized.")
+			}
 
 			if (context == null) {
 				throw IllegalArgumentException("Context can't be null.")
@@ -69,7 +63,7 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 			val application = context.applicationContext as Application
 			val fileStorage = FileStorage(application)
 
-			Analytics(fileStorage, analyticsKey, flushInterval)
+			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval)
 		}
 
 		@JvmOverloads
@@ -92,7 +86,7 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 			val event = Event(applicationId, eventId)
 			event.properties = properties
 
-			flushProcess.addEvent(event)
+			instance!!.flushProcess.addEvent(event)
 		}
 
 		@JvmStatic
@@ -125,8 +119,6 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 		}
 
 		private var analyticsInstance: Analytics? = null
-
-		internal lateinit var flushProcess: FlushProcess
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
 	}
 
