@@ -47,7 +47,7 @@ class EventsDAOTest {
 
 	@Test
 	fun addEvent() {
-		val firstEventModel = eventsDAO.events.first()
+		val firstEventModel = eventsDAO.getEvents().first()
 
 		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
 	}
@@ -60,7 +60,7 @@ class EventsDAOTest {
 		val eventModel = Event(lastApplicationId, lastEventId)
 		eventsDAO.addEvents(listOf(eventModel))
 
-		val events = eventsDAO.events
+		val events = eventsDAO.getEvents()
 
 		val lastEventModel = events.last()
 		Assert.assertEquals(lastEventId, lastEventModel.eventId)
@@ -75,7 +75,7 @@ class EventsDAOTest {
 	fun clearEvents() {
 		eventsDAO.clear()
 
-		Assert.assertEquals(0, eventsDAO.events.size)
+		Assert.assertEquals(0, eventsDAO.getEvents().size)
 	}
 
 	@Test
@@ -83,7 +83,7 @@ class EventsDAOTest {
 		val eventToReplace = Event("applicationId", "eventId")
 		eventsDAO.replace(listOf(eventToReplace))
 
-		val events = eventsDAO.events
+		val events = eventsDAO.getEvents()
 		Assert.assertEquals(1, events.size)
 		Assert.assertEquals("applicationId", events.first().applicationId)
 		Assert.assertEquals("eventId", events.first().eventId)

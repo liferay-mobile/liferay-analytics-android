@@ -48,7 +48,7 @@ class UserDAOTest {
 	fun addUserId() {
 		val userId = "123456789"
 		userDAO.setUserId(userId)
-		Assert.assertEquals(userId, userDAO.userId)
+		Assert.assertEquals(userId, userDAO.getUserId())
 	}
 
 	@Test
@@ -57,11 +57,11 @@ class UserDAOTest {
 			identity = Identity("ned", "ned.ludd@email.com")
 		}
 
-		Assert.assertEquals(0, userDAO.userContexts.size)
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
 		userDAO.addIdentityContext(identityContext1)
-		Assert.assertEquals(1, userDAO.userContexts.size)
+		Assert.assertEquals(1, userDAO.getUserContexts().size)
 
-		val userIdentity = userDAO.userContexts.first().identity!!
+		val userIdentity = userDAO.getUserContexts().first().identity!!
 
 		Assert.assertEquals("ned", userIdentity.name)
 		Assert.assertEquals("ned.ludd@email.com", userIdentity.email)
@@ -72,9 +72,9 @@ class UserDAOTest {
 		val identityContext1 = IdentityContext("analyticsKey")
 		val identityContext2 = IdentityContext("analyticsKey")
 
-		Assert.assertEquals(0, userDAO.userContexts.size)
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
 		userDAO.replace(listOf(identityContext1, identityContext2))
-		Assert.assertEquals(2, userDAO.userContexts.size)
+		Assert.assertEquals(2, userDAO.getUserContexts().size)
 	}
 
 	@Test
@@ -82,25 +82,25 @@ class UserDAOTest {
 		userDAO.setUserId("userId1")
 		userDAO.clearUserId()
 
-		Assert.assertEquals("", userDAO.userId)
+		Assert.assertEquals("", userDAO.getUserId())
 	}
 
 	@Test
 	fun setUserId() {
 		userDAO.setUserId("userId")
-		Assert.assertEquals("userId", userDAO.userId)
+		Assert.assertEquals("userId", userDAO.getUserId())
 	}
 
 	fun clearUserContexts() {
 		val identityContext1 = IdentityContext("analyticsKey")
 		val identityContext2 = IdentityContext("analyticsKey")
 
-		Assert.assertEquals(0, userDAO.userContexts.size)
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
 		userDAO.replace(listOf(identityContext1, identityContext2))
-		Assert.assertEquals(2, userDAO.userContexts.size)
+		Assert.assertEquals(2, userDAO.getUserContexts().size)
 
 		userDAO.clearIdentities()
-		Assert.assertEquals(0, userDAO.userContexts.size)
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
 	}
 
 }

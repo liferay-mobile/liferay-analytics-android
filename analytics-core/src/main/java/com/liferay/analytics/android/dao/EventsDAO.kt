@@ -27,23 +27,22 @@ import java.lang.reflect.Type
  */
 internal class EventsDAO(private var fileStorage: FileStorage) {
 
-	val events: List<Event>
-		get() {
-			val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
+	fun getEvents(): List<Event> {
+		val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
 
-			eventsJsonString?.let {
-				try {
-					return Gson().fromJson<List<Event>>(it, listType())
-				} catch (e: JsonSyntaxException) {
-					clear()
-				}
+		eventsJsonString?.let {
+			try {
+				return Gson().fromJson<List<Event>>(it, listType())
+			} catch (e: JsonSyntaxException) {
+				clear()
 			}
-
-			return listOf()
 		}
 
+		return listOf()
+	}
+
 	fun addEvents(events: List<Event>) {
-		val eventsToSave = this.events.plus(events)
+		val eventsToSave = this.getEvents().plus(events)
 
 		replace(eventsToSave)
 	}

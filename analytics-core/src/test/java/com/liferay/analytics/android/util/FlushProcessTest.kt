@@ -66,16 +66,16 @@ class FlushProcessTest {
 		val event1 = Event("applicationId1", "eventId1")
 		val event2 = Event("applicationId2", "eventId2")
 
-		Assert.assertEquals(0, eventsDAO.events.size)
+		Assert.assertEquals(0, eventsDAO.getEvents().size)
 		flushProcess.addEvent(event1)
 
-		Assert.assertEquals(1, eventsDAO.events.size)
+		Assert.assertEquals(1, eventsDAO.getEvents().size)
 		Assert.assertEquals(0, flushProcess.eventsQueue.size)
 
 		flushProcess.isInProgress = true
 		flushProcess.addEvent(event2)
 
-		Assert.assertEquals(1, eventsDAO.events.size)
+		Assert.assertEquals(1, eventsDAO.getEvents().size)
 		Assert.assertEquals(1, flushProcess.eventsQueue.size)
 	}
 
@@ -128,9 +128,9 @@ class FlushProcessTest {
 		val defaultUserContext = analytics.getDefaultIdentityContext()
 
 		userDAO.addIdentityContext(defaultUserContext)
-		Assert.assertEquals(1, userDAO.userContexts.size)
+		Assert.assertEquals(1, userDAO.getUserContexts().size)
 		flushProcess.sendIdentities()
-		Assert.assertEquals(0, userDAO.userContexts.size)
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
 	}
 
 	@Test
