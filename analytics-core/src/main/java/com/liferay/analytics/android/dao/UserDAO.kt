@@ -28,25 +28,23 @@ import java.lang.reflect.Type
  */
 internal class UserDAO(private var fileStorage: FileStorage) {
 
-	val userContexts: List<IdentityContext>
-		get() {
-			val userContextsJsonString = fileStorage.getStringByKey(USER_CONTEXTS)
+	fun getUserContexts(): List<IdentityContext> {
+		val userContextsJsonString = fileStorage.getStringByKey(USER_CONTEXTS)
 
-			userContextsJsonString?.let {
-				try {
-					return Gson().fromJson<List<IdentityContext>>(it, listType())
-				} catch (e: JsonSyntaxException) {
-					clearIdentities()
-				}
+		userContextsJsonString?.let {
+			try {
+				return Gson().fromJson<List<IdentityContext>>(it, listType())
+			} catch (e: JsonSyntaxException) {
+				clearIdentities()
 			}
-
-			return listOf()
 		}
 
-	val userId: String?
-		get() {
-			return fileStorage.getStringByKey(STORAGE_KEY_USER_ID)
-		}
+		return listOf()
+	}
+
+	fun getUserId(): String? {
+		return fileStorage.getStringByKey(STORAGE_KEY_USER_ID)
+	}
 
 	fun clearIdentities() {
 		replace(listOf())
@@ -57,7 +55,7 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 	}
 
 	fun addIdentityContext(identityContext: IdentityContext) {
-		replace(userContexts.plus(identityContext))
+		replace(getUserContexts().plus(identityContext))
 	}
 
 	fun replace(identityContexts: List<IdentityContext>) {

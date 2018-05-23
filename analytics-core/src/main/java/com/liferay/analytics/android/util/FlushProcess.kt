@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.util
 
+import android.util.Log
 import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.api.impl.AnalyticsClientImpl
 import com.liferay.analytics.android.api.impl.IdentityClient
@@ -40,11 +41,11 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 	}
 
 	fun getEventsToSend(): List<Event> {
-		return eventsDAO.events.take(FLUSH_SIZE)
+		return eventsDAO.getEvents().take(FLUSH_SIZE)
 	}
 
 	fun getRemainingEvents(): List<Event> {
-		return eventsDAO.events.drop(FLUSH_SIZE)
+		return eventsDAO.getEvents().drop(FLUSH_SIZE)
 	}
 
 	private fun saveEventsQueue() {
@@ -116,7 +117,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 	}
 
 	fun getUserId(): String {
-		val userId = userDAO.userId ?: initUserId()
+		val userId = userDAO.getUserId() ?: initUserId()
 
 		return userId
 	}
@@ -124,7 +125,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 	fun sendIdentities() {
 		val identityClient = IdentityClient()
 
-		var userContexts = userDAO.userContexts.toMutableList()
+		var userContexts = userDAO.getUserContexts().toMutableList()
 
 		while (userContexts.isNotEmpty()) {
 			val userContext = userContexts.removeAt(0)
