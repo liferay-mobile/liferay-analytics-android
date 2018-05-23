@@ -67,7 +67,8 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 		try {
 			fileStorage.saveStringToKey(key, value)
 		} catch (e: IOException) {
-			e.printStackTrace()
+			Log.d("LIFERAY-ANALYTICS",
+				"Could not replace the value for key ${e.printStackTrace()}")
 		}
 	}
 
