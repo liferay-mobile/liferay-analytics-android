@@ -19,6 +19,7 @@ import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.Event
+import com.liferay.analytics.android.model.IdentityContext
 import junit.framework.Assert
 import org.junit.After
 import org.junit.Before
@@ -69,7 +70,7 @@ class FlushProcessTest {
 
 	@Test
 	fun sendIdentities() {
-		val defaultUserContext = analytics.getDefaultIdentityContext()
+		val defaultUserContext = IdentityContext(analytics.analyticsKey)
 
 		userDAO.addIdentityContext(defaultUserContext)
 		Assert.assertEquals(1, userDAO.getUserContexts().size)

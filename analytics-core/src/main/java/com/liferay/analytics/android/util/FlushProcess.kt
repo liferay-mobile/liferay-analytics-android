@@ -22,6 +22,7 @@ import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
+import com.liferay.analytics.android.model.IdentityContext
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.schedule
@@ -130,7 +131,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
 	private fun initUserId(): String {
 		val instance = Analytics.instance!!
-		val identityContext = instance.getDefaultIdentityContext()
+		val identityContext = IdentityContext(instance.analyticsKey)
 
 		userDAO.addIdentityContext(identityContext)
 		userDAO.setUserId(identityContext.userId)

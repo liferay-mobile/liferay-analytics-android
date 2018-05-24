@@ -89,7 +89,7 @@ class Analytics private constructor(
 
 		@JvmStatic
 		fun setIdentity(email: String, name: String = "") {
-			val identityContext = instance!!.getDefaultIdentityContext()
+			val identityContext = IdentityContext(instance!!.analyticsKey)
 
 			val identity = Identity(name, email)
 			identityContext.identity = identity
@@ -118,10 +118,6 @@ class Analytics private constructor(
 
 		private var analyticsInstance: Analytics? = null
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
-	}
-
-	internal fun getDefaultIdentityContext(): IdentityContext {
-		return IdentityContext(analyticsKey)
 	}
 
 	internal val userDAO = UserDAO(fileStorage)
