@@ -32,6 +32,12 @@ class Analytics private constructor(
 
 	companion object {
 
+		/**
+		 * Need to call to initialize the library
+		 *
+		 * @throws IllegalStateException if the library was already initialized
+		 * @since 1.0.0
+		 */
 		@JvmOverloads
 		@JvmStatic
 		fun configure(
@@ -64,6 +70,12 @@ class Analytics private constructor(
 			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval.toLong())
 		}
 
+		/**
+		 * Send custom events to Liferay Analytics
+		 *
+		 * @throws IllegalStateException if the library was not initialized
+		 * @since 1.0.0
+		 */
 		@JvmOverloads
 		@JvmStatic
 		fun send(@NotNull eventId: String, @NotNull applicationId: String,
@@ -87,22 +99,12 @@ class Analytics private constructor(
 			instance!!.flushProcess.addEvent(event)
 		}
 
-		@JvmStatic
-		fun setIdentity(email: String, name: String = "") {
-			val identityContext = IdentityContext(instance!!.analyticsKey)
-
-			val identity = Identity(name, email)
-			identityContext.identity = identity
-
-			instance!!.userDAO.addIdentityContext(identityContext)
-			instance!!.userDAO.setUserId(identityContext.userId)
-		}
-
-		@JvmStatic
-		fun clearSession() {
-			instance!!.userDAO.clearUserId()
-		}
-
+		/**
+		 * Returns the Liferay Analytics instance
+		 *
+		 * @throws IllegalStateException if the library was not initialized
+		 * @since 1.0.0
+		 */
 		@JvmStatic
 		internal var instance: Analytics?
 			@Synchronized get() {
@@ -115,6 +117,36 @@ class Analytics private constructor(
 			set(value) {
 				analyticsInstance = value
 			}
+
+		/**
+		 * Need to call to send events with user informations.
+		 * Recommended after the user login in application.
+		 *
+		 * @throws IllegalStateException if the library was not initialized
+		 * @since 1.0.0
+		 */
+		@JvmStatic
+		fun setIdentity(email: String, name: String = "") {
+			val identityContext = IdentityContext(instance!!.analyticsKey)
+
+			val identity = Identity(name, email)
+			identityContext.identity = identity
+
+			instance!!.userDAO.addIdentityContext(identityContext)
+			instance!!.userDAO.setUserId(identityContext.userId)
+		}
+
+		/**
+		 * Need to call to clear the identity, to send events with anonymous session again.
+		 * Recommended after the user logout of application.
+		 *
+		 * @throws IllegalStateException if the library was not initialized
+		 * @since 1.0.0
+		 */
+		@JvmStatic
+		fun clearSession() {
+			instance!!.userDAO.clearUserId()
+		}
 
 		private var analyticsInstance: Analytics? = null
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
