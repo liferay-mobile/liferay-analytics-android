@@ -21,9 +21,8 @@ import java.util.HashMap
  * @author Igor Matos
  * @author Allan Melo
  */
-data class AnalyticsEvents(
-		var analyticsKey: String,
-		@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
+internal data class AnalyticsEvents(var analyticsKey: String,
+	@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
 
 	var context: Map<String, String> = HashMap()
 	var events: List<Event> = listOf()

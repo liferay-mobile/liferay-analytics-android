@@ -21,7 +21,8 @@ import java.util.HashMap
  * @author Igor Matos
  * @author Allan Melo
  */
-class Event(var applicationId: String, var eventId: String) {
+internal class Event(var applicationId: String, var eventId: String) {
+
 	var eventDate = Date()
 	var properties: Map<String, String> = HashMap()
 }

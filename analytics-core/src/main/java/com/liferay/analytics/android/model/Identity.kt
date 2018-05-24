@@ -17,4 +17,4 @@ package com.liferay.analytics.android.model
 /**
  * @author Igor Matos
  */
-data class Identity(val name: String, val email: String)
+internal data class Identity(val name: String, val email: String)

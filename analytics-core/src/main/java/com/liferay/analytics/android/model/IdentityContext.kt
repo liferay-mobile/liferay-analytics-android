@@ -21,7 +21,7 @@ import java.util.UUID
  * @author Igor Matos
  * @author Allan Melo
  */
-data class IdentityContext(var analyticsKey: String) {
+internal data class IdentityContext(var analyticsKey: String) {
 
 	var identity: Identity? = null
 	val language: String = Locale.getDefault().toString()
