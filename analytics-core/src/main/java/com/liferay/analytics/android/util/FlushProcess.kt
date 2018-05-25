@@ -32,7 +32,7 @@ import kotlin.concurrent.schedule
  */
 internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
-	var eventsQueue: HashMap<String, List<Event>> = hashMapOf()
+	var eventsQueue: MutableMap<String, List<Event>> = mutableMapOf()
 	var isInProgress = false
 	var eventsDAO: EventsDAO = EventsDAO(fileStorage)
 	var userDAO: UserDAO = UserDAO(fileStorage)
@@ -48,7 +48,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		return userId
 	}
 
-	private fun saveEventsQueue() {
+	internal fun saveEventsQueue() {
 		eventsQueue.forEach { (userId, events) ->
 			eventsDAO.addEvents(userId, events)
 		}

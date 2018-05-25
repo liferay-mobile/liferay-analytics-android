@@ -36,7 +36,7 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 	}
 
 	fun clear() {
-		replace(hashMapOf())
+		replace(mutableMapOf())
 	}
 
 	fun getEvents(): MutableMap<String, List<Event>> {
@@ -44,7 +44,7 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 
 		eventsJsonString?.let {
 			try {
-				return Gson().fromJson<HashMap<String, List<Event>>>(it, listType())
+				return Gson().fromJson<MutableMap<String, List<Event>>>(it, listType())
 			} catch (e: JsonSyntaxException) {
 				clear()
 			}
@@ -72,7 +72,7 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 	}
 
 	private fun listType(): Type? {
-		return object : TypeToken<HashMap<String, List<Event>>>() {}.type
+		return object : TypeToken<MutableMap<String, List<Event>>>() {}.type
 	}
 
 	companion object {

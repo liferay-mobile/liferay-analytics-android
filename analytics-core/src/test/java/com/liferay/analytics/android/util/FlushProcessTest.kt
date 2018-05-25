@@ -50,15 +50,14 @@ class FlushProcessTest {
 		flushProcess = analytics.flushProcess
 		eventsDAO = flushProcess.eventsDAO
 		userDAO = flushProcess.userDAO
-
-		eventsDAO.clear()
-		userDAO.clearIdentities()
-		userDAO.clearUserId()
 	}
 
 	@After
 	fun tearDown() {
 		Analytics.instance = null
+		eventsDAO.clear()
+		userDAO.clearIdentities()
+		userDAO.clearUserId()
 	}
 
 	@Test
@@ -66,6 +65,21 @@ class FlushProcessTest {
 		val userId = "123456789"
 		userDAO.setUserId(userId)
 		Assert.assertEquals(userId, flushProcess.getUserId())
+	}
+
+	@Test
+	fun saveEventsQueue() {
+		val event1 = Event("applicationId1", "eventId1")
+
+		flushProcess.isInProgress = true
+		flushProcess.addEvent(event1)
+
+		Assert.assertEquals(0, eventsDAO.getEvents().size)
+		Assert.assertEquals(1, flushProcess.eventsQueue.size)
+
+		flushProcess.saveEventsQueue()
+		Assert.assertEquals(1, eventsDAO.getEvents().size)
+		Assert.assertEquals(0, flushProcess.eventsQueue.size)
 	}
 
 	@Test
