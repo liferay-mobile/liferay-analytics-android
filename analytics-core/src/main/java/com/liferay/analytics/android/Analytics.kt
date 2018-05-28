@@ -22,7 +22,7 @@ import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.FileStorage
 import com.liferay.analytics.android.util.FlushProcess
-import io.reactivex.annotations.NonNull
+import org.jetbrains.annotations.NotNull
 
 /**
  * @author Igor Matos
@@ -35,7 +35,7 @@ class Analytics private constructor(
 		@JvmOverloads
 		@JvmStatic
 		fun configure(
-				@NonNull context: Context, @NonNull analyticsKey: String,
+				@NotNull context: Context, @NotNull analyticsKey: String,
 				flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
 
 			analyticsInstance?.let {
@@ -66,8 +66,8 @@ class Analytics private constructor(
 
 		@JvmOverloads
 		@JvmStatic
-		fun send(@NonNull eventId: String, @NonNull applicationId: String,
-			@NonNull properties: Map<String, String> = hashMapOf()) {
+		fun send(@NotNull eventId: String, @NotNull applicationId: String,
+			@NotNull properties: Map<String, String> = hashMapOf()) {
 
 			if (eventId.isNullOrEmpty() || eventId.isBlank()) {
 				throw IllegalArgumentException("EventId can't be null or empty.")
