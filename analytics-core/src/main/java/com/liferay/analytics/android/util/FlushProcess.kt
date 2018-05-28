@@ -22,20 +22,20 @@ import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import java.io.IOException
-import java.util.concurrent.TimeUnit
+import java.util.*
+import kotlin.concurrent.schedule
 
 /**
  * @author Igor Matos
  */
-internal class FlushProcess(fileStorage: FileStorage, private var flushInterval: Int) {
+internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
 	var eventsQueue: MutableList<Event> = mutableListOf()
 	var isInProgress = false
 	var eventsDAO: EventsDAO = EventsDAO(fileStorage)
 	var userDAO: UserDAO = UserDAO(fileStorage)
+    private val flushInterval = interval * 1000
 
 	init {
 		flush()
@@ -71,10 +71,6 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 	}
 
 	private fun sendEvents() {
-		if (isInProgress) {
-			return
-		}
-
 		try {
 			isInProgress = true
 
@@ -120,11 +116,10 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 	}
 
 	private fun flush() {
-		Observable.interval(flushInterval.toLong(), TimeUnit.SECONDS)
-			.subscribeOn(Schedulers.io())
-			.subscribe {
-				sendEvents()
-			}
+        Timer().schedule(flushInterval) {
+            sendEvents()
+            flush()
+        }
 	}
 
 	private fun initUserId(): String {

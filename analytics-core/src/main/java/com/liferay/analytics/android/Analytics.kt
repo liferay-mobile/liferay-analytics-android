@@ -28,7 +28,7 @@ import io.reactivex.annotations.NonNull
  * @author Igor Matos
  */
 class Analytics private constructor(
-		fileStorage: FileStorage, internal val analyticsKey: String, flushInterval: Int) {
+		fileStorage: FileStorage, internal val analyticsKey: String, flushInterval: Long) {
 
 	companion object {
 
@@ -61,7 +61,7 @@ class Analytics private constructor(
 			val application = context.applicationContext as Application
 			val fileStorage = FileStorage(application)
 
-			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval)
+			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval.toLong())
 		}
 
 		@JvmOverloads
