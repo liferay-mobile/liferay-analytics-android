@@ -14,7 +14,7 @@
 
 package com.liferay.analytics.android.api
 
-import com.liferay.analytics.android.model.AnalyticsEventsMessage
+import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.util.HTTPClient
 import com.liferay.analytics.android.util.JSONParser
 import java.io.IOException
@@ -23,7 +23,7 @@ import java.io.IOException
  * @author Igor Matos
  * @author Allan Melo
  */
-class AnalyticsClient  {
+internal class AnalyticsClient {
 
 	val analyticsGatewayHost: String
 		get() = ANALYTICS_GATEWAY_HOST
@@ -38,9 +38,8 @@ class AnalyticsClient  {
 		get() = ANALYTICS_GATEWAY_PROTOCOL
 
 	@Throws(IOException::class)
-	fun sendAnalytics(analyticsEventsMessage: AnalyticsEventsMessage): String {
-
-		val json = JSONParser.toJSON(analyticsEventsMessage)
+	fun sendAnalytics(analyticsEvents: AnalyticsEvents): String {
+		val json = JSONParser.toJSON(analyticsEvents)
 
 		val analyticsPath = "$analyticsGatewayProtocol://" +
 			"$analyticsGatewayHost:$analyticsGatewayPort$analyticsGatewayPath"
@@ -54,5 +53,4 @@ class AnalyticsClient  {
 		private const val ANALYTICS_GATEWAY_PORT = "8095"
 		private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
 	}
-
 }

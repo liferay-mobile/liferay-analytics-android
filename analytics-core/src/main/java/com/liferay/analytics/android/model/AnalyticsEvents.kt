@@ -21,11 +21,11 @@ import java.util.HashMap
  * @author Igor Matos
  * @author Allan Melo
  */
-data class AnalyticsEventsMessage(var analyticsKey: String,
-	@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
+data class AnalyticsEvents(
+		var analyticsKey: String,
+		@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
 
 	var context: Map<String, String> = HashMap()
 	var events: MutableList<Event> = mutableListOf()
 	var protocolVersion: String? = null
-
 }

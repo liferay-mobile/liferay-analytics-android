@@ -41,7 +41,8 @@ internal class FileStorage(private val context: Context) {
 			}
 
 			return stringBuilder.toString()
-		} catch (e: FileNotFoundException) {
+		}
+		catch (e: FileNotFoundException) {
 			return null
 		}
 	}
@@ -53,5 +54,4 @@ internal class FileStorage(private val context: Context) {
 		outputStream.write(value.toByteArray())
 		outputStream.close()
 	}
-
 }

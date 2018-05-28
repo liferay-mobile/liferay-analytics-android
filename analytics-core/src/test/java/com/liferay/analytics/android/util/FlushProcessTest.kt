@@ -41,7 +41,6 @@ class FlushProcessTest {
 	private lateinit var flushProcess: FlushProcess
 	private lateinit var userDAO: UserDAO
 
-
 	@Before
 	fun setup() {
 		Analytics.configure(RuntimeEnvironment.application, "analyticsKey")
@@ -59,24 +58,6 @@ class FlushProcessTest {
 	@After
 	fun tearDown() {
 		Analytics.instance = null
-	}
-
-	@Test
-	fun inProgress() {
-		val event1 = Event("applicationId1", "eventId1")
-		val event2 = Event("applicationId2", "eventId2")
-
-		Assert.assertEquals(0, eventsDAO.getEvents().size)
-		flushProcess.addEvent(event1)
-
-		Assert.assertEquals(1, eventsDAO.getEvents().size)
-		Assert.assertEquals(0, flushProcess.eventsQueue.size)
-
-		flushProcess.isInProgress = true
-		flushProcess.addEvent(event2)
-
-		Assert.assertEquals(1, eventsDAO.getEvents().size)
-		Assert.assertEquals(1, flushProcess.eventsQueue.size)
 	}
 
 	@Test
@@ -140,6 +121,24 @@ class FlushProcessTest {
 		Assert.assertEquals(userId, flushProcess.getUserId())
 	}
 
+	@Test
+	fun shouldAddEventsInQueue() {
+		val event1 = Event("applicationId1", "eventId1")
+		val event2 = Event("applicationId2", "eventId2")
+
+		Assert.assertEquals(0, eventsDAO.getEvents().size)
+		flushProcess.addEvent(event1)
+
+		Assert.assertEquals(1, eventsDAO.getEvents().size)
+		Assert.assertEquals(0, flushProcess.eventsQueue.size)
+
+		flushProcess.isInProgress = true
+		flushProcess.addEvent(event2)
+
+		Assert.assertEquals(1, eventsDAO.getEvents().size)
+		Assert.assertEquals(1, flushProcess.eventsQueue.size)
+	}
+
 	private fun createEvents(size: Int) {
 		var events: MutableList<Event> = mutableListOf()
 
@@ -149,5 +148,4 @@ class FlushProcessTest {
 
 		eventsDAO.replace(events)
 	}
-
 }

@@ -20,7 +20,7 @@ import com.liferay.analytics.android.api.AnalyticsClient
 import com.liferay.analytics.android.api.IdentityClient
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
-import com.liferay.analytics.android.model.AnalyticsEventsMessage
+import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -41,19 +41,6 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 		flush()
 	}
 
-	fun getEventsToSend(): List<Event> {
-		return eventsDAO.getEvents().take(FLUSH_SIZE)
-	}
-
-	fun getRemainingEvents(): List<Event> {
-		return eventsDAO.getEvents().drop(FLUSH_SIZE)
-	}
-
-	private fun saveEventsQueue() {
-		eventsDAO.addEvents(eventsQueue)
-		eventsQueue.clear()
-	}
-
 	fun addEvent(event: Event) {
 		if (isInProgress) {
 			eventsQueue.add(event)
@@ -62,6 +49,25 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 		}
 
 		eventsDAO.addEvents(listOf(event))
+	}
+
+	fun getEventsToSend(): List<Event> {
+		return eventsDAO.getEvents().take(FLUSH_SIZE)
+	}
+
+	fun getRemainingEvents(): List<Event> {
+		return eventsDAO.getEvents().drop(FLUSH_SIZE)
+	}
+
+	fun getUserId(): String {
+		val userId = userDAO.getUserId() ?: initUserId()
+
+		return userId
+	}
+
+	private fun saveEventsQueue() {
+		eventsDAO.addEvents(eventsQueue)
+		eventsQueue.clear()
 	}
 
 	private fun sendEvents() {
@@ -78,7 +84,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 			var events = getEventsToSend()
 
 			while (events.isNotEmpty()) {
-				val analyticsEventsMessage = AnalyticsEventsMessage(instance.analyticsKey, userId)
+				val analyticsEventsMessage = AnalyticsEvents(instance.analyticsKey, userId)
 
 				analyticsEventsMessage.events = events.take(100).toMutableList()
 
@@ -86,17 +92,30 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 
 				events = getRemainingEvents()
 				eventsDAO.replace(events)
-
 			}
 
 			sendIdentities()
-
-		} catch (e: IOException) {
+		}
+		catch (e: IOException) {
 			Log.d("LIFERAY-ANALYTICS",
 				"Could not send analytics events ${e.printStackTrace()}")
-		} finally {
+		}
+		finally {
 			isInProgress = false
 			saveEventsQueue()
+		}
+	}
+
+	fun sendIdentities() {
+		val identityClient = IdentityClient()
+
+		var userContexts = userDAO.getUserContexts().toMutableList()
+
+		while (userContexts.isNotEmpty()) {
+			val userContext = userContexts.removeAt(0)
+
+			identityClient.send(userContext)
+			userDAO.replace(userContexts)
 		}
 	}
 
@@ -118,30 +137,9 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 		return identityContext.userId
 	}
 
-	fun getUserId(): String {
-		val userId = userDAO.getUserId() ?: initUserId()
-
-		return userId
-	}
-
-	fun sendIdentities() {
-		val identityClient = IdentityClient()
-
-		var userContexts = userDAO.getUserContexts().toMutableList()
-
-		while (userContexts.isNotEmpty()) {
-			val userContext = userContexts.removeAt(0)
-
-			identityClient.send(userContext)
-			userDAO.replace(userContexts)
-		}
-
-	}
-
 	private val analyticsClient = AnalyticsClient()
 
 	companion object {
 		private const val FLUSH_SIZE = 100
 	}
-
 }

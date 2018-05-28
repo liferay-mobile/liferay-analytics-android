@@ -15,7 +15,8 @@ artifacts {
 Properties properties = new Properties()
 try {
 	properties.load(project.rootProject.file('local.properties').newDataInputStream())
-} catch (FileNotFoundException ignore) {
+}
+catch (FileNotFoundException ignore) {
 }
 
 bintray {

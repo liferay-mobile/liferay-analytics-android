@@ -27,18 +27,16 @@ import io.reactivex.annotations.NonNull
 /**
  * @author Igor Matos
  */
-class Analytics private constructor(fileStorage: FileStorage, internal val analyticsKey: String,
-	flushInterval: Int) {
-
-	private val userDAO = UserDAO(fileStorage)
-	internal var flushProcess = FlushProcess(fileStorage, flushInterval)
+class Analytics private constructor(
+		fileStorage: FileStorage, internal val analyticsKey: String, flushInterval: Int) {
 
 	companion object {
 
 		@JvmOverloads
 		@JvmStatic
-		fun configure(@NonNull context: Context, @NonNull analyticsKey: String,
-			flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
+		fun configure(
+				@NonNull context: Context, @NonNull analyticsKey: String,
+				flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
 
 			analyticsInstance?.let {
 				throw IllegalStateException("Your library was already initialized.")
@@ -90,19 +88,6 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 		}
 
 		@JvmStatic
-		var instance: Analytics?
-			@Synchronized get() {
-				analyticsInstance?.let {
-					return it
-				}
-
-				throw IllegalStateException("You must initialize your library")
-			}
-			set(value) {
-				analyticsInstance = value
-			}
-
-		@JvmStatic
 		fun setIdentity(email: String, name: String = "") {
 			val identityContext = instance!!.getDefaultIdentityContext()
 
@@ -118,12 +103,27 @@ class Analytics private constructor(fileStorage: FileStorage, internal val analy
 			instance!!.userDAO.clearUserId()
 		}
 
+		@JvmStatic
+		internal var instance: Analytics?
+			@Synchronized get() {
+				analyticsInstance?.let {
+					return it
+				}
+
+				throw IllegalStateException("You must initialize your library")
+			}
+			set(value) {
+				analyticsInstance = value
+			}
+
 		private var analyticsInstance: Analytics? = null
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
 	}
 
-	fun getDefaultIdentityContext(): IdentityContext {
+	internal fun getDefaultIdentityContext(): IdentityContext {
 		return IdentityContext(analyticsKey)
 	}
 
+	internal val userDAO = UserDAO(fileStorage)
+	internal var flushProcess = FlushProcess(fileStorage, flushInterval)
 }

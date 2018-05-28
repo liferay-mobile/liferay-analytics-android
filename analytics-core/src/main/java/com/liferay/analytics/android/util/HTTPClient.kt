@@ -24,7 +24,6 @@ import java.io.IOException
  * @author Igor Matos
  */
 internal class HTTPClient {
-
 	companion object {
 
 		@Throws(IOException::class)
@@ -46,6 +45,5 @@ internal class HTTPClient {
 		}
 
 		private val MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
-
 	}
 }

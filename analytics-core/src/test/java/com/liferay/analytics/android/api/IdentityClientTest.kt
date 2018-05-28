@@ -36,10 +36,10 @@ class IdentityClientTest {
 
 		try {
 			identityClientImpl.send(identityContext)
-		} catch (e: IOException) {
+		}
+		catch (e: IOException) {
 			Assert.fail()
 		}
-
 	}
 
 	@Test
@@ -49,5 +49,4 @@ class IdentityClientTest {
 
 		Assert.assertEquals(userId.length, 20)
 	}
-
 }

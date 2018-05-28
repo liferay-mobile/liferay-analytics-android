@@ -29,7 +29,6 @@ internal object JSONParser {
 
 	@Throws(JsonSyntaxException::class)
 	fun <T> fromJsonString(json: String, type: Type): T {
-
 		return gson().fromJson(json, type)
 	}
 
@@ -39,10 +38,8 @@ internal object JSONParser {
 
 	internal fun gson(): Gson {
 		val gsonBuilder = GsonBuilder()
-
 		gsonBuilder.setDateFormat(DATE_FORMAT)
 
 		return gsonBuilder.create()
 	}
-
 }

@@ -28,7 +28,6 @@ import java.sql.Timestamp
  * @author Igor Matos
  */
 object Forms {
-
 	private const val APPLICATION_ID = "forms"
 	private const val FIELD_NAME = "fieldName"
 	private const val FOCUS_DURATION_KEY = "focusDuration"
@@ -84,7 +83,6 @@ object Forms {
 				fieldBlurred(duration, fieldAttributes)
 			}
 			.disposedWith(lifecycleOwner)
-
 	}
 
 	private fun fieldBlurred(focusDuration: Long, fieldAttributes: FieldAttributes) {
@@ -117,5 +115,4 @@ object Forms {
 	private fun send(formEvent: FormEvent, properties: HashMap<String, String>) {
 		Analytics.send(formEvent.value, APPLICATION_ID, properties)
 	}
-
 }

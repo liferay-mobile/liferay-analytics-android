@@ -22,8 +22,6 @@ import java.util.HashMap
  * @author Allan Melo
  */
 class Event(var applicationId: String, var eventId: String) {
-
 	var eventDate = Date()
 	var properties: Map<String, String> = HashMap()
-
 }

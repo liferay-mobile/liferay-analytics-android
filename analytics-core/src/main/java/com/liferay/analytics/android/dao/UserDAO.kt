@@ -28,13 +28,26 @@ import java.lang.reflect.Type
  */
 internal class UserDAO(private var fileStorage: FileStorage) {
 
+	fun addIdentityContext(identityContext: IdentityContext) {
+		replace(getUserContexts().plus(identityContext))
+	}
+
+	fun clearIdentities() {
+		replace(listOf())
+	}
+
+	fun clearUserId() {
+		replace(STORAGE_KEY_USER_ID, "")
+	}
+
 	fun getUserContexts(): List<IdentityContext> {
 		val userContextsJsonString = fileStorage.getStringByKey(USER_CONTEXTS)
 
 		userContextsJsonString?.let {
 			try {
 				return Gson().fromJson<List<IdentityContext>>(it, listType())
-			} catch (e: JsonSyntaxException) {
+			}
+			catch (e: JsonSyntaxException) {
 				clearIdentities()
 			}
 		}
@@ -46,18 +59,6 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 		return fileStorage.getStringByKey(STORAGE_KEY_USER_ID)
 	}
 
-	fun clearIdentities() {
-		replace(listOf())
-	}
-
-	fun clearUserId() {
-		replace(STORAGE_KEY_USER_ID, "")
-	}
-
-	fun addIdentityContext(identityContext: IdentityContext) {
-		replace(getUserContexts().plus(identityContext))
-	}
-
 	fun replace(identityContexts: List<IdentityContext>) {
 		val eventsJson = Gson().toJson(identityContexts)
 		replace(USER_CONTEXTS, eventsJson)
@@ -66,7 +67,8 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 	fun replace(key: String, value: String) {
 		try {
 			fileStorage.saveStringToKey(key, value)
-		} catch (e: IOException) {
+		}
+		catch (e: IOException) {
 			Log.d("LIFERAY-ANALYTICS",
 				"Could not replace the value for key ${e.printStackTrace()}")
 		}
@@ -75,7 +77,8 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 	fun setUserId(userId: String) {
 		try {
 			fileStorage.saveStringToKey(STORAGE_KEY_USER_ID, userId)
-		} catch (e: IOException) {
+		}
+		catch (e: IOException) {
 			Log.d("LIFERAY-ANALYTICS", "Could not save UserId ${e.printStackTrace()}")
 		}
 	}
@@ -88,5 +91,4 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 		private const val STORAGE_KEY_USER_ID = "lcs_client_user_id"
 		private const val USER_CONTEXTS = "user_contexts"
 	}
-
 }

@@ -25,7 +25,6 @@ import com.liferay.analytics.android.forms.Forms
  * @author Igor Matos
  */
 class MainActivity : AppCompatActivity() {
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -41,5 +40,4 @@ class MainActivity : AppCompatActivity() {
 			startActivity(intent)
 		}
 	}
-
 }

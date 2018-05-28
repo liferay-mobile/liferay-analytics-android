@@ -15,7 +15,7 @@
 package com.liferay.analytics.android.api
 
 import com.google.gson.reflect.TypeToken
-import com.liferay.analytics.android.model.AnalyticsEventsMessage
+import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.util.HTTPClient
 import com.liferay.analytics.android.util.JSONParser
@@ -36,16 +36,15 @@ import java.util.concurrent.TimeUnit
  */
 class AnalyticsClientTest {
 
-	private val analyticsCLient = Mockito.spy(AnalyticsClient::class.java)
-
+	private val analyticsClient = Mockito.spy(AnalyticsClient::class.java)
 	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
-		Mockito.`when`(analyticsCLient.analyticsGatewayHost).thenReturn("192.168.108.90")
-		Mockito.`when`(analyticsCLient.analyticsGatewayProtocol).thenReturn("http")
-		Mockito.`when`(analyticsCLient.analyticsGatewayPort).thenReturn("8081")
-		Mockito.`when`(analyticsCLient.analyticsGatewayPath).thenReturn("/")
+		Mockito.`when`(analyticsClient.analyticsGatewayHost).thenReturn("192.168.108.90")
+		Mockito.`when`(analyticsClient.analyticsGatewayProtocol).thenReturn("http")
+		Mockito.`when`(analyticsClient.analyticsGatewayPort).thenReturn("8081")
+		Mockito.`when`(analyticsClient.analyticsGatewayPath).thenReturn("/")
 
 		userId = getUserId()
 	}
@@ -53,7 +52,7 @@ class AnalyticsClientTest {
 	@Test
 	@Throws(Exception::class)
 	fun sendAnalytics() {
-		var analyticsEventsMessage = AnalyticsEventsMessage("liferay.com", userId).apply {
+		var analyticsEventsMessage = AnalyticsEvents("liferay.com", userId).apply {
 			context = mapOf("languageId" to "pt_PT",
 				"url" to "http://192.168.108.90:8081/")
 
@@ -63,7 +62,7 @@ class AnalyticsClientTest {
 			events = mutableListOf(event)
 		}
 
-		analyticsCLient.sendAnalytics(analyticsEventsMessage)
+		analyticsClient.sendAnalytics(analyticsEventsMessage)
 
 		val client = OkHttpClient().newBuilder()
 			.readTimeout(300, TimeUnit.SECONDS)
@@ -73,7 +72,7 @@ class AnalyticsClientTest {
 
 		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), client)
 
-		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEventsMessage>>(
+		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEvents>>(
 			responseBody, listType())
 
 		Assert.assertTrue(list.isNotEmpty())
@@ -96,11 +95,10 @@ class AnalyticsClientTest {
 	}
 
 	private fun listType(): Type {
-		return object : TypeToken<ArrayList<AnalyticsEventsMessage>>() {}.type
+		return object : TypeToken<ArrayList<AnalyticsEvents>>() {}.type
 	}
 
 	companion object {
 		private const val CASSANDRA_URL = "http://192.168.108.90:9095/api/query/execute"
 	}
-
 }

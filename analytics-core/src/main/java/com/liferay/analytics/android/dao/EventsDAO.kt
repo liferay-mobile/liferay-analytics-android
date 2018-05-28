@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.dao
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -27,20 +28,6 @@ import java.lang.reflect.Type
  */
 internal class EventsDAO(private var fileStorage: FileStorage) {
 
-	fun getEvents(): List<Event> {
-		val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
-
-		eventsJsonString?.let {
-			try {
-				return Gson().fromJson<List<Event>>(it, listType())
-			} catch (e: JsonSyntaxException) {
-				clear()
-			}
-		}
-
-		return listOf()
-	}
-
 	fun addEvents(events: List<Event>) {
 		val eventsToSave = this.getEvents().plus(events)
 
@@ -51,13 +38,29 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 		replace(listOf())
 	}
 
+	fun getEvents(): List<Event> {
+		val eventsJsonString = fileStorage.getStringByKey(EVENTS_KEY)
+
+		eventsJsonString?.let {
+			try {
+				return Gson().fromJson<List<Event>>(it, listType())
+			}
+			catch (e: JsonSyntaxException) {
+				clear()
+			}
+		}
+
+		return listOf()
+	}
+
 	fun replace(events: List<Event>) {
 		val eventsJson = Gson().toJson(events)
 
 		try {
 			fileStorage.saveStringToKey(EVENTS_KEY, eventsJson)
-		} catch (e: IOException) {
-			e.printStackTrace()
+		}
+		catch (e: IOException) {
+			Log.e("LIFERAY-ANALYTICS", "Could not replace events")
 		}
 	}
 
@@ -68,5 +71,4 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 	companion object {
 		private const val EVENTS_KEY = "events"
 	}
-
 }

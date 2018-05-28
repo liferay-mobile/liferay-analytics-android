@@ -24,15 +24,12 @@ import com.squareup.leakcanary.RefWatcher
  * @author Igor Matos
  */
 class MainApplication : Application() {
-
 	companion object {
 		fun getRefWatcher(context: Context): RefWatcher {
 			val application = context.applicationContext as MainApplication
 			return application.refWatcher
 		}
 	}
-
-	private lateinit var refWatcher: RefWatcher
 
 	override fun onCreate() {
 		super.onCreate()
@@ -46,7 +43,7 @@ class MainApplication : Application() {
 		}
 
 		Analytics.configure(this, "key")
-
 	}
 
+	private lateinit var refWatcher: RefWatcher
 }

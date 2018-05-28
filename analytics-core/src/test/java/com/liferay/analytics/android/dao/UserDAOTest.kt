@@ -45,13 +45,6 @@ class UserDAOTest {
 	}
 
 	@Test
-	fun addUserId() {
-		val userId = "123456789"
-		userDAO.setUserId(userId)
-		Assert.assertEquals(userId, userDAO.getUserId())
-	}
-
-	@Test
 	fun addIdentityContext() {
 		val identityContext1 = IdentityContext("analyticsKey").apply {
 			identity = Identity("ned", "ned.ludd@email.com")
@@ -68,13 +61,10 @@ class UserDAOTest {
 	}
 
 	@Test
-	fun replaceIdentityContexts() {
-		val identityContext1 = IdentityContext("analyticsKey")
-		val identityContext2 = IdentityContext("analyticsKey")
-
-		Assert.assertEquals(0, userDAO.getUserContexts().size)
-		userDAO.replace(listOf(identityContext1, identityContext2))
-		Assert.assertEquals(2, userDAO.getUserContexts().size)
+	fun addUserId() {
+		val userId = "123456789"
+		userDAO.setUserId(userId)
+		Assert.assertEquals(userId, userDAO.getUserId())
 	}
 
 	@Test
@@ -83,12 +73,6 @@ class UserDAOTest {
 		userDAO.clearUserId()
 
 		Assert.assertEquals("", userDAO.getUserId())
-	}
-
-	@Test
-	fun setUserId() {
-		userDAO.setUserId("userId")
-		Assert.assertEquals("userId", userDAO.getUserId())
 	}
 
 	fun clearUserContexts() {
@@ -103,4 +87,19 @@ class UserDAOTest {
 		Assert.assertEquals(0, userDAO.getUserContexts().size)
 	}
 
+	@Test
+	fun replaceIdentityContexts() {
+		val identityContext1 = IdentityContext("analyticsKey")
+		val identityContext2 = IdentityContext("analyticsKey")
+
+		Assert.assertEquals(0, userDAO.getUserContexts().size)
+		userDAO.replace(listOf(identityContext1, identityContext2))
+		Assert.assertEquals(2, userDAO.getUserContexts().size)
+	}
+
+	@Test
+	fun setUserId() {
+		userDAO.setUserId("userId")
+		Assert.assertEquals("userId", userDAO.getUserId())
+	}
 }

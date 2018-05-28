@@ -27,7 +27,6 @@ import com.liferay.analytics.android.forms.FormAttributes;
 import com.liferay.analytics.android.forms.Forms;
 
 public class ActivityJava extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

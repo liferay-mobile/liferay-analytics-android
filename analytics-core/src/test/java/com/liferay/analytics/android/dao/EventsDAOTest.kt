@@ -46,13 +46,6 @@ class EventsDAOTest {
 	}
 
 	@Test
-	fun addEvent() {
-		val firstEventModel = eventsDAO.getEvents().first()
-
-		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
-	}
-
-	@Test
 	fun addAnotherEvent() {
 		val lastApplicationId = "lastApplicationId"
 		val lastEventId = "lastEventId"
@@ -69,6 +62,13 @@ class EventsDAOTest {
 		val firstEventModel = events.first()
 		Assert.assertEquals(FIRST_EVENT_ID, firstEventModel.eventId)
 		Assert.assertEquals(FIRST_APPLICATION_ID, firstEventModel.applicationId)
+	}
+
+	@Test
+	fun addEvent() {
+		val firstEventModel = eventsDAO.getEvents().first()
+
+		Assert.assertEquals(firstEventModel.eventId, FIRST_EVENT_ID)
 	}
 
 	@Test
@@ -93,5 +93,4 @@ class EventsDAOTest {
 		private const val FIRST_EVENT_ID = "firstEventId"
 		private const val FIRST_APPLICATION_ID = "firstApplicationId"
 	}
-
 }

@@ -23,10 +23,11 @@ import java.util.UUID
  */
 data class IdentityContext(var analyticsKey: String) {
 
-	var userId: String
 	var identity: Identity? = null
-	var timezone: String? = null
 	val language: String = Locale.getDefault().toString()
+	val platform = "Android"
+	var timezone: String? = null
+	var userId: String
 
 	init {
 		userId = createUserId()
@@ -37,9 +38,4 @@ data class IdentityContext(var analyticsKey: String) {
 
 		return uuid.take(20)
 	}
-
-	companion object {
-		const val platform: String = "Android"
-	}
-
 }
