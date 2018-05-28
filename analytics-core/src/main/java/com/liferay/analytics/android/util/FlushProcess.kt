@@ -86,7 +86,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 			while (events.isNotEmpty()) {
 				val analyticsEventsMessage = AnalyticsEvents(instance.analyticsKey, userId)
 
-				analyticsEventsMessage.events = events.take(100).toMutableList()
+				analyticsEventsMessage.events = getEventsToSend()
 
 				analyticsClient.sendAnalytics(analyticsEventsMessage)
 

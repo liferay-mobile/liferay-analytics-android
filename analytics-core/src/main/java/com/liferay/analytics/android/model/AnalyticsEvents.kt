@@ -26,6 +26,6 @@ data class AnalyticsEvents(
 		@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
 
 	var context: Map<String, String> = HashMap()
-	var events: MutableList<Event> = mutableListOf()
+	var events: List<Event> = listOf()
 	var protocolVersion: String? = null
 }
