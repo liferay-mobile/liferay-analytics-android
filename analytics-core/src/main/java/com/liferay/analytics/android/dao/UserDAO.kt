@@ -70,7 +70,7 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 		}
 		catch (e: IOException) {
 			Log.d("LIFERAY-ANALYTICS",
-				"Could not replace the value for key ${e.printStackTrace()}")
+				"Could not replace the value for key ${e.localizedMessage}")
 		}
 	}
 
@@ -79,7 +79,7 @@ internal class UserDAO(private var fileStorage: FileStorage) {
 			fileStorage.saveStringToKey(STORAGE_KEY_USER_ID, userId)
 		}
 		catch (e: IOException) {
-			Log.d("LIFERAY-ANALYTICS", "Could not save UserId ${e.printStackTrace()}")
+			Log.d("LIFERAY-ANALYTICS", "Could not save UserId ${e.localizedMessage}")
 		}
 	}
 

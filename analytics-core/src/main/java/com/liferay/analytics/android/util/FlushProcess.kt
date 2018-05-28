@@ -98,7 +98,7 @@ internal class FlushProcess(fileStorage: FileStorage, private var flushInterval:
 		}
 		catch (e: IOException) {
 			Log.d("LIFERAY-ANALYTICS",
-				"Could not send analytics events ${e.printStackTrace()}")
+				"Could not send analytics events ${e.localizedMessage}")
 		}
 		finally {
 			isInProgress = false
