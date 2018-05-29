@@ -42,6 +42,18 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		flush()
 	}
 
+	fun addEvent(event: Event) {
+		val userId = getUserId()
+
+		if (isInProgress) {
+			eventsQueue[userId] = (eventsQueue[userId] ?: listOf()).plus(event)
+
+			return
+		}
+
+		eventsDAO.addEvents(userId, listOf(event))
+	}
+
 	fun getUserId(): String {
 		val userId = userDAO.getUserId() ?: initUserId()
 
@@ -56,16 +68,34 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		eventsQueue.clear()
 	}
 
-	fun addEvent(event: Event) {
-		val userId = getUserId()
+	internal fun sendIdentities() {
+		val identityClient = IdentityClient()
 
-		if (isInProgress) {
-			eventsQueue[userId] = (eventsQueue[userId] ?: listOf()).plus(event)
+		var userContexts = userDAO.getUserContexts().toMutableList()
 
-			return
+		while (userContexts.isNotEmpty()) {
+			val userContext = userContexts.removeAt(0)
+
+			identityClient.send(userContext)
+			userDAO.replace(userContexts)
 		}
+	}
 
-		eventsDAO.addEvents(userId, listOf(event))
+	private fun flush() {
+		Timer().schedule(flushInterval) {
+			sendEvents()
+			flush()
+		}
+	}
+
+	private fun initUserId(): String {
+		val instance = Analytics.instance!!
+		val identityContext = IdentityContext(instance.analyticsKey)
+
+		userDAO.addIdentityContext(identityContext)
+		userDAO.setUserId(identityContext.userId)
+
+		return identityContext.userId
 	}
 
 	private fun sendEvents() {
@@ -107,36 +137,6 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 			eventsDAO.replace(userId, events)
 		}
 
-	}
-
-	fun sendIdentities() {
-		val identityClient = IdentityClient()
-
-		var userContexts = userDAO.getUserContexts().toMutableList()
-
-		while (userContexts.isNotEmpty()) {
-			val userContext = userContexts.removeAt(0)
-
-			identityClient.send(userContext)
-			userDAO.replace(userContexts)
-		}
-	}
-
-	private fun flush() {
-        Timer().schedule(flushInterval) {
-            sendEvents()
-            flush()
-        }
-	}
-
-	private fun initUserId(): String {
-		val instance = Analytics.instance!!
-		val identityContext = IdentityContext(instance.analyticsKey)
-
-		userDAO.addIdentityContext(identityContext)
-		userDAO.setUserId(identityContext.userId)
-
-		return identityContext.userId
 	}
 
 	private val analyticsClient = AnalyticsClient()

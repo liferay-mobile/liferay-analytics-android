@@ -100,25 +100,6 @@ class Analytics private constructor(
 		}
 
 		/**
-		 * Returns the Liferay Analytics instance
-		 *
-		 * @throws IllegalStateException if the library was not initialized
-		 * @since 1.0.0
-		 */
-		@JvmStatic
-		internal var instance: Analytics?
-			@Synchronized get() {
-				analyticsInstance?.let {
-					return it
-				}
-
-				throw IllegalStateException("You must initialize your library")
-			}
-			set(value) {
-				analyticsInstance = value
-			}
-
-		/**
 		 * Need to call to send events with user informations.
 		 * Recommended after the user login in application.
 		 *
@@ -147,6 +128,25 @@ class Analytics private constructor(
 		fun clearSession() {
 			instance!!.userDAO.clearUserId()
 		}
+
+		/**
+		 * Returns the Liferay Analytics instance
+		 *
+		 * @throws IllegalStateException if the library was not initialized
+		 * @since 1.0.0
+		 */
+		@JvmStatic
+		internal var instance: Analytics?
+			@Synchronized get() {
+				analyticsInstance?.let {
+					return it
+				}
+
+				throw IllegalStateException("You must initialize your library")
+			}
+			set(value) {
+				analyticsInstance = value
+			}
 
 		private var analyticsInstance: Analytics? = null
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60

@@ -29,7 +29,7 @@ import java.lang.reflect.Type
 internal class EventsDAO(private var fileStorage: FileStorage) {
 
 	fun addEvents(userId: String, events: List<Event>) {
-		val currentEvents = this.getEvents()
+		val currentEvents = getEvents()
 		currentEvents[userId] = (currentEvents[userId] ?: listOf()) + events
 
 		replace(currentEvents)
@@ -65,7 +65,7 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 	}
 
 	fun replace(userId: String, events: List<Event>) {
-		var currentEvents = this.getEvents()
+		var currentEvents = getEvents()
 		currentEvents[userId] = events
 
 		replace(currentEvents)
