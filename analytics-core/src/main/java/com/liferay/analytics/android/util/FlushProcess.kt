@@ -107,6 +107,8 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 			userIdsAndEvents.forEach { (userId, events) ->
 				sendEventsForUserId(userId, events)
 				userIdsAndEvents.remove(userId)
+
+				eventsDAO.replace(userIdsAndEvents)
 			}
 
 			sendIdentities()
