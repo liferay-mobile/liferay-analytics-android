@@ -126,19 +126,18 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 	private fun sendEventsForUserId(userId: String, events: List<Event>) {
 		val instance = Analytics.instance!!
 
-		var events = events.take(FLUSH_SIZE)
+		var currentEvents = events
 
 		while (events.isNotEmpty()) {
 			val analyticsEvents = AnalyticsEvents(instance.analyticsKey, userId)
 
-			analyticsEvents.events = events.take(FLUSH_SIZE)
+			analyticsEvents.events = currentEvents.take(FLUSH_SIZE)
 
 			analyticsClient.sendAnalytics(analyticsEvents)
 
-			events = events.drop(FLUSH_SIZE)
-			eventsDAO.replace(userId, events)
+			currentEvents = currentEvents.drop(FLUSH_SIZE)
+			eventsDAO.replace(userId, currentEvents)
 		}
-
 	}
 
 	private val analyticsClient = AnalyticsClient()
