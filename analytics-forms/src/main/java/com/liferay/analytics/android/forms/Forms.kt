@@ -28,7 +28,7 @@ import java.sql.Timestamp
  * @author Igor Matos
  */
 object Forms {
-	private const val APPLICATION_ID = "forms"
+	private const val APPLICATION_ID = "Forms"
 	private const val FIELD_NAME = "fieldName"
 	private const val FOCUS_DURATION_KEY = "focusDuration"
 	private const val FORM_ID_KEY = "formId"
