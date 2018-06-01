@@ -32,10 +32,10 @@ class IdentityClientTest {
 			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
 
-		val identityClientImpl = IdentityClient()
+		val identityClient = IdentityClient()
 
 		try {
-			identityClientImpl.send(identityContext)
+			identityClient.send(identityContext)
 		}
 		catch (e: IOException) {
 			Assert.fail()
