@@ -128,7 +128,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
 		var currentEvents = events
 
-		while (events.isNotEmpty()) {
+		while (currentEvents.isNotEmpty()) {
 			val analyticsEvents = AnalyticsEvents(instance.analyticsKey, userId)
 
 			analyticsEvents.events = currentEvents.take(FLUSH_SIZE)
