@@ -15,7 +15,7 @@
 package com.liferay.analytics.android.api
 
 import com.liferay.analytics.android.model.IdentityContext
-import com.liferay.analytics.android.util.HTTPClient
+import com.liferay.analytics.android.util.HttpClient
 import com.liferay.analytics.android.util.JSONParser
 import java.io.IOException
 
@@ -45,7 +45,7 @@ internal class IdentityClient {
 		val identityPath = "$identityGatewayProtocol://$identityGatewayHost:" +
 			"$identityGatewayPort/$identityGatewayPath"
 
-		return HTTPClient.post(identityPath, json)
+		return HttpClient.post(identityPath, json)
 	}
 
 	companion object {

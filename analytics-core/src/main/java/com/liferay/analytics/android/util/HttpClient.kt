@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Igor Matos
  */
-internal class HTTPClient {
+internal class HttpClient {
 	companion object {
 
 		@Throws(IOException::class)

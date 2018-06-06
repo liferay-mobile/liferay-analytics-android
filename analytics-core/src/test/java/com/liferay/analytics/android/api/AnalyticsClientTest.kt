@@ -17,7 +17,7 @@ package com.liferay.analytics.android.api
 import com.google.gson.reflect.TypeToken
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
-import com.liferay.analytics.android.util.HTTPClient
+import com.liferay.analytics.android.util.HttpClient
 import com.liferay.analytics.android.util.JSONParser
 import org.junit.Assert
 import org.junit.Before
@@ -62,7 +62,7 @@ class AnalyticsClientTest {
 
 		analyticsClient.sendAnalytics(analyticsEventsMessage)
 
-		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), 300)
+		val responseBody = HttpClient.post(CASSANDRA_URL, getQuery(userId), 300)
 
 		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEvents>>(
 			responseBody, listType())

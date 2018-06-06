@@ -15,7 +15,7 @@
 package com.liferay.analytics.android.api
 
 import com.liferay.analytics.android.model.AnalyticsEvents
-import com.liferay.analytics.android.util.HTTPClient
+import com.liferay.analytics.android.util.HttpClient
 import com.liferay.analytics.android.util.JSONParser
 import java.io.IOException
 
@@ -44,7 +44,7 @@ internal class AnalyticsClient {
 		val analyticsPath = "$analyticsGatewayProtocol://" +
 			"$analyticsGatewayHost:$analyticsGatewayPort$analyticsGatewayPath"
 
-		return HTTPClient.post(analyticsPath, json)
+		return HttpClient.post(analyticsPath, json)
 	}
 
 	companion object {
