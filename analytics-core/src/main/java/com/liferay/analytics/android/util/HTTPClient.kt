@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Igor Matos
@@ -27,12 +28,20 @@ internal class HTTPClient {
 	companion object {
 
 		@Throws(IOException::class)
-		fun post(url: String, json: String, client: OkHttpClient = OkHttpClient()): String {
+		fun post(url: String, json: String, timeout: Long = 30): String {
+
 			val body = RequestBody.create(MEDIA_TYPE, json)
 
 			val request = Request.Builder()
 				.url(url)
 				.post(body)
+				.build()
+
+			val client = OkHttpClient.Builder()
+				.readTimeout(timeout, TimeUnit.SECONDS)
+				.writeTimeout(timeout, TimeUnit.SECONDS)
+				.connectTimeout(timeout, TimeUnit.SECONDS)
+				.trust("certificates/DST Root CA X3")
 				.build()
 
 			val response = client.newCall(request).execute()

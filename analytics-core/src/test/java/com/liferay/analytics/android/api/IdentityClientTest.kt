@@ -14,16 +14,22 @@
 
 package com.liferay.analytics.android.api
 
+import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.io.IOException
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
+@Config(constants = BuildConfig::class, sdk = [26])
+@RunWith(RobolectricTestRunner::class)
 class IdentityClientTest {
 
 	@Test
@@ -38,7 +44,7 @@ class IdentityClientTest {
 			identityClient.send(identityContext)
 		}
 		catch (e: IOException) {
-			Assert.fail()
+			Assert.fail(e.localizedMessage)
 		}
 	}
 

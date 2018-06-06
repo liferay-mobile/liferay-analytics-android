@@ -19,7 +19,6 @@ import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.util.HTTPClient
 import com.liferay.analytics.android.util.JSONParser
-import okhttp3.OkHttpClient
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +27,6 @@ import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Igor Matos
@@ -64,13 +62,7 @@ class AnalyticsClientTest {
 
 		analyticsClient.sendAnalytics(analyticsEventsMessage)
 
-		val client = OkHttpClient().newBuilder()
-			.readTimeout(300, TimeUnit.SECONDS)
-			.writeTimeout(300, TimeUnit.SECONDS)
-			.connectTimeout(300, TimeUnit.SECONDS)
-			.build()
-
-		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), client)
+		val responseBody = HTTPClient.post(CASSANDRA_URL, getQuery(userId), 300)
 
 		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEvents>>(
 			responseBody, listType())
