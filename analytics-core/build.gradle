@@ -11,7 +11,7 @@ ext {
 	bintrayOrg = 'liferay'
 
 	versionCode = 100
-	versionName = '1.0.0'
+	versionName = '0.1.0'
 
 	siteUrl = 'https://github.com/liferay-mobile/liferay-analytics-android'
 	gitUrl = 'https://github.com/liferay-mobile/liferay-analytics-android.git'
