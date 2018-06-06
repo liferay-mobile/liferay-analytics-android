@@ -45,7 +45,8 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 		eventsJsonString?.let {
 			try {
 				return Gson().fromJson<MutableMap<String, List<Event>>>(it, listType())
-			} catch (e: JsonSyntaxException) {
+			}
+			catch (e: JsonSyntaxException) {
 				clear()
 			}
 		}

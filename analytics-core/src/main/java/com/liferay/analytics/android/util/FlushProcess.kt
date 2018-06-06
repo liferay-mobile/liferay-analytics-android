@@ -24,7 +24,7 @@ import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.IdentityContext
 import java.io.IOException
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.schedule
 
 /**
