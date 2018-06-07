@@ -15,43 +15,52 @@
 package com.liferay.analytics.android.sample;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import com.liferay.analytics.android.forms.FieldAttributes;
 import com.squareup.leakcanary.RefWatcher;
 import com.liferay.analytics.android.forms.FormAttributes;
 import com.liferay.analytics.android.forms.Forms;
 
-public class ActivityJava extends AppCompatActivity {
+public class FormsActivityJava extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_java);
+        setContentView(R.layout.activity_forms);
 
         RefWatcher refWatcher = MainApplication.Companion.getRefWatcher(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         final FormAttributes formAttributes = new FormAttributes("FormID", "Form Title");
+
+        // Send "formViewed" event
+        Forms.formViewed(formAttributes);
 
         FieldAttributes nameFieldAttributes = new FieldAttributes("Name", "nameTitle", formAttributes);
         EditText nameField = findViewById(R.id.nameField);
-        refWatcher.watch(nameField);
 
+        //Track "fieldFocused" and "fieldBlurred" events
         Forms.trackField(nameField, nameFieldAttributes);
+
+        refWatcher.watch(nameField);
 
         FieldAttributes emailFieldAttributes = new FieldAttributes("Email", "emailTitle", formAttributes);
         EditText emailField = findViewById(R.id.emailField);
+
+        //Track "fieldFocused" and "fieldBlurred" events
         Forms.trackField(emailField, emailFieldAttributes);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button button = findViewById(R.id.sendButton);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Send "formSubmitted" event
                 Forms.formSubmitted(formAttributes);
 
                 Snackbar.make(view, "Email sent!", Snackbar.LENGTH_LONG)

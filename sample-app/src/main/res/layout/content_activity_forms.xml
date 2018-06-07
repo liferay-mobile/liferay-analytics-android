@@ -20,8 +20,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
-	tools:context="com.liferay.analytics.android.sample.ActivityJava"
-	tools:showIn="@layout/activity_java">
+	tools:context="com.liferay.analytics.android.sample.FormsActivityJava"
+	tools:showIn="@layout/activity_forms">
 
 	<EditText
 		android:id="@+id/nameField"
@@ -46,5 +46,17 @@
 		android:inputType="textPersonName"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/nameField"
+		/>
+	<Button
+		android:id="@+id/sendButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="8dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="32dp"
+		android:text="Send form"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/emailField"
 		/>
 </android.support.constraint.ConstraintLayout>

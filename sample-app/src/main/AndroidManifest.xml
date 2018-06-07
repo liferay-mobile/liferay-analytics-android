@@ -20,7 +20,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ActivityJava"
+			android:name=".FormsActivityJava"
 			android:label="@string/title_activity_java"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>

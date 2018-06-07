@@ -18,6 +18,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.forms.FormAttributes
 import com.liferay.analytics.android.forms.Forms
 
@@ -29,14 +30,12 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		val formAttributes = FormAttributes("FormID", "Form Title")
-
-		Forms.formViewed(formAttributes)
+		Analytics.send("pageViewed", "AndroidAppId")
 
 		val button = findViewById<Button>(R.id.button)
 
 		button.setOnClickListener {
-			val intent = Intent(it.context, ActivityJava::class.java)
+			val intent = Intent(it.context, FormsActivityJava::class.java)
 			startActivity(intent)
 		}
 	}
