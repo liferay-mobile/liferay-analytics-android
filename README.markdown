@@ -1,13 +1,16 @@
-# Liferay Analytics Android
+# Liferay Analytics Android [![Codacy Badge](https://api.codacy.com/project/badge/Grade/aed9538a5fe047dfb7843a8466139d04)](https://www.codacy.com/app/liferay-mobile/liferay-analytics-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=liferay-mobile/liferay-analytics-android&amp;utm_campaign=Badge_Grade)
 
-## Analytics Core
+## Analytics Core  
+
 
 ### Setup
 In your app build.gradle add the dependency:
 
 ```kotlin
-imlementation 'com.liferay:liferay-analytics-android:1.0.0'
+imlementation 'com.liferay:liferay-analytics-android:x.x.x'
 ```
+Change x.x.x for the latest version: [![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-android/_latestVersion)
+
 
 ### How to use ?
 
@@ -73,8 +76,10 @@ Analytics.send("eventId", "applicationId", hashMapOf("property" to "value",
 In your app build.gradle add the dependency:
 
 ```kotlin
-imlementation 'com.liferay:liferay-analytics-forms-android:1.0.0'
+imlementation 'com.liferay:liferay-analytics-forms-android:x.x.x'
 ```
+
+Change x.x.x for the latest version: [ ![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-forms-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-forms-android/_latestVersion)
 
 ### How to use?
 
