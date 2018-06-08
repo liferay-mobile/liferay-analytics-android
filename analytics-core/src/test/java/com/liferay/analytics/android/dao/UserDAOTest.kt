@@ -18,7 +18,7 @@ import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.FileStorage
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
