@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
+		// Method to send custom events
 		Analytics.send("pageViewed", "AndroidAppId")
 
 		val button = findViewById<Button>(R.id.button)

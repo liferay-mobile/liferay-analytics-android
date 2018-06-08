@@ -42,7 +42,8 @@ class MainApplication : Application() {
 			refWatcher = LeakCanary.install(this)
 		}
 
-		Analytics.configure(this, "key")
+		// Initialize the library using your analytics key
+		Analytics.configure(this, "ANALYTICS_KEY")
 	}
 
 	private lateinit var refWatcher: RefWatcher
