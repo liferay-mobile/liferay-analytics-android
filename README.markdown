@@ -70,7 +70,8 @@ Analytics.send("eventId", "applicationId", hashMapOf("property" to "value",
                                                     "property2" to "value2"))
 ```
 
-## Analytics Forms Plugin
+## Analytics Forms Plugin  [ ![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-forms-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-forms-android/_latestVersion)
+
 
 ### Setup
 In your app build.gradle add the dependency:
