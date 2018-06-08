@@ -28,14 +28,14 @@ import javax.net.ssl.X509TrustManager
 fun OkHttpClient.Builder.trust(certificate: String) : OkHttpClient.Builder {
 	val keyStore = CertificateUtil.getKeyStore(certificate)
 
-	val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-	trustManagerFactory.init(keyStore)
+	val factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+	factory.init(keyStore)
 
-	val trustManagers = trustManagerFactory.trustManagers
+	val trustManagers = factory.trustManagers
 
 	if (trustManagers.isEmpty() || trustManagers.first() !is X509TrustManager) {
-		throw IllegalStateException("Unexpected default trust managers:" +
-			Arrays.toString(trustManagers))
+		throw IllegalStateException(
+				"Unexpected default trust managers:" + Arrays.toString(trustManagers))
 	}
 
 	val trustManager = trustManagers.first() as X509TrustManager

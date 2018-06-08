@@ -27,30 +27,28 @@ class CertificateUtil {
 
 		fun getKeyStore(fileName: String): KeyStore? {
 			try {
-				val certificateFactory = CertificateFactory.getInstance("X.509")
+				val certificateFactory = CertificateFactory.getInstance(CERTIFICATION_TYPE)
 				val caInput = javaClass.classLoader.getResourceAsStream(fileName)
 
 				caInput.use {
-					var keyStore: KeyStore?
+					val ca = certificateFactory.generateCertificate(it)
 
-					val ca = certificateFactory.generateCertificate(caInput)
-					val keyStoreType = KeyStore.getDefaultType()
-					keyStore = KeyStore.getInstance(keyStoreType)
-					keyStore!!.load(null, null)
+					val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+					keyStore.load(null, null)
 					keyStore.setCertificateEntry("ca", ca)
 
 					return keyStore
 				}
-
 			}
 			catch (e: Exception) {
 				Log.e("LIFERAY-ANALYTICS",
-					"Error during getting keystore ${e.localizedMessage}")
+						"Error during getting keystore ${e.localizedMessage}")
 			}
 
 			return null
 		}
 
+		private const val CERTIFICATION_TYPE = "X.509"
 	}
 
 }

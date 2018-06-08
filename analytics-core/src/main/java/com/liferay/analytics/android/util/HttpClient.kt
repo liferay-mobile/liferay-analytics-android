@@ -41,7 +41,7 @@ internal class HttpClient {
 				.readTimeout(timeout, TimeUnit.SECONDS)
 				.writeTimeout(timeout, TimeUnit.SECONDS)
 				.connectTimeout(timeout, TimeUnit.SECONDS)
-				.trust("certificates/DST Root CA X3")
+				.trust(CERTIFICATE_DST_CA_X3)
 				.build()
 
 			val response = client.newCall(request).execute()
@@ -53,6 +53,7 @@ internal class HttpClient {
 			return ""
 		}
 
+		private const val CERTIFICATE_DST_CA_X3 = "certificates/DST Root CA X3"
 		private val MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
 	}
 }
