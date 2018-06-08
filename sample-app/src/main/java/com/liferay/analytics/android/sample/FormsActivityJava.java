@@ -32,8 +32,6 @@ public class FormsActivityJava extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forms);
 
-        RefWatcher refWatcher = MainApplication.Companion.getRefWatcher(this);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,8 +45,6 @@ public class FormsActivityJava extends AppCompatActivity {
 
         //Track "fieldFocused" and "fieldBlurred" events
         Forms.trackField(nameField, nameFieldAttributes);
-
-        refWatcher.watch(nameField);
 
         FieldAttributes emailFieldAttributes = new FieldAttributes("Email", "emailTitle", formAttributes);
         EditText emailField = findViewById(R.id.emailField);

@@ -24,27 +24,11 @@ import com.squareup.leakcanary.RefWatcher
  * @author Igor Matos
  */
 class MainApplication : Application() {
-	companion object {
-		fun getRefWatcher(context: Context): RefWatcher {
-			val application = context.applicationContext as MainApplication
-			return application.refWatcher
-		}
-	}
 
 	override fun onCreate() {
 		super.onCreate()
 
-		if (LeakCanary.isInAnalyzerProcess(this)) {
-			return
-		}
-
-		if (BuildConfig.DEBUG) {
-			refWatcher = LeakCanary.install(this)
-		}
-
 		// Initialize the library using your analytics key
 		Analytics.configure(this, "ANALYTICS_KEY")
 	}
-
-	private lateinit var refWatcher: RefWatcher
 }
