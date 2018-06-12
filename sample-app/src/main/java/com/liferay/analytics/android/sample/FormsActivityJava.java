@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.liferay.analytics.android.forms.FieldAttributes;
-import com.squareup.leakcanary.RefWatcher;
 import com.liferay.analytics.android.forms.FormAttributes;
 import com.liferay.analytics.android.forms.Forms;
 
