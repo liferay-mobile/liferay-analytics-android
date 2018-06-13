@@ -34,7 +34,7 @@ class IdentityClientTest {
 
 	@Test
 	fun sendUserId() {
-		val identityContext = IdentityContext("liferay.com").apply {
+		val identityContext = IdentityContext("analyticsKey").apply {
 			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
 
@@ -50,7 +50,7 @@ class IdentityClientTest {
 
 	@Test
 	fun createUserId() {
-		val identityContext = IdentityContext("liferay.com")
+		val identityContext = IdentityContext("analyticsKey")
 		val userId = identityContext.userId
 
 		Assert.assertEquals(userId.length, 20)

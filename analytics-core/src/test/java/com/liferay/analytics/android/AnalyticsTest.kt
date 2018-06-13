@@ -36,7 +36,7 @@ class AnalyticsTest {
 	private lateinit var userDAO: UserDAO
 	private lateinit var userId: String
 	private lateinit var eventsDAO: EventsDAO
-	private val analyticsKey = "androidAnalyticsKey"
+	private val analyticsKey = "analyticsKey"
 
 	@Before
 	fun setup() {
