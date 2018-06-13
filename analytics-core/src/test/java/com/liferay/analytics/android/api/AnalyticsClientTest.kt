@@ -14,18 +14,13 @@
 
 package com.liferay.analytics.android.api
 
-import com.google.gson.reflect.TypeToken
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
-import com.liferay.analytics.android.util.HttpClient
-import com.liferay.analytics.android.util.JSONParser
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
-import java.lang.reflect.Type
+import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Date
 
 /**
@@ -34,25 +29,19 @@ import java.util.Date
  */
 class AnalyticsClientTest {
 
-	private val analyticsClient = Mockito.spy(AnalyticsClient::class.java)
+	private val analyticsClient = AnalyticsClient()
 	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
-		Mockito.`when`(analyticsClient.analyticsGatewayHost).thenReturn("192.168.108.90")
-		Mockito.`when`(analyticsClient.analyticsGatewayProtocol).thenReturn("http")
-		Mockito.`when`(analyticsClient.analyticsGatewayPort).thenReturn("8081")
-		Mockito.`when`(analyticsClient.analyticsGatewayPath).thenReturn("/")
-
 		userId = getUserId()
 	}
 
 	@Test
 	@Throws(Exception::class)
 	fun sendAnalytics() {
-		var analyticsEventsMessage = AnalyticsEvents("liferay.com", userId).apply {
-			context = mapOf("languageId" to "pt_PT",
-				"url" to "http://192.168.108.90:8081/")
+		var analyticsEventsMessage = AnalyticsEvents("analyticsKey", userId).apply {
+			context = mapOf("languageId" to "pt_PT")
 
 			protocolVersion = "1.0"
 
@@ -60,24 +49,11 @@ class AnalyticsClientTest {
 			events = mutableListOf(event)
 		}
 
-		analyticsClient.sendAnalytics(analyticsEventsMessage)
-
-		val responseBody = HttpClient.post(CASSANDRA_URL, getQuery(userId), 300)
-
-		val list = JSONParser.fromJsonString<ArrayList<AnalyticsEvents>>(
-			responseBody, listType())
-
-		Assert.assertTrue(list.isNotEmpty())
-
-		val model = list.first()
-
-		Assert.assertEquals(userId, model.userId)
-	}
-
-	private fun getQuery(userId: String?): String {
-		return """{ "keyspace": "analytics", "table": "analyticsevent",
-                "conditions" : [{"name":"userId","operator":"eq",
-                "value": "$userId"}]}"""
+		try {
+			analyticsClient.sendAnalytics(analyticsEventsMessage)
+		} catch (e: IOException) {
+			Assert.fail()
+		}
 	}
 
 	private fun getUserId(): String {
@@ -86,11 +62,4 @@ class AnalyticsClientTest {
 		return "ANDROID$currentDate"
 	}
 
-	private fun listType(): Type {
-		return object : TypeToken<ArrayList<AnalyticsEvents>>() {}.type
-	}
-
-	companion object {
-		private const val CASSANDRA_URL = "http://192.168.108.90:9095/api/query/execute"
-	}
 }
