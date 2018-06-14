@@ -1,6 +1,6 @@
-# Liferay Analytics Android [![Codacy Badge](https://api.codacy.com/project/badge/Grade/aed9538a5fe047dfb7843a8466139d04)](https://www.codacy.com/app/liferay-mobile/liferay-analytics-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=liferay-mobile/liferay-analytics-android&amp;utm_campaign=Badge_Grade)
+# Liferay Analytics Android [![Codacy Badge](https://api.codacy.com/project/badge/Grade/aed9538a5fe047dfb7843a8466139d04)](https://www.codacy.com/app/liferay-mobile/liferay-analytics-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=liferay-mobile/liferay-analytics-android&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/aed9538a5fe047dfb7843a8466139d04)](https://www.codacy.com/app/liferay-mobile/liferay-analytics-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=liferay-mobile/liferay-analytics-android&amp;utm_campaign=Badge_Coverage) [![Build Status](https://travis-ci.org/liferay-mobile/liferay-analytics-android.svg?branch=master)](https://travis-ci.org/liferay-mobile/liferay-analytics-android)
 
-## Analytics Core  
+## Analytics Core 
 
 
 ### Setup
@@ -70,7 +70,7 @@ Analytics.send("eventId", "applicationId", hashMapOf("property" to "value",
                                                     "property2" to "value2"))
 ```
 
-## Analytics Forms Plugin  [ ![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-forms-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-forms-android/_latestVersion)
+## Analytics Forms Plugin
 
 
 ### Setup
