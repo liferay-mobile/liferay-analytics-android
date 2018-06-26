@@ -25,34 +25,19 @@ import java.io.IOException
  */
 internal class IdentityClient {
 
-	private val identityGatewayHost: String
-		get() = IDENTITY_GATEWAY_HOST
-
-	private val identityGatewayPath: String
-		get() = IDENTITY_GATEWAY_PATH
-
-	private val identityGatewayPort: String
-		get() = IDENTITY_GATEWAY_PORT
-
-	private val identityGatewayProtocol: String
-		get() = IDENTITY_GATEWAY_PROTOCOL
+	val identityGateway: String
+		get() = IDENTITY_GATEWAY
 
 	@Throws(IOException::class)
 	fun send(identityContext: IdentityContext): String {
 
 		val json = JSONParser.toJSON(identityContext)
 
-		val identityPath = "$identityGatewayProtocol://$identityGatewayHost:" +
-			"$identityGatewayPort/$identityGatewayPath"
-
-		return HttpClient.post(identityPath, json)
+		return HttpClient.post(identityGateway, json)
 	}
 
 	companion object {
-		private const val IDENTITY_GATEWAY_HOST = "ec-dev.liferay.com"
-		private const val IDENTITY_GATEWAY_PATH = "api/identitycontextgateway/send-identity-context"
-		private const val IDENTITY_GATEWAY_PORT = "8095"
-		private const val IDENTITY_GATEWAY_PROTOCOL = "https"
+		private const val IDENTITY_GATEWAY =
+				"https://analytics-gw.liferay.com/api/identitycontextgateway/send-identity-context"
 	}
-
 }

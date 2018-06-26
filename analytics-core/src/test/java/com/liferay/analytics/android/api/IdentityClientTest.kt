@@ -18,8 +18,10 @@ import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.IOException
@@ -32,13 +34,20 @@ import java.io.IOException
 @RunWith(RobolectricTestRunner::class)
 class IdentityClientTest {
 
+	private val identityClient = Mockito.spy(IdentityClient::class.java)
+
+	@Before
+	fun setUp() {
+		Mockito
+				.`when`(identityClient.identityGateway)
+				.thenReturn(IDENTITY_GATEWAY_DEV)
+	}
+
 	@Test
 	fun sendUserId() {
 		val identityContext = IdentityContext("analyticsKey").apply {
 			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
-
-		val identityClient = IdentityClient()
 
 		try {
 			identityClient.send(identityContext)
@@ -54,5 +63,10 @@ class IdentityClientTest {
 		val userId = identityContext.userId
 
 		Assert.assertEquals(userId.length, 20)
+	}
+
+	companion object {
+		private val IDENTITY_GATEWAY_DEV =
+				"https://ec-dev.liferay.com:8095/api/identitycontextgateway/send-identity-context"
 	}
 }
