@@ -41,16 +41,17 @@ internal class AnalyticsClient {
 	fun sendAnalytics(analyticsEvents: AnalyticsEvents): String {
 		val json = JSONParser.toJSON(analyticsEvents)
 
-		val analyticsPath = "$analyticsGatewayProtocol://" +
+		val analyticsPath = if (analyticsGatewayPort.isEmpty()) "$analyticsGatewayProtocol://" +
+			"$analyticsGatewayHost$analyticsGatewayPath" else "$analyticsGatewayProtocol://" +
 			"$analyticsGatewayHost:$analyticsGatewayPort$analyticsGatewayPath"
 
 		return HttpClient.post(analyticsPath, json)
 	}
 
 	companion object {
-		private const val ANALYTICS_GATEWAY_HOST = "ec-dev.liferay.com"
+		private const val ANALYTICS_GATEWAY_HOST = "analytics-gw.liferay.com"
 		private const val ANALYTICS_GATEWAY_PATH = "/api/analyticsgateway/send-analytics-events"
-		private const val ANALYTICS_GATEWAY_PORT = "8095"
+		private const val ANALYTICS_GATEWAY_PORT = ""
 		private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
 	}
 }

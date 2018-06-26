@@ -19,6 +19,7 @@ import com.liferay.analytics.android.model.Event
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -29,12 +30,17 @@ import java.util.Date
  */
 class AnalyticsClientTest {
 
-	private val analyticsClient = AnalyticsClient()
+	private val analyticsClient = Mockito.spy(AnalyticsClient::class.java)
 	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
 		userId = getUserId()
+
+		Mockito.`when`(analyticsClient.analyticsGatewayHost).thenReturn("ec-dev.liferay.com")
+		Mockito.`when`(analyticsClient.analyticsGatewayProtocol).thenReturn("https")
+		Mockito.`when`(analyticsClient.analyticsGatewayPort).thenReturn("8095")
+		Mockito.`when`(analyticsClient.analyticsGatewayPath).thenReturn("/api/analyticsgateway/send-analytics-events")
 	}
 
 	@Test
