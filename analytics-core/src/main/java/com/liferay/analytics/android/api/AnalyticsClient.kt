@@ -14,29 +14,42 @@
 
 package com.liferay.analytics.android.api
 
+import android.util.Log
+import com.liferay.analytics.android.R
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.util.HttpClient
 import com.liferay.analytics.android.util.JSONParser
+import org.koin.dsl.context.Context
+import org.koin.dsl.module.applicationContext
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.io.IOException
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-internal class AnalyticsClient {
+internal class AnalyticsClient : KoinComponent {
+
+//	constructor(context: Context) {
+//
+//	}
 
 	val analyticsGateway: String
 		get() = ANALYTICS_GATEWAY
+
+	private val context : android.content.Context by inject()
 
 	@Throws(IOException::class)
 	fun sendAnalytics(analyticsEvents: AnalyticsEvents): String {
 		val json = JSONParser.toJSON(analyticsEvents)
 
-		return HttpClient.post(analyticsGateway, json)
+		Log.d("KOIN", ">>> ${context.getString(R.string.server)}")
+
+		return HttpClient.post(ANALYTICS_GATEWAY, json)
 	}
 
 	companion object {
-		private const val ANALYTICS_GATEWAY =
-				"https://analytics-gw.liferay.com/api/analyticsgateway/send-analytics-events"
+		private const val ANALYTICS_GATEWAY = "https://analytics-gw.liferay.com/api/analyticsgateway/send-analytics-events"
 	}
 }

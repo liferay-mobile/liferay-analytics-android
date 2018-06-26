@@ -37,8 +37,7 @@ class AnalyticsClientTest {
 	fun setUp() {
 		userId = getUserId()
 
-		Mockito
-				.`when`(analyticsClient.analyticsGateway)
+		Mockito.`when`(analyticsClient.analyticsGateway)
 				.thenReturn(ANALYTICS_GATEWAY_DEV)
 	}
 

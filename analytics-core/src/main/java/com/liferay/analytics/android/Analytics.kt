@@ -16,6 +16,7 @@ package com.liferay.analytics.android
 
 import android.app.Application
 import android.content.Context
+import com.liferay.analytics.android.api.AnalyticsClient
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.Identity
@@ -23,6 +24,9 @@ import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.FileStorage
 import com.liferay.analytics.android.util.FlushProcess
 import org.jetbrains.annotations.NotNull
+import org.koin.dsl.module.Module
+import org.koin.dsl.module.applicationContext
+import org.koin.standalone.StandAloneContext.startKoin
 
 /**
  * @author Igor Matos
@@ -66,6 +70,14 @@ class Analytics private constructor(
 
 			val application = context.applicationContext as Application
 			val fileStorage = FileStorage(application)
+
+			// Koin module
+			val myModule : Module = applicationContext {
+				bean { context.applicationContext as Context } // get() will resolve Repository instance
+//				provide { MyRepository() as Repository }
+			}
+
+			startKoin(listOf(myModule))
 
 			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval.toLong())
 		}
