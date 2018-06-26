@@ -37,10 +37,9 @@ class AnalyticsClientTest {
 	fun setUp() {
 		userId = getUserId()
 
-		Mockito.`when`(analyticsClient.analyticsGatewayHost).thenReturn("ec-dev.liferay.com")
-		Mockito.`when`(analyticsClient.analyticsGatewayProtocol).thenReturn("https")
-		Mockito.`when`(analyticsClient.analyticsGatewayPort).thenReturn("8095")
-		Mockito.`when`(analyticsClient.analyticsGatewayPath).thenReturn("/api/analyticsgateway/send-analytics-events")
+		Mockito
+				.`when`(analyticsClient.analyticsGateway)
+				.thenReturn(ANALYTICS_GATEWAY_DEV)
 	}
 
 	@Test
@@ -68,4 +67,8 @@ class AnalyticsClientTest {
 		return "ANDROID$currentDate"
 	}
 
+	companion object {
+		private val ANALYTICS_GATEWAY_DEV =
+				"https://ec-dev.liferay.com:8095/api/analyticsgateway/send-analytics-events"
+	}
 }

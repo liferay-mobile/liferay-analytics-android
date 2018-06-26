@@ -25,33 +25,18 @@ import java.io.IOException
  */
 internal class AnalyticsClient {
 
-	val analyticsGatewayHost: String
-		get() = ANALYTICS_GATEWAY_HOST
-
-	val analyticsGatewayPath: String
-		get() = ANALYTICS_GATEWAY_PATH
-
-	val analyticsGatewayPort: String
-		get() = ANALYTICS_GATEWAY_PORT
-
-	val analyticsGatewayProtocol: String
-		get() = ANALYTICS_GATEWAY_PROTOCOL
+	val analyticsGateway: String
+		get() = ANALYTICS_GATEWAY
 
 	@Throws(IOException::class)
 	fun sendAnalytics(analyticsEvents: AnalyticsEvents): String {
 		val json = JSONParser.toJSON(analyticsEvents)
 
-		val analyticsPath = if (analyticsGatewayPort.isEmpty()) "$analyticsGatewayProtocol://" +
-			"$analyticsGatewayHost$analyticsGatewayPath" else "$analyticsGatewayProtocol://" +
-			"$analyticsGatewayHost:$analyticsGatewayPort$analyticsGatewayPath"
-
-		return HttpClient.post(analyticsPath, json)
+		return HttpClient.post(analyticsGateway, json)
 	}
 
 	companion object {
-		private const val ANALYTICS_GATEWAY_HOST = "analytics-gw.liferay.com"
-		private const val ANALYTICS_GATEWAY_PATH = "/api/analyticsgateway/send-analytics-events"
-		private const val ANALYTICS_GATEWAY_PORT = ""
-		private const val ANALYTICS_GATEWAY_PROTOCOL = "https"
+		private const val ANALYTICS_GATEWAY =
+				"https://analytics-gw.liferay.com/api/analyticsgateway/send-analytics-events"
 	}
 }
