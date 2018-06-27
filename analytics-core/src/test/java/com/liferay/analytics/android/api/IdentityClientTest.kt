@@ -14,34 +14,18 @@
 
 package com.liferay.analytics.android.api
 
-import com.liferay.analytics.android.BuildConfig
+import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.IOException
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-@Config(constants = BuildConfig::class, sdk = [26])
-@RunWith(RobolectricTestRunner::class)
-class IdentityClientTest {
-
-	private val identityClient = Mockito.spy(IdentityClient::class.java)
-
-	@Before
-	fun setUp() {
-		Mockito
-				.`when`(identityClient.identityGateway)
-				.thenReturn(IDENTITY_GATEWAY_DEV)
-	}
+class IdentityClientTest: BaseTest() {
 
 	@Test
 	fun sendUserId() {
@@ -50,7 +34,7 @@ class IdentityClientTest {
 		}
 
 		try {
-			identityClient.send(identityContext)
+			IdentityClient().send(identityContext)
 		}
 		catch (e: IOException) {
 			Assert.fail(e.localizedMessage)

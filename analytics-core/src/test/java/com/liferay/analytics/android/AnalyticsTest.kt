@@ -21,6 +21,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.StandAloneContext.closeKoin
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -51,6 +52,7 @@ class AnalyticsTest {
 	@After
 	fun tearDown() {
 		Analytics.instance = null
+		closeKoin()
 	}
 
 	@Test

@@ -14,24 +14,19 @@
 
 package com.liferay.analytics.android.dao
 
-import com.liferay.analytics.android.BuildConfig
+import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.FileStorage
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
 /**
  * @author Igor Matos
  */
-@Config(constants = BuildConfig::class, sdk = [26])
-@RunWith(RobolectricTestRunner::class)
-class UserDAOTest {
+class UserDAOTest: BaseTest() {
 
 	private lateinit var userDAO: UserDAO
 

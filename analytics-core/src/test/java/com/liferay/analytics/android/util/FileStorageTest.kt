@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.util
 
+import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.BuildConfig
 
 import java.io.IOException
@@ -30,9 +31,7 @@ import org.robolectric.annotation.Config
 /**
  * @author Igor Matos
  */
-@Config(constants = BuildConfig::class, sdk = [26])
-@RunWith(RobolectricTestRunner::class)
-class FileStorageTest {
+class FileStorageTest: BaseTest() {
 
 	private lateinit var fileStorage: FileStorage
 	private val notSavedKey = "notSavedValue"

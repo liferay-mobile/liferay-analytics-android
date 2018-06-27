@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.util
 
+import android.content.Context
 import android.util.Log
 import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.api.AnalyticsClient
@@ -23,6 +24,8 @@ import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.IdentityContext
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.io.IOException
 import java.util.Timer
 import kotlin.concurrent.schedule
