@@ -14,12 +14,12 @@
 
 package com.liferay.analytics.android.api
 
+import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -28,18 +28,14 @@ import java.util.Date
  * @author Igor Matos
  * @author Allan Melo
  */
-class AnalyticsClientTest {
+class AnalyticsClientTest: BaseTest() {
 
-	private val analyticsClient = Mockito.spy(AnalyticsClient::class.java)
+	private val analyticsClient =  AnalyticsClient()
 	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
 		userId = getUserId()
-
-		Mockito
-				.`when`(analyticsClient.analyticsGateway)
-				.thenReturn(ANALYTICS_GATEWAY_DEV)
 	}
 
 	@Test

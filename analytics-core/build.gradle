@@ -95,7 +95,6 @@ android {
 dependencies {
 	testImplementation "org.mockito:mockito-inline:2.13.0"
 	testImplementation group: "junit", name: "junit", version: "4.12"
-	testImplementation group: "org.mockito", name: "mockito-core", version: "2.15.0"
 	testImplementation group: "org.robolectric", name: "robolectric", version: "3.8"
 	androidTestImplementation group: "com.android.support.test", name: "runner", version: "1.0.1"
 

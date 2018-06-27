@@ -26,13 +26,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.koin.standalone.StandAloneContext.closeKoin
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 /**
  * @author Igor Matos
  */
-
 @Config(constants = BuildConfig::class, sdk = [26])
 @RunWith(RobolectricTestRunner::class)
 class FlushProcessTest {
@@ -58,6 +58,7 @@ class FlushProcessTest {
 		eventsDAO.clear()
 		userDAO.clearIdentities()
 		userDAO.clearUserId()
+		closeKoin()
 	}
 
 	@Test

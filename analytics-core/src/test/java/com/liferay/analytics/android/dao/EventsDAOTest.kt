@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.dao
 
+import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.util.FileStorage
@@ -28,10 +29,7 @@ import org.robolectric.annotation.Config
 /**
  * @author Igor Matos
  */
-
-@Config(constants = BuildConfig::class, sdk = [26])
-@RunWith(RobolectricTestRunner::class)
-class EventsDAOTest {
+class EventsDAOTest: BaseTest() {
 
 	private lateinit var eventsDAO: EventsDAO
 
