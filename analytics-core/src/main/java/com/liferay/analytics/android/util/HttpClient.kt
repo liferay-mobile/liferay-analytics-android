@@ -28,7 +28,7 @@ internal class HttpClient {
 	companion object {
 
 		@Throws(IOException::class)
-		fun post(url: String, json: String, timeout: Long = 30): String {
+		fun post(url: String, json: String, certificate: String, timeout: Long = 30): String {
 
 			val body = RequestBody.create(MEDIA_TYPE, json)
 
@@ -37,13 +37,14 @@ internal class HttpClient {
 				.post(body)
 				.build()
 
-			val client = OkHttpClient.Builder()
+			var builder = OkHttpClient.Builder()
 				.readTimeout(timeout, TimeUnit.SECONDS)
 				.writeTimeout(timeout, TimeUnit.SECONDS)
 				.connectTimeout(timeout, TimeUnit.SECONDS)
-				.trust(CERTIFICATE_DST_CA_X3)
-				.build()
 
+			builder = if (certificate.isEmpty())  builder else builder.trust(certificate)
+
+			val client = builder.build()
 			val response = client.newCall(request).execute()
 
 			response.body()?.let {
@@ -53,7 +54,6 @@ internal class HttpClient {
 			return ""
 		}
 
-		private const val CERTIFICATE_DST_CA_X3 = "certificates/DST Root CA X3"
 		private val MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
 	}
 }

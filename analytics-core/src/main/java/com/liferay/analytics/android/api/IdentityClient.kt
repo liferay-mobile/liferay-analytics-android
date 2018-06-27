@@ -14,30 +14,28 @@
 
 package com.liferay.analytics.android.api
 
+import com.liferay.analytics.android.R
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.HttpClient
 import com.liferay.analytics.android.util.JSONParser
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.io.IOException
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-internal class IdentityClient {
-
-	val identityGateway: String
-		get() = IDENTITY_GATEWAY
+internal class IdentityClient: KoinComponent {
+	private val context : android.content.Context by inject()
 
 	@Throws(IOException::class)
 	fun send(identityContext: IdentityContext): String {
 
 		val json = JSONParser.toJSON(identityContext)
+		val gateway = context.getString(R.string.analytics_identity_gateway)
+		val certificate = context.getString(R.string.certificate)
 
-		return HttpClient.post(identityGateway, json)
-	}
-
-	companion object {
-		private const val IDENTITY_GATEWAY =
-				"https://analytics-gw.liferay.com/api/identitycontextgateway/send-identity-context"
+		return HttpClient.post(gateway, json, certificate)
 	}
 }
