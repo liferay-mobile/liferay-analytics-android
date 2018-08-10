@@ -78,6 +78,7 @@ In your app build.gradle add the dependency:
 
 ```kotlin
 imlementation 'com.liferay:liferay-analytics-forms-android:x.x.x'
+annotationProcessor "com.liferay:liferay-analytics-forms-android:x.x.x"
 ```
 
 Change x.x.x for the latest version: [ ![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-forms-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-forms-android/_latestVersion)
