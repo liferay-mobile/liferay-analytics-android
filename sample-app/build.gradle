@@ -34,10 +34,13 @@ dependencies {
     implementation group: "com.android.support.constraint", name: "constraint-layout", version: "1.0.2"
     implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jre7", version: "$kotlin_version"
 
+	debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+	releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    //	implementation "com.liferay:liferay-analytics-android:1.0.0"
+    //	implementation "com.liferay:liferay-analytics-forms-android:1.0.0"
+    //	annotationProcessor "com.liferay:liferay-analytics-forms-android:1.0.0"
+
     implementation project(":analytics-core")
-    implementation project(":analytics-forms")
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
+	implementation project(":analytics-forms")
 }
