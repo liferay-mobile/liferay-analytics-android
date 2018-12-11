@@ -7,7 +7,7 @@
 In your app build.gradle add the dependency:
 
 ```kotlin
-imlementation 'com.liferay:liferay-analytics-android:x.x.x'
+implementation 'com.liferay:liferay-analytics-android:x.x.x'
 ```
 Change x.x.x for the latest version: [![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-android/_latestVersion)
 
@@ -77,7 +77,7 @@ Analytics.send("eventId", "applicationId", hashMapOf("property" to "value",
 In your app build.gradle add the dependency:
 
 ```kotlin
-imlementation 'com.liferay:liferay-analytics-forms-android:x.x.x'
+implementation 'com.liferay:liferay-analytics-forms-android:x.x.x'
 annotationProcessor "com.liferay:liferay-analytics-forms-android:x.x.x"
 ```
 
