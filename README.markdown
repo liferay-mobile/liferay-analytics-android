@@ -51,7 +51,7 @@ Parameters:
  ```
 
  #### Clear the identity
- It is recomended to call when the user is logged out, necessary to unbind the next events of the previous user.
+ It is recommended to clean analytics session when user logged out. This is necessary to unbind the next events from the previous user.
 
 ```kotlin
 Analytics.clearSession()
