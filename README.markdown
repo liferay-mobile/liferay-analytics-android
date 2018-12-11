@@ -40,7 +40,7 @@ class MainApplication : Application() {
 ```
 
 #### Set identity
-It is recomended to call when the user is logged in, necessary to bind the next events for this user. The name parameter is optional.
+It is recommended identify your user after he logged in. This way, next events will be connected to his identity.
 
 Parameters:
 * email: String (required)
