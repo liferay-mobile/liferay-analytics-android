@@ -15,7 +15,7 @@ Change x.x.x for the latest version: [![Download](https://api.bintray.com/packag
 ### How to use ?
 
 #### Initialize the library
-You should initialize the lib passing your analytics key. If you don't initialize your library you will receive a runtime exception when you try to send a event, also you can't initialize your library twice.
+You should initialize the library providing your analytics key. If you don't initialize your library properly you will receive a runtime exception when you try to send an event, also you can't initialize your library twice. This will also happen if you try to initialize the library twice.
 
 Parameters:
 * context: Context (required)
