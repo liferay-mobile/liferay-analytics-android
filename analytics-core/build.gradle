@@ -56,11 +56,11 @@ tasks.withType(Test) {
 }
 
 android {
-	compileSdkVersion 26
+	compileSdkVersion 28
 
 	defaultConfig {
 		minSdkVersion 14
-		targetSdkVersion 26
+		targetSdkVersion 28
 		versionCode 1
 		versionName "1.0"
 
@@ -96,10 +96,10 @@ dependencies {
 	testImplementation "org.mockito:mockito-inline:2.13.0"
 	testImplementation group: "junit", name: "junit", version: "4.12"
 	testImplementation group: "org.robolectric", name: "robolectric", version: "3.8"
-	androidTestImplementation group: "com.android.support.test", name: "runner", version: "1.0.1"
+	androidTestImplementation group: "com.android.support.test", name: "runner", version: "1.0.2"
 
-	implementation group: "com.google.code.gson", name: "gson", version: "2.8.2"
-	implementation group: "com.squareup.okhttp3", name: "okhttp", version: "3.10.0"
+	implementation group: "com.google.code.gson", name: "gson", version: "2.8.5"
+	implementation group: "com.squareup.okhttp3", name: "okhttp", version: "3.11.0"
 	implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk7", version: "$kotlin_version"
 	implementation "org.koin:koin-android:$koin_version"
 	testImplementation "org.koin:koin-test:$koin_version"

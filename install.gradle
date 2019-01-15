@@ -26,6 +26,11 @@ install {
 
 				developers {
 					developer {
+						id 'victorlaerte'
+						name 'Victor Oliveira'
+						email 'victor.oliveira@liferay.com'
+					}
+					developer {
 						id 'igormatos'
 						name 'Igor Matos'
 					}
