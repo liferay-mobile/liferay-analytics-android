@@ -26,6 +26,15 @@
 			android:label="@string/title_activity_java"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
+
+		<meta-data
+			android:name="com.liferay.analytics.DataSourceId"
+			android:value="ANALYTICS_DATA_SOURCE_ID"/>
+
+		<meta-data
+			android:name="com.liferay.analytics.EndpointUrl"
+			android:value="http://192.168.108.90:8085"/>
+
 	</application>
 
 </manifest>
