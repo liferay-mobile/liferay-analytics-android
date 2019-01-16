@@ -14,7 +14,5 @@
   -->
 
 <resources>
-    <string name="analytics_events_gateway">https://ec-dev.liferay.com:8095/api/analyticsgateway/send-analytics-events</string>
-    <string name="analytics_identity_gateway">https://ec-dev.liferay.com:8095/api/identitycontextgateway/send-identity-context</string>
     <string name="certificate">certificates/DST Root CA X3</string>
 </resources>

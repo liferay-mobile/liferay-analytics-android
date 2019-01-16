@@ -30,11 +30,10 @@ internal class AnalyticsClient : KoinComponent {
 	private val context : android.content.Context by inject()
 
 	@Throws(IOException::class)
-	fun sendAnalytics(analyticsEvents: AnalyticsEvents): String {
+	fun sendAnalytics(endpointURL: String, analyticsEvents: AnalyticsEvents): String {
 		val json = JSONParser.toJSON(analyticsEvents)
-		val gateway = context.getString(R.string.analytics_events_gateway)
 		val certificate = context.getString(R.string.certificate)
 
-		return HttpClient.post(gateway, json, certificate)
+		return HttpClient.post(endpointURL, json, certificate)
 	}
 }

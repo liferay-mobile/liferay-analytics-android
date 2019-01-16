@@ -14,7 +14,6 @@
 
 package com.liferay.analytics.android.util
 
-import android.content.Context
 import android.util.Log
 import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.api.AnalyticsClient
@@ -24,8 +23,6 @@ import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.IdentityContext
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 import java.io.IOException
 import java.util.Timer
 import kotlin.concurrent.schedule
@@ -33,7 +30,7 @@ import kotlin.concurrent.schedule
 /**
  * @author Igor Matos
  */
-internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
+internal class FlushProcess(private val endpointURL: String, fileStorage: FileStorage, interval: Long) {
 
 	var eventsQueue: MutableMap<String, List<Event>> = mutableMapOf()
 	var isInProgress = false
@@ -77,7 +74,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		while (userContexts.isNotEmpty()) {
 			val userContext = userContexts.removeAt(0)
 
-			identityClient.send(userContext)
+			identityClient.send(endpointURL, userContext)
 			userDAO.replace(userContexts)
 		}
 	}
@@ -91,7 +88,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 
 	private fun initUserId(): String {
 		val instance = Analytics.instance!!
-		val identityContext = IdentityContext(instance.analyticsKey)
+		val identityContext = IdentityContext(instance.dataSourceId)
 
 		userDAO.addIdentityContext(identityContext)
 		userDAO.setUserId(identityContext.userId)
@@ -130,11 +127,11 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 		var currentEvents = events
 
 		while (currentEvents.isNotEmpty()) {
-			val analyticsEvents = AnalyticsEvents(instance.analyticsKey, userId)
+			val analyticsEvents = AnalyticsEvents(instance.dataSourceId, userId)
 
 			analyticsEvents.events = currentEvents.take(FLUSH_SIZE)
 
-			analyticsClient.sendAnalytics(analyticsEvents)
+			analyticsClient.sendAnalytics(endpointURL, analyticsEvents)
 
 			currentEvents = currentEvents.drop(FLUSH_SIZE)
 			eventsDAO.replace(userId, currentEvents)

@@ -30,12 +30,10 @@ internal class IdentityClient: KoinComponent {
 	private val context : android.content.Context by inject()
 
 	@Throws(IOException::class)
-	fun send(identityContext: IdentityContext): String {
-
+	fun send(endpointURL: String, identityContext: IdentityContext): String {
 		val json = JSONParser.toJSON(identityContext)
-		val gateway = context.getString(R.string.analytics_identity_gateway)
 		val certificate = context.getString(R.string.certificate)
 
-		return HttpClient.post(gateway, json, certificate)
+		return HttpClient.post("$endpointURL/identity", json, certificate)
 	}
 }
