@@ -14,7 +14,5 @@
   -->
 
 <resources>
-    <string name="analytics_events_gateway">https://analytics-gw.liferay.com/api/analyticsgateway/send-analytics-events</string>
-    <string name="analytics_identity_gateway">https://analytics-gw.liferay.com/api/identitycontextgateway/send-identity-context</string>
     <string name="certificate">certificates/DigiCert Global Root CA</string>
 </resources>

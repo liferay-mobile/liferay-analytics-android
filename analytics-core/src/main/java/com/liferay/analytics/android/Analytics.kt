@@ -16,12 +16,14 @@ package com.liferay.analytics.android
 
 import android.app.Application
 import android.content.Context
+import android.content.pm.PackageManager
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.FileStorage
 import com.liferay.analytics.android.util.FlushProcess
+import okhttp3.HttpUrl
 import org.jetbrains.annotations.NotNull
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
@@ -31,7 +33,8 @@ import org.koin.standalone.StandAloneContext.startKoin
  * @author Igor Matos
  */
 class Analytics private constructor(
-		fileStorage: FileStorage, internal val analyticsKey: String, flushInterval: Long) {
+		endpointURL: String, internal val dataSourceId: String,
+		fileStorage: FileStorage, flushInterval: Long) {
 
 	companion object {
 
@@ -43,9 +46,8 @@ class Analytics private constructor(
 		 */
 		@JvmOverloads
 		@JvmStatic
-		fun configure(
-				@NotNull context: Context, @NotNull analyticsKey: String,
-				flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
+		fun init(
+				@NotNull context: Context, flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
 
 			analyticsInstance?.let {
 				throw IllegalStateException("Your library was already initialized.")
@@ -59,8 +61,19 @@ class Analytics private constructor(
 				throw IllegalArgumentException("AppContext can't be null.")
 			}
 
-			if (analyticsKey.isNullOrEmpty() || analyticsKey.isBlank()) {
-				throw IllegalArgumentException("Analytics key can't be null or empty.")
+			val applicationInfo =
+				context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+
+            val dataSourceId = applicationInfo.metaData.getString("com.liferay.analytics.DataSourceId")
+
+			if (dataSourceId.isNullOrEmpty() || dataSourceId.isBlank()) {
+				throw IllegalArgumentException("Analytics Data source id can't be null or empty.")
+			}
+
+			val endpointURL = applicationInfo.metaData.getString("com.liferay.analytics.EndpointUrl")
+
+			if (endpointURL.isNullOrEmpty() || endpointURL.isBlank() || HttpUrl.parse(endpointURL) == null) {
+				throw IllegalArgumentException("You must provide a valid endpoint URL")
 			}
 
 			if (flushInterval <= 0) {
@@ -76,7 +89,7 @@ class Analytics private constructor(
 
 			startKoin(listOf(module))
 
-			analyticsInstance = Analytics(fileStorage, analyticsKey, flushInterval.toLong())
+			analyticsInstance = Analytics(endpointURL, dataSourceId, fileStorage, flushInterval.toLong())
 		}
 
 		/**
@@ -117,7 +130,7 @@ class Analytics private constructor(
 		 */
 		@JvmStatic
 		fun setIdentity(email: String, name: String = "") {
-			val identityContext = IdentityContext(instance!!.analyticsKey)
+			val identityContext = IdentityContext(instance!!.dataSourceId)
 
 			val identity = Identity(name, email)
 			identityContext.identity = identity
@@ -162,5 +175,5 @@ class Analytics private constructor(
 	}
 
 	internal val userDAO = UserDAO(fileStorage)
-	internal var flushProcess = FlushProcess(fileStorage, flushInterval)
+	internal var flushProcess = FlushProcess(endpointURL, fileStorage, flushInterval)
 }
