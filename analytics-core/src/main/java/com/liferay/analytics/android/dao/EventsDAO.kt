@@ -66,7 +66,7 @@ internal class EventsDAO(private var fileStorage: FileStorage) {
 	}
 
 	fun replace(userId: String, events: List<Event>) {
-		var currentEvents = getEvents()
+		val currentEvents = getEvents()
 		currentEvents[userId] = events
 
 		replace(currentEvents)

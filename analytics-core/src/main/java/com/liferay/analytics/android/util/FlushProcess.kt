@@ -58,9 +58,7 @@ internal class FlushProcess(fileStorage: FileStorage, interval: Long) {
 	}
 
 	fun getUserId(): String {
-		val userId = userDAO.getUserId() ?: initUserId()
-
-		return userId
+		return userDAO.getUserId() ?: initUserId()
 	}
 
 	internal fun saveEventsQueue() {
