@@ -15,10 +15,7 @@
 package com.liferay.analytics.android.sample
 
 import android.app.Application
-import android.content.Context
 import com.liferay.analytics.android.Analytics
-import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
 
 /**
  * @author Igor Matos
@@ -29,6 +26,6 @@ class MainApplication : Application() {
 		super.onCreate()
 
 		// Initialize the library using your analytics key
-		Analytics.configure(this, "ANALYTICS_KEY")
+		Analytics.init(this)
 	}
 }
