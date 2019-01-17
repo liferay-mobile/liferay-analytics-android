@@ -118,7 +118,7 @@ class Analytics private constructor(
 			val event = Event(applicationId, eventId)
 			event.properties = properties
 
-			instance!!.flushProcess.addEvent(event)
+			instance.flushProcess.addEvent(event)
 		}
 
 		/**
@@ -135,8 +135,8 @@ class Analytics private constructor(
 			val identity = Identity(name, email)
 			identityContext.identity = identity
 
-			instance!!.userDAO.addIdentityContext(identityContext)
-			instance!!.userDAO.setUserId(identityContext.userId)
+			instance.userDAO.addIdentityContext(identityContext)
+			instance.userDAO.setUserId(identityContext.userId)
 		}
 
 		/**
@@ -148,7 +148,12 @@ class Analytics private constructor(
 		 */
 		@JvmStatic
 		fun clearSession() {
-			instance!!.userDAO.clearUserId()
+			instance.userDAO.clearUserId()
+		}
+
+		@JvmStatic
+		internal fun close() {
+			analyticsInstance = null
 		}
 
 		/**
@@ -158,7 +163,7 @@ class Analytics private constructor(
 		 * @since 1.0.0
 		 */
 		@JvmStatic
-		internal var instance: Analytics?
+		internal var instance: Analytics
 			@Synchronized get() {
 				analyticsInstance?.let {
 					return it
