@@ -1,0 +1,12 @@
+<manifest package="com.liferay.analytics.android"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<application>
+		<meta-data
+			android:name="com.liferay.analytics.DataSourceId"
+			android:value="dataSourceId"
+			/>
+		<meta-data
+			android:name="com.liferay.analytics.EndpointUrl"
+			android:value="http://192.168.108.90:8085"/>
+	</application>
+</manifest>
