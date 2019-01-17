@@ -32,8 +32,8 @@ class UserDAOTest: BaseTest() {
 
 	@Before
 	fun setup() {
-		val filestorage = FileStorage(RuntimeEnvironment.application)
-		userDAO = UserDAO(filestorage)
+		val fileStorage = FileStorage(RuntimeEnvironment.application)
+		userDAO = UserDAO(fileStorage)
 
 		userDAO.clearUserId()
 		userDAO.clearIdentities()
@@ -41,7 +41,7 @@ class UserDAOTest: BaseTest() {
 
 	@Test
 	fun addIdentityContext() {
-		val identityContext1 = IdentityContext("analyticsKey").apply {
+		val identityContext1 = IdentityContext("dataSourceId").apply {
 			identity = Identity("ned", "ned.ludd@email.com")
 		}
 
@@ -71,8 +71,8 @@ class UserDAOTest: BaseTest() {
 	}
 
 	fun clearUserContexts() {
-		val identityContext1 = IdentityContext("analyticsKey")
-		val identityContext2 = IdentityContext("analyticsKey")
+		val identityContext1 = IdentityContext("dataSourceId")
+		val identityContext2 = IdentityContext("dataSourceId")
 
 		Assert.assertEquals(0, userDAO.getUserContexts().size)
 		userDAO.replace(listOf(identityContext1, identityContext2))
@@ -84,8 +84,8 @@ class UserDAOTest: BaseTest() {
 
 	@Test
 	fun replaceIdentityContexts() {
-		val identityContext1 = IdentityContext("analyticsKey")
-		val identityContext2 = IdentityContext("analyticsKey")
+		val identityContext1 = IdentityContext("dataSourceId")
+		val identityContext2 = IdentityContext("dataSourceId")
 
 		Assert.assertEquals(0, userDAO.getUserContexts().size)
 		userDAO.replace(listOf(identityContext1, identityContext2))
