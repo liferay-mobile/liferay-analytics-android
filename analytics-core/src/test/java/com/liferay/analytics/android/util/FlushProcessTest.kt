@@ -37,27 +37,25 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class FlushProcessTest {
 
-	private lateinit var analytics: Analytics
 	private lateinit var eventsDAO: EventsDAO
 	private lateinit var flushProcess: FlushProcess
 	private lateinit var userDAO: UserDAO
 
 	@Before
 	fun setup() {
-		Analytics.configure(RuntimeEnvironment.application, "analyticsKey")
+		Analytics.init(RuntimeEnvironment.application)
 
-		analytics = Analytics.instance!!
-		flushProcess = analytics.flushProcess
+		flushProcess = Analytics.instance.flushProcess
 		eventsDAO = flushProcess.eventsDAO
 		userDAO = flushProcess.userDAO
 	}
 
 	@After
 	fun tearDown() {
-		Analytics.instance = null
 		eventsDAO.clear()
 		userDAO.clearIdentities()
 		userDAO.clearUserId()
+		Analytics.close()
 		closeKoin()
 	}
 
@@ -85,7 +83,7 @@ class FlushProcessTest {
 
 	@Test
 	fun sendIdentities() {
-		val defaultUserContext = IdentityContext(analytics.analyticsKey)
+		val defaultUserContext = IdentityContext(Analytics.instance.dataSourceId)
 
 		userDAO.addIdentityContext(defaultUserContext)
 		Assert.assertEquals(1, userDAO.getUserContexts().size)

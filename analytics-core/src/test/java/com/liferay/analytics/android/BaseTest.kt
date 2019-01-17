@@ -15,6 +15,8 @@
 package com.liferay.analytics.android
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Bundle
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
@@ -45,5 +47,13 @@ abstract class BaseTest: KoinTest {
     @After
     fun after() {
         closeKoin()
+    }
+
+    fun getApplicationMetaData(): Bundle {
+        val context = RuntimeEnvironment.application
+        val applicationInfo =
+            context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+
+        return applicationInfo.metaData
     }
 }

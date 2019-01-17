@@ -41,7 +41,7 @@ class AnalyticsClientTest: BaseTest() {
 	@Test
 	@Throws(Exception::class)
 	fun sendAnalytics() {
-		var analyticsEventsMessage = AnalyticsEvents("analyticsKey", userId).apply {
+		val analyticsEventsMessage = AnalyticsEvents("dataSourceId", userId).apply {
 			context = mapOf("languageId" to "pt_PT")
 
 			protocolVersion = "1.0"
@@ -51,7 +51,9 @@ class AnalyticsClientTest: BaseTest() {
 		}
 
 		try {
-			analyticsClient.sendAnalytics(analyticsEventsMessage)
+			val endpointURL = getApplicationMetaData().getString("com.liferay.analytics.EndpointUrl")
+
+			analyticsClient.sendAnalytics(endpointURL!!, analyticsEventsMessage)
 		} catch (e: IOException) {
 			Assert.fail()
 		}
@@ -61,10 +63,5 @@ class AnalyticsClientTest: BaseTest() {
 		val currentDate = SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(Date())
 
 		return "ANDROID$currentDate"
-	}
-
-	companion object {
-		private val ANALYTICS_GATEWAY_DEV =
-				"https://ec-dev.liferay.com:8095/api/analyticsgateway/send-analytics-events"
 	}
 }

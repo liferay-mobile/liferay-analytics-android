@@ -29,12 +29,13 @@ class IdentityClientTest: BaseTest() {
 
 	@Test
 	fun sendUserId() {
-		val identityContext = IdentityContext("analyticsKey").apply {
+		val identityContext = IdentityContext("dataSourceId").apply {
 			identity = Identity("Ned Ludd", "ned.ludd@email.com")
 		}
-
 		try {
-			IdentityClient().send(identityContext)
+			val endpointURL = getApplicationMetaData().getString("com.liferay.analytics.EndpointUrl")
+
+			IdentityClient().send(endpointURL!!, identityContext)
 		}
 		catch (e: IOException) {
 			Assert.fail(e.localizedMessage)
@@ -43,14 +44,9 @@ class IdentityClientTest: BaseTest() {
 
 	@Test
 	fun createUserId() {
-		val identityContext = IdentityContext("analyticsKey")
+		val identityContext = IdentityContext("dataSourceId")
 		val userId = identityContext.userId
 
 		Assert.assertEquals(userId.length, 20)
-	}
-
-	companion object {
-		private val IDENTITY_GATEWAY_DEV =
-				"https://ec-dev.liferay.com:8095/api/identitycontextgateway/send-identity-context"
 	}
 }

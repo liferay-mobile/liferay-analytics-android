@@ -16,8 +16,8 @@ package com.liferay.analytics.android
 
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
-import junit.framework.Assert
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,25 +33,23 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class AnalyticsTest {
 
-	private lateinit var analytics: Analytics
 	private lateinit var userDAO: UserDAO
 	private lateinit var userId: String
 	private lateinit var eventsDAO: EventsDAO
-	private val analyticsKey = "analyticsKey"
+	private val dataSourceId = "dataSourceId"
 
 	@Before
 	fun setup() {
-		Analytics.configure(RuntimeEnvironment.application, analyticsKey, 240)
-		analytics = Analytics.instance!!
+		Analytics.init(RuntimeEnvironment.application, 240)
 
-		userId = analytics.flushProcess.getUserId()
-		eventsDAO = analytics.flushProcess.eventsDAO
-		userDAO = analytics.userDAO
+		userId = Analytics.instance.flushProcess.getUserId()
+		eventsDAO = Analytics.instance.flushProcess.eventsDAO
+		userDAO = Analytics.instance.userDAO
 	}
 
 	@After
 	fun tearDown() {
-		Analytics.instance = null
+		Analytics.close()
 		closeKoin()
 	}
 
@@ -92,7 +90,7 @@ class AnalyticsTest {
 
 	@Test
 	fun getInstance() {
-		Assert.assertEquals(analyticsKey, Analytics.instance!!.analyticsKey)
+		Assert.assertEquals(dataSourceId, Analytics.instance.dataSourceId)
 	}
 
 }
