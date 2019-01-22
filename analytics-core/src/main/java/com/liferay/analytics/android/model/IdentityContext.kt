@@ -14,28 +14,32 @@
 
 package com.liferay.analytics.android.model
 
-import java.util.Locale
-import java.util.UUID
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
+import java.util.*
 
 /**
  * @author Igor Matos
  * @author Allan Melo
  */
-internal data class IdentityContext(var dataSourceId: String) {
+internal data class IdentityContext(var dataSourceId: String): KoinComponent {
+	@delegate:Transient private val analyticsContext: AnalyticsContext by inject()
 
 	var identity: Identity? = null
 	val language: String = Locale.getDefault().toString()
 	val platform = "Android"
-	var timezone: String? = null
+	val timezone: String = TimeZone.getDefault().displayName
+	var userAgent: String
 	var userId: String
 
 	init {
+		userAgent = analyticsContext.userAgent
 		userId = createUserId()
 	}
 
 	fun createUserId(): String {
 		val uuid = UUID.randomUUID().toString()
 
-		return uuid.take(20)
+		return uuid.take(36)
 	}
 }

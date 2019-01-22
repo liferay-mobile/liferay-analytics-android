@@ -15,6 +15,8 @@
 package com.liferay.analytics.android.model
 
 import com.google.gson.annotations.SerializedName
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.HashMap
 
 /**
@@ -22,10 +24,10 @@ import java.util.HashMap
  * @author Allan Melo
  */
 internal data class AnalyticsEvents(
-		var analyticsKey: String,
-		@SerializedName(alternate = ["userid"], value = "userId") var userId: String) {
+		var dataSourceId: String,
+		@SerializedName(alternate = ["userid"], value = "userId") var userId: String): KoinComponent {
 
-	var context: Map<String, String> = HashMap()
+	val context: AnalyticsContext = inject<AnalyticsContext>().value
 	var events: List<Event> = listOf()
 	var protocolVersion: String? = null
 }
