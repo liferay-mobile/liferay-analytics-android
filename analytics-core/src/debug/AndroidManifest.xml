@@ -3,10 +3,10 @@
 	<application>
 		<meta-data
 			android:name="com.liferay.analytics.DataSourceId"
-			android:value="dataSourceId"
+			android:value="@string/data_source_id"
 			/>
 		<meta-data
 			android:name="com.liferay.analytics.EndpointUrl"
-			android:value="http://192.168.108.90:8085"/>
+			android:value="@string/endpoint_url"/>
 	</application>
 </manifest>

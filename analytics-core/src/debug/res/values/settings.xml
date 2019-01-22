@@ -15,4 +15,6 @@
 
 <resources>
     <string name="certificate">certificates/DST Root CA X3</string>
+    <string name="data_source_id">dataSourceId</string>
+    <string name="endpoint_url">http://192.168.108.90:8085</string>
 </resources>
