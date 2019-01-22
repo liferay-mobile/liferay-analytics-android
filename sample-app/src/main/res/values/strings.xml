@@ -1,4 +1,7 @@
 <resources>
 	<string name="app_name">Liferay Analytics Sample</string>
 	<string name="title_activity_java">Forms</string>
+
+	<string name="data_source_id">My Sample Data Source Id</string>
+	<string name="endpoint_url">http://192.168.108.90:8085</string>
 </resources>
