@@ -18,6 +18,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import com.liferay.analytics.android.dao.UserDAO
+import com.liferay.analytics.android.model.AnalyticsContext
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
@@ -83,11 +84,7 @@ class Analytics private constructor(
 			val application = context.applicationContext as Application
 			val fileStorage = FileStorage(application)
 
-			val module : Module = applicationContext {
-				bean { context.applicationContext as Context }
-			}
-
-			startKoin(listOf(module))
+			startKoin(getModules(context))
 
 			analyticsInstance = Analytics(endpointURL, dataSourceId, fileStorage, flushInterval.toLong())
 		}
@@ -130,7 +127,7 @@ class Analytics private constructor(
 		 */
 		@JvmStatic
 		fun setIdentity(email: String, name: String = "") {
-			val identityContext = IdentityContext(instance!!.dataSourceId)
+			val identityContext = IdentityContext(instance.dataSourceId)
 
 			val identity = Identity(name, email)
 			identityContext.identity = identity
@@ -174,6 +171,18 @@ class Analytics private constructor(
 			set(value) {
 				analyticsInstance = value
 			}
+
+		internal fun getModules(context: Context): List<Module> {
+			val contextModule: Module = applicationContext {
+				bean { context.applicationContext as Context }
+			}
+
+			val analyticsContextModule: Module = applicationContext {
+				bean { AnalyticsContext(context) }
+			}
+
+			return listOf(contextModule, analyticsContextModule)
+		}
 
 		private var analyticsInstance: Analytics? = null
 		private const val FLUSH_INTERVAL_DEFAULT: Int = 60
