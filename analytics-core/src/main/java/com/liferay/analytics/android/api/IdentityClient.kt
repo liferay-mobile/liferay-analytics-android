@@ -14,9 +14,11 @@
 
 package com.liferay.analytics.android.api
 
+import android.content.Context
 import com.liferay.analytics.android.R
 import com.liferay.analytics.android.model.IdentityContext
 import com.liferay.analytics.android.util.HttpClient
+import com.liferay.analytics.android.util.HttpClientConfig
 import com.liferay.analytics.android.util.JSONParser
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
@@ -27,13 +29,16 @@ import java.io.IOException
  * @author Allan Melo
  */
 internal class IdentityClient: KoinComponent {
-	private val context : android.content.Context by inject()
+	private val context : Context by inject()
 
 	@Throws(IOException::class)
 	fun send(endpointURL: String, identityContext: IdentityContext): String {
-		val json = JSONParser.toJSON(identityContext)
-		val certificate = context.getString(R.string.certificate)
+		val config = HttpClientConfig().apply {
+			body = JSONParser.toJSON(identityContext)
+			certificate = context.getString(R.string.certificate)
+			userAgent = identityContext.userAgent
+		}
 
-		return HttpClient.post("$endpointURL/identity", json, certificate)
+		return HttpClient.post("$endpointURL/identity", config)
 	}
 }

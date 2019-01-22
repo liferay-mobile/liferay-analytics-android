@@ -14,9 +14,11 @@
 
 package com.liferay.analytics.android.api
 
+import android.content.Context
 import com.liferay.analytics.android.R
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.util.HttpClient
+import com.liferay.analytics.android.util.HttpClientConfig
 import com.liferay.analytics.android.util.JSONParser
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
@@ -27,13 +29,16 @@ import java.io.IOException
  * @author Allan Melo
  */
 internal class AnalyticsClient : KoinComponent {
-	private val context : android.content.Context by inject()
+	private val context : Context by inject()
 
 	@Throws(IOException::class)
 	fun sendAnalytics(endpointURL: String, analyticsEvents: AnalyticsEvents): String {
-		val json = JSONParser.toJSON(analyticsEvents)
-		val certificate = context.getString(R.string.certificate)
+		val config = HttpClientConfig().apply {
+			body = JSONParser.toJSON(analyticsEvents)
+			certificate = context.getString(R.string.certificate)
+			userAgent = analyticsEvents.context.userAgent
+		}
 
-		return HttpClient.post(endpointURL, json, certificate)
+		return HttpClient.post(endpointURL, config)
 	}
 }

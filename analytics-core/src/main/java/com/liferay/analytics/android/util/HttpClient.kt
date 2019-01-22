@@ -14,6 +14,7 @@
 
 package com.liferay.analytics.android.util
 
+import com.liferay.analytics.android.BuildConfig
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,32 +29,46 @@ internal class HttpClient {
 	companion object {
 
 		@Throws(IOException::class)
-		fun post(url: String, json: String, certificate: String, timeout: Long = 30): String {
+		fun post(url: String, config: HttpClientConfig): String {
 
-			val body = RequestBody.create(MEDIA_TYPE, json)
+			val body = RequestBody.create(MEDIA_TYPE, config.body)
 
-			val request = Request.Builder()
+			val requestBuilder = Request.Builder()
 				.url(url)
 				.post(body)
-				.build()
 
-			var builder = OkHttpClient.Builder()
-				.readTimeout(timeout, TimeUnit.SECONDS)
-				.writeTimeout(timeout, TimeUnit.SECONDS)
-				.connectTimeout(timeout, TimeUnit.SECONDS)
+			config.userAgent?.also {
+				requestBuilder.addHeader("User-Agent", it)
+			}
 
-			builder = if (certificate.isEmpty())  builder else builder.trust(certificate)
+			val request = requestBuilder.build()
+
+			val builder = OkHttpClient.Builder()
+				.readTimeout(config.timeout, TimeUnit.SECONDS)
+				.writeTimeout(config.timeout, TimeUnit.SECONDS)
+				.connectTimeout(config.timeout, TimeUnit.SECONDS)
+
+			if (!config.certificate.isEmpty()) {
+				builder.trust(config.certificate)
+			}
+
+			if (BuildConfig.DEBUG) {
+				builder.addInterceptor(LoggingInterceptor())
+			}
 
 			val client = builder.build()
 			val response = client.newCall(request).execute()
 
-			response.body()?.let {
-				return it.string()
-			}
-
-			return ""
+			return response.body()?.string() ?: ""
 		}
 
 		private val MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
 	}
+}
+
+internal class HttpClientConfig {
+	var body: String = "{}"
+	var certificate: String = ""
+	var timeout: Long = 30
+	var userAgent: String? = null
 }
