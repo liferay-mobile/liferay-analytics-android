@@ -87,7 +87,7 @@ internal class FlushProcess(private val endpointURL: String, fileStorage: FileSt
 	}
 
 	private fun initUserId(): String {
-		val instance = Analytics.instance!!
+		val instance = Analytics.instance
 		val identityContext = IdentityContext(instance.dataSourceId)
 
 		userDAO.addIdentityContext(identityContext)
@@ -122,12 +122,10 @@ internal class FlushProcess(private val endpointURL: String, fileStorage: FileSt
 	}
 
 	private fun sendEventsForUserId(userId: String, events: List<Event>) {
-		val instance = Analytics.instance!!
-
 		var currentEvents = events
 
 		while (currentEvents.isNotEmpty()) {
-			val analyticsEvents = AnalyticsEvents(instance.dataSourceId, userId)
+			val analyticsEvents = AnalyticsEvents(Analytics.instance.dataSourceId, userId)
 
 			analyticsEvents.events = currentEvents.take(FLUSH_SIZE)
 
