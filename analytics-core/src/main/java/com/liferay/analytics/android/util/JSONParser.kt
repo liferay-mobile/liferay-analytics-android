@@ -25,7 +25,7 @@ import java.lang.reflect.Type
  */
 internal object JSONParser {
 
-	private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"
+	private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
 	@Throws(JsonSyntaxException::class)
 	fun <T> fromJsonString(json: String, type: Type): T {
