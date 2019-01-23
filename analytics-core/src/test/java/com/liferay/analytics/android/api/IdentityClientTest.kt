@@ -17,9 +17,11 @@ package com.liferay.analytics.android.api
 import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.model.Identity
 import com.liferay.analytics.android.model.IdentityContext
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
-import java.io.IOException
 
 /**
  * @author Igor Matos
@@ -28,25 +30,44 @@ import java.io.IOException
 class IdentityClientTest: BaseTest() {
 
 	@Test
-	fun sendUserId() {
-		val identityContext = IdentityContext("dataSourceId").apply {
-			identity = Identity("Ned Ludd", "ned.ludd@email.com")
-		}
-		try {
-			val endpointURL = getApplicationMetaData().getString("com.liferay.analytics.EndpointUrl")
+	fun getIdentityContext() {
+		val identityContext = IdentityContext("dataSourceId")
+		val userId = identityContext.userId
+		val userAgent = identityContext.userAgent
 
-			IdentityClient().send(endpointURL!!, identityContext)
-		}
-		catch (e: IOException) {
-			Assert.fail(e.localizedMessage)
-		}
+		Assert.assertEquals(userId.length, 36)
+		Assert.assertTrue(userAgent.isNotEmpty())
 	}
 
 	@Test
-	fun createUserId() {
-		val identityContext = IdentityContext("dataSourceId")
-		val userId = identityContext.userId
+	@Throws(Exception::class)
+	fun sendIdentity() {
+		val server = MockWebServer()
+		server.enqueue(MockResponse().setBody("{}").setResponseCode(200))
+		val mockedURL = server.url("/")
 
-		Assert.assertEquals(userId.length, 20)
+		val identityContext = IdentityContext("dataSourceId").apply {
+			identity = Identity("Ned Ludd", "ned.ludd@email.com")
+		}
+
+		IdentityClient().send(mockedURL.toString(), identityContext)
+
+		val request = server.takeRequest()
+		val requestBody = JSONObject(request.body.readUtf8())
+
+		val identityJSON = requestBody.getJSONObject("identity")
+		Assert.assertEquals("Ned Ludd", identityJSON.getString("name"))
+		Assert.assertEquals("ned.ludd@email.com", identityJSON.getString("email"))
+
+		Assert.assertTrue(requestBody.has("language"))
+		Assert.assertTrue(requestBody.has("timezone"))
+		Assert.assertTrue(requestBody.has("userAgent"))
+
+		Assert.assertEquals("Android", requestBody.getString("platform"))
+		Assert.assertEquals("dataSourceId", requestBody.getString("dataSourceId"))
+		Assert.assertEquals(identityContext.userId, requestBody.getString("userId"))
+
+		server.shutdown()
 	}
+
 }

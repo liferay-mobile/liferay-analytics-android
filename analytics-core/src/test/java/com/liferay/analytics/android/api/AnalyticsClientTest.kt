@@ -17,10 +17,13 @@ package com.liferay.analytics.android.api
 import com.liferay.analytics.android.BaseTest
 import com.liferay.analytics.android.model.AnalyticsEvents
 import com.liferay.analytics.android.model.Event
+import com.liferay.analytics.android.util.JSONParser
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -30,7 +33,6 @@ import java.util.Date
  */
 class AnalyticsClientTest: BaseTest() {
 
-	private val analyticsClient =  AnalyticsClient()
 	private lateinit var userId: String
 
 	@Before
@@ -41,22 +43,41 @@ class AnalyticsClientTest: BaseTest() {
 	@Test
 	@Throws(Exception::class)
 	fun sendAnalytics() {
-		val analyticsEventsMessage = AnalyticsEvents("dataSourceId", userId).apply {
-			context = mapOf("languageId" to "pt_PT")
+		val server = MockWebServer()
+		server.enqueue(MockResponse().setBody("{}").setResponseCode(200))
+		val mockedURL = server.url("/")
 
+		val event = Event("ApplicationId", "EventId")
+
+		val analyticsEvents = AnalyticsEvents("dataSourceId", userId).apply {
 			protocolVersion = "1.0"
-
-			val event = Event("ApplicationId", "EventId")
 			events = mutableListOf(event)
 		}
 
-		try {
-			val endpointURL = getApplicationMetaData().getString("com.liferay.analytics.EndpointUrl")
+		AnalyticsClient().sendAnalytics(mockedURL.toString(), analyticsEvents)
 
-			analyticsClient.sendAnalytics(endpointURL!!, analyticsEventsMessage)
-		} catch (e: IOException) {
-			Assert.fail()
-		}
+		val request = server.takeRequest()
+		val requestBody = JSONObject(request.body.readUtf8())
+
+		val contextJSON = requestBody.getJSONObject("context")
+		Assert.assertTrue(contextJSON.has("userAgent"))
+		Assert.assertTrue(contextJSON.has("contentLanguageId"))
+		Assert.assertTrue(contextJSON.has("languageId"))
+		Assert.assertTrue(contextJSON.has("screenHeight"))
+		Assert.assertTrue(contextJSON.has("screenWidth"))
+
+		val eventDate = SimpleDateFormat(JSONParser.DATE_FORMAT).format(event.eventDate)
+		val eventJSON = requestBody.getJSONArray("events").getJSONObject(0)
+		Assert.assertTrue(eventJSON.has("properties"))
+		Assert.assertEquals("ApplicationId", eventJSON.getString("applicationId"))
+		Assert.assertEquals("EventId", eventJSON.getString("eventId"))
+		Assert.assertEquals(eventDate, eventJSON.getString("eventDate"))
+
+		Assert.assertEquals("1.0", requestBody.getString("protocolVersion"))
+		Assert.assertEquals("dataSourceId", requestBody.getString("dataSourceId"))
+		Assert.assertEquals(userId, requestBody.getString("userId"))
+
+		server.shutdown()
 	}
 
 	private fun getUserId(): String {

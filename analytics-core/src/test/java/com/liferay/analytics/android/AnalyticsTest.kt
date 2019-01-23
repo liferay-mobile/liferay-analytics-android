@@ -16,6 +16,7 @@ package com.liferay.analytics.android
 
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
+import com.liferay.analytics.android.model.AnalyticsContext
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -33,18 +34,18 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class AnalyticsTest {
 
-	private lateinit var userDAO: UserDAO
-	private lateinit var userId: String
 	private lateinit var eventsDAO: EventsDAO
+    private lateinit var userDAO: UserDAO
+    private lateinit var userId: String
 	private val dataSourceId = "dataSourceId"
 
 	@Before
 	fun setup() {
 		Analytics.init(RuntimeEnvironment.application, 240)
 
-		userId = Analytics.instance.flushProcess.getUserId()
 		eventsDAO = Analytics.instance.flushProcess.eventsDAO
 		userDAO = Analytics.instance.userDAO
+		userId = Analytics.instance.flushProcess.getUserId()
 	}
 
 	@After
@@ -91,6 +92,16 @@ class AnalyticsTest {
 	@Test
 	fun getInstance() {
 		Assert.assertEquals(dataSourceId, Analytics.instance.dataSourceId)
+	}
+
+	@Test
+	fun getAnalyticsContext() {
+		val analyticsContext = AnalyticsContext(RuntimeEnvironment.application)
+
+		Assert.assertTrue(analyticsContext.userAgent.isNotEmpty())
+		Assert.assertTrue(analyticsContext.contentLanguageId.isNotEmpty())
+		Assert.assertTrue(analyticsContext.screenHeight > 0)
+		Assert.assertTrue(analyticsContext.screenWidth > 0)
 	}
 
 }
