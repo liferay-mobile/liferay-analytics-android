@@ -68,8 +68,7 @@ internal class FlushProcess(private val endpointURL: String, fileStorage: FileSt
 
 	internal fun sendIdentities() {
 		val identityClient = IdentityClient()
-
-		var userContexts = userDAO.getUserContexts().toMutableList()
+		val userContexts = userDAO.getUserContexts().toMutableList()
 
 		while (userContexts.isNotEmpty()) {
 			val userContext = userContexts.removeAt(0)

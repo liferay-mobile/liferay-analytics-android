@@ -14,12 +14,16 @@
 
 package com.liferay.analytics.android.util
 
+import android.content.pm.PackageManager
 import com.liferay.analytics.android.Analytics
 import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.dao.EventsDAO
 import com.liferay.analytics.android.dao.UserDAO
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.model.IdentityContext
+import okhttp3.HttpUrl
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -39,10 +43,17 @@ class FlushProcessTest {
 
 	private lateinit var eventsDAO: EventsDAO
 	private lateinit var flushProcess: FlushProcess
+	private lateinit var server: MockWebServer
 	private lateinit var userDAO: UserDAO
 
 	@Before
 	fun setup() {
+		server = MockWebServer()
+		server.enqueue(MockResponse().setBody("{}").setResponseCode(200))
+		val mockedURL = server.url("/")
+
+		mockEndpointUrl(mockedURL)
+
 		Analytics.init(RuntimeEnvironment.application)
 
 		flushProcess = Analytics.instance.flushProcess
@@ -57,6 +68,7 @@ class FlushProcessTest {
 		userDAO.clearUserId()
 		Analytics.close()
 		closeKoin()
+		server.shutdown()
 	}
 
 	@Test
@@ -107,6 +119,14 @@ class FlushProcessTest {
 
 		Assert.assertEquals(1, eventsDAO.getEvents().size)
 		Assert.assertEquals(1, flushProcess.eventsQueue.size)
+	}
+
+	private fun mockEndpointUrl(mockedURL: HttpUrl) {
+		val context = RuntimeEnvironment.application
+		val applicationInfo =
+			context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+
+		applicationInfo.metaData.putString("com.liferay.analytics.EndpointUrl", mockedURL.toString())
 	}
 
 }

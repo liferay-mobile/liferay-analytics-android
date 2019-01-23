@@ -14,14 +14,11 @@
 
 package com.liferay.analytics.android
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.koin.dsl.module.Module
-import org.koin.dsl.module.applicationContext
 import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.startKoin
 import org.koin.test.KoinTest
@@ -37,11 +34,7 @@ import org.robolectric.annotation.Config
 abstract class BaseTest: KoinTest {
     @Before
     fun init() {
-        val testModule : Module = applicationContext {
-            bean { RuntimeEnvironment.application as Context }
-        }
-
-        startKoin(listOf(testModule))
+        startKoin(Analytics.getModules(RuntimeEnvironment.application))
     }
 
     @After
