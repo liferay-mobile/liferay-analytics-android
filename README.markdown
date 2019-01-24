@@ -15,25 +15,51 @@ Change x.x.x for the latest version: [![Download](https://api.bintray.com/packag
 ### How to use ?
 
 #### Initialize the library
-You should initialize the library providing your analytics key. If you don't initialize your library properly you will receive a runtime exception when you try to send an event, also you can't initialize your library twice. This will also happen if you try to initialize the library twice.
+You should initialize the library providing your `dataSourceId` and `endpointUrl`. If you don't initialize your library properly you will receive a runtime exception when you try to send an event, also you can't initialize your library twice. This will also happen if you try to initialize the library twice.
+
+##### Add Liferay Analytics Cloud configuration keys
+
+1. Open your `app/res/values/strings.xml` file.
+2. Add a `string` element with the name attribute `data_source_id` and value as your Liferay Analytics Cloud Data Source ID to the file. For example:
+```xml
+<string name="data_source_id">Liferay Analytics Cloud Data Source ID</string>
+```
+3. Add a `string` element with the name attribute `endpoint_url` and value as your Liferay Analytics Cloud Endpoint URL to the file. For example:
+```xml
+<string name="endpoint_url">https://myendpoint.liferay.com</string>
+```
+4. Open `/app/manifests/AndroidManifest.xml`
+5. Add a uses-permission element to the manifest:
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+6. Add a `meta-data` element to the `application` element:
+```xml
+<application android:label="@string/app_name" ...>
+    ...
+    <meta-data android:name="com.liferay.analytics.DataSourceId" android:value="@string/data_source_id"/>
+    <meta-data android:name="com.liferay.analytics.EndpointUrl" android:value="@string/endpoint_url"/>
+    ...
+</application>
+```
+Now your application is read to be initialized properly.
 
 Parameters:
 * context: Context (required)
-* analyticsKey: String (required)
 * flushInterval: int (optional, default is 60)
 
 ```kotlin
-Analytics.configure(this, "key", 90)
+Analytics.init(this, "key", 90)
 ```
 
-It is recomended to do that inside your Application singleton: 
+It is recomended to do that inside your Application singleton:
 ```kotlin
 class MainApplication : Application() {
 
 	override fun onCreate() {
 		super.onCreate()
 
-		Analytics.configure(this, "key", 90)
+		Analytics.init(this, 90)
 	}
 
 }
@@ -47,7 +73,7 @@ Parameters:
 * name: String (optional)
 
 ```kotlin
- Analytics.setIdentity("ned.ludd@email.com", "Ned Ludd") 
+ Analytics.setIdentity("ned.ludd@email.com", "Ned Ludd")
  ```
 
  #### Clear the identity
