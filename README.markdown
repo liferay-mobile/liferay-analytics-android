@@ -49,7 +49,7 @@ Parameters:
 * flushInterval: int (optional, default is 60)
 
 ```kotlin
-Analytics.init(this, "key", 90)
+Analytics.init(this, 90)
 ```
 
 It is recomended to do that inside your Application singleton:
