@@ -62,7 +62,6 @@ class AnalyticsClientTest: BaseTest() {
 
 		val contextJSON = requestBody.getJSONObject("context")
 		Assert.assertTrue(contextJSON.has("userAgent"))
-		Assert.assertTrue(contextJSON.has("contentLanguageId"))
 		Assert.assertTrue(contextJSON.has("languageId"))
 		Assert.assertTrue(contextJSON.has("screenHeight"))
 		Assert.assertTrue(contextJSON.has("screenWidth"))

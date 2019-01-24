@@ -25,7 +25,6 @@ import android.util.DisplayMetrics
  * @author Victor Oliveira
  */
 internal class AnalyticsContext(context: Context) : KoinComponent {
-    val contentLanguageId = Locale.getDefault().toString()
     val languageId = Locale.getDefault().toString()
     val screenHeight: Int
     val screenWidth: Int
