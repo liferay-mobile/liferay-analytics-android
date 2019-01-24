@@ -14,11 +14,19 @@
 
 package com.liferay.analytics.android.util
 
-import com.google.gson.*
+import com.google.gson.JsonSerializer
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonParseException
 import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 /**
  * @author Victor Oliveira
