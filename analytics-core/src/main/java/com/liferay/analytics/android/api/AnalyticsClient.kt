@@ -29,7 +29,7 @@ import java.io.IOException
  * @author Allan Melo
  */
 internal class AnalyticsClient : KoinComponent {
-	private val context : Context by inject()
+	private val context: Context by inject()
 
 	@Throws(IOException::class)
 	fun sendAnalytics(endpointURL: String, analyticsEvents: AnalyticsEvents): String {

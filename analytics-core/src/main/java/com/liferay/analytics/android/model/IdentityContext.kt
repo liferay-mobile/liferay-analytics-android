@@ -16,7 +16,9 @@ package com.liferay.analytics.android.model
 
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
-import java.util.*
+import java.util.Locale
+import java.util.TimeZone
+import java.util.UUID
 
 /**
  * @author Igor Matos
