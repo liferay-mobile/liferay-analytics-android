@@ -12,7 +12,7 @@ implementation 'com.liferay:liferay-analytics-android:x.x.x'
 Change x.x.x for the latest version: [![Download](https://api.bintray.com/packages/liferay/liferay-mobile/liferay-analytics-android/images/download.svg) ](https://bintray.com/liferay/liferay-mobile/liferay-analytics-android/_latestVersion)
 
 
-### How to use ?
+### How to use?
 
 #### Initialize the library
 You should initialize the library providing your `dataSourceId` and `endpointUrl`. If you don't initialize your library properly you will receive a runtime exception when you try to send an event, also you can't initialize your library twice. This will also happen if you try to initialize the library twice.

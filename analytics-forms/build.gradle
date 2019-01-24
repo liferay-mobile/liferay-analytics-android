@@ -50,7 +50,7 @@ dependencies {
 	implementation group: "com.android.support", name: "appcompat-v7", version: "28.0.0"
 	implementation group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk7", version: "$kotlin_version"
 	implementation group: "android.arch.lifecycle", name: "compiler", version: "1.1.1"
-	annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+	annotationProcessor group: "android.arch.lifecycle", name: "compiler", version: "1.1.1"
 
 	implementation project(":analytics-core")
 }

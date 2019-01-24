@@ -37,7 +37,7 @@ dependencies {
 	debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
 	releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
 
-    //	implementation "com.liferay:liferay-analytics-android:1.0.0"
+    //	implementation "com.liferay:liferay-analytics-android:1.1.0"
     //	implementation "com.liferay:liferay-analytics-forms-android:1.0.0"
     //	annotationProcessor "com.liferay:liferay-analytics-forms-android:1.0.0"
 
