@@ -99,7 +99,6 @@ class AnalyticsTest {
 		val analyticsContext = AnalyticsContext(RuntimeEnvironment.application)
 
 		Assert.assertTrue(analyticsContext.userAgent.isNotEmpty())
-		Assert.assertTrue(analyticsContext.contentLanguageId.isNotEmpty())
 		Assert.assertTrue(analyticsContext.screenHeight > 0)
 		Assert.assertTrue(analyticsContext.screenWidth > 0)
 	}
