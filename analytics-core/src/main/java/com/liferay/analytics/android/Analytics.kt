@@ -48,7 +48,7 @@ class Analytics private constructor(
 		@JvmOverloads
 		@JvmStatic
 		fun init(
-				@NotNull context: Context, flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
+			@NotNull context: Context, flushInterval: Int = FLUSH_INTERVAL_DEFAULT) {
 
 			analyticsInstance?.let {
 				throw IllegalStateException("Your library was already initialized.")
@@ -65,7 +65,7 @@ class Analytics private constructor(
 			val applicationInfo =
 				context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
 
-            val dataSourceId = applicationInfo.metaData.getString("com.liferay.analytics.DataSourceId")
+			val dataSourceId = applicationInfo.metaData.getString("com.liferay.analytics.DataSourceId")
 
 			if (dataSourceId.isNullOrEmpty() || dataSourceId.isBlank()) {
 				throw IllegalArgumentException("Analytics Data source id can't be null or empty.")

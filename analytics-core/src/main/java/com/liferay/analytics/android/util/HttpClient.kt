@@ -15,6 +15,7 @@
 package com.liferay.analytics.android.util
 
 import com.liferay.analytics.android.BuildConfig
+import com.liferay.analytics.android.util.extensions.trust
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request

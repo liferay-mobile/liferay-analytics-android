@@ -15,16 +15,12 @@
 package com.liferay.analytics.android.dao
 
 import com.liferay.analytics.android.BaseTest
-import com.liferay.analytics.android.BuildConfig
 import com.liferay.analytics.android.model.Event
 import com.liferay.analytics.android.util.FileStorage
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
 /**
  * @author Igor Matos
@@ -35,8 +31,8 @@ class EventsDAOTest: BaseTest() {
 
 	@Before
 	fun setUp() {
-		val filestorage = FileStorage(RuntimeEnvironment.application)
-		eventsDAO = EventsDAO(filestorage)
+		val fileStorage = FileStorage(RuntimeEnvironment.application)
+		eventsDAO = EventsDAO(fileStorage)
 
 		val eventModel = Event(FIRST_APPLICATION_ID, FIRST_EVENT_ID)
 
