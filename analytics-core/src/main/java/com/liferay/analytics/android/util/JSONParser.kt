@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import java.lang.reflect.Type
+import java.util.*
 
 /**
  * @author Igor Matos
@@ -38,7 +39,7 @@ internal object JSONParser {
 
 	internal fun gson(): Gson {
 		val gsonBuilder = GsonBuilder()
-		gsonBuilder.setDateFormat(DATE_FORMAT)
+		gsonBuilder.registerTypeAdapter(Date::class.java, UtcDateTypeAdapter(DATE_FORMAT))
 
 		return gsonBuilder.create()
 	}
