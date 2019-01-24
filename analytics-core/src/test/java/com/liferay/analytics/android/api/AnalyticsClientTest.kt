@@ -25,7 +25,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 /**
  * @author Igor Matos
@@ -66,8 +66,11 @@ class AnalyticsClientTest: BaseTest() {
 		Assert.assertTrue(contextJSON.has("screenHeight"))
 		Assert.assertTrue(contextJSON.has("screenWidth"))
 
-		val eventDate = SimpleDateFormat(JSONParser.DATE_FORMAT).format(event.eventDate)
+		val simpleDateFormat = SimpleDateFormat(JSONParser.DATE_FORMAT)
+		simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+		val eventDate = simpleDateFormat.format(event.eventDate)
 		val eventJSON = requestBody.getJSONArray("events").getJSONObject(0)
+
 		Assert.assertTrue(eventJSON.has("properties"))
 		Assert.assertEquals("ApplicationId", eventJSON.getString("applicationId"))
 		Assert.assertEquals("EventId", eventJSON.getString("eventId"))
