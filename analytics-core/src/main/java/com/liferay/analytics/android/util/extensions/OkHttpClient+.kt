@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.analytics.android.util
+package com.liferay.analytics.android.util.extensions
 
+import com.liferay.analytics.android.util.CertificateUtil
 import okhttp3.OkHttpClient
 import java.security.SecureRandom
 import java.util.Arrays
